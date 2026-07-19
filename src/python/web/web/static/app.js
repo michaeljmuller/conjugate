@@ -74,6 +74,70 @@ function buildAccentBar() {
 function wireControls() {
   el("toggle-accents").addEventListener("click", toggleAccents);
   el("again").addEventListener("click", () => startVerb(currentVerbId));
+  el("open-settings").addEventListener("click", openSettings);
+  el("settings-save").addEventListener("click", saveSettings);
+  el("settings-close").addEventListener("click", closeSettings);
+}
+
+// ---- Settings: which tenses to drill, and in what order -----------------
+
+async function openSettings() {
+  const data = await api("/api/settings");
+  renderTensePrefs(data.tenses);
+  el("settings-error").classList.add("hidden");
+  el("settings-panel").classList.remove("hidden");
+}
+
+function closeSettings() {
+  el("settings-panel").classList.add("hidden");
+}
+
+// One row per tense: an enable checkbox plus up/down reordering. Labels come
+// from the server (trusted constants), so innerHTML is safe here.
+function renderTensePrefs(tenses) {
+  const ul = el("tense-prefs");
+  ul.innerHTML = "";
+  for (const t of tenses) {
+    const li = document.createElement("li");
+    li.className = "tense-pref";
+    li.dataset.key = t.key;
+    li.innerHTML =
+      `<label class="tp-toggle">` +
+      `<input type="checkbox" ${t.enabled ? "checked" : ""} />` +
+      `<span class="tp-name">${t.label} <span class="tp-mood">${t.mood}</span></span>` +
+      `</label>` +
+      `<span class="tp-move">` +
+      `<button type="button" class="tp-up" aria-label="Move up">▲</button>` +
+      `<button type="button" class="tp-down" aria-label="Move down">▼</button>` +
+      `</span>`;
+    li.querySelector(".tp-up").addEventListener("click", () => movePref(li, -1));
+    li.querySelector(".tp-down").addEventListener("click", () => movePref(li, 1));
+    ul.appendChild(li);
+  }
+}
+
+function movePref(li, dir) {
+  const ul = li.parentElement;
+  if (dir < 0 && li.previousElementSibling)
+    ul.insertBefore(li, li.previousElementSibling);
+  else if (dir > 0 && li.nextElementSibling)
+    ul.insertBefore(li.nextElementSibling, li);
+}
+
+async function saveSettings() {
+  const tenses = [...el("tense-prefs").querySelectorAll(".tense-pref")].map((li) => ({
+    key: li.dataset.key,
+    enabled: li.querySelector("input[type=checkbox]").checked,
+  }));
+  if (!tenses.some((t) => t.enabled)) {
+    const err = el("settings-error");
+    err.textContent = "Enable at least one tense.";
+    err.classList.remove("hidden");
+    return;
+  }
+  await api("/api/settings", { method: "PUT", body: JSON.stringify({ tenses }) });
+  closeSettings();
+  if (currentVerbId) await loadVerb(currentVerbId); // re-render with new order/selection
 }
 
 // Show/hide the accent-helper buttons (hidden by default). The bar lives in the

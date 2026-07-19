@@ -24,6 +24,7 @@
       <label for="verb-select">Verb</label>
       <select id="verb-select"></select>
       <button id="toggle-accents" class="btn ghost" type="button">Show accent buttons</button>
+      <button id="open-settings" class="btn ghost" type="button">Settings</button>
     </div>
 
     <!-- Verb banner + accent bar stay pinned to the top together while scrolling. -->
@@ -48,6 +49,20 @@
       </div>
     </div>
   </main>
+
+  <!-- Settings modal. Choose which tenses to drill and in what order. -->
+  <div id="settings-panel" class="settings-panel hidden" role="dialog" aria-modal="true" aria-label="Settings">
+    <div class="settings-card">
+      <h2>Settings</h2>
+      <p class="settings-hint">Tick the tenses to practise; use the arrows to set their order.</p>
+      <ul id="tense-prefs" class="tense-prefs"></ul>
+      <p id="settings-error" class="settings-error hidden"></p>
+      <div class="settings-actions">
+        <button id="settings-save" class="btn primary" type="button">Save</button>
+        <button id="settings-close" class="btn ghost" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Transient "Correct!" toast; fixed position, never takes focus. -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>

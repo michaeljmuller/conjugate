@@ -226,6 +226,60 @@ select {
 .footer-summary.perfect { color: var(--green); }
 .footer-summary:empty { display: none; }
 
+/* Settings modal: choose which tenses to drill and in what order. */
+.settings-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  overflow-y: auto;
+}
+.settings-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  width: 100%;
+  max-width: 30rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+.settings-card h2 { margin: 0 0 0.25rem; font-size: 1.15rem; }
+.settings-hint { margin: 0 0 1rem; color: var(--muted); font-size: 0.85rem; }
+
+.tense-prefs { list-style: none; margin: 0; padding: 0; }
+.tense-pref {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 0.4rem;
+  background: var(--bg);
+}
+.tp-toggle { display: flex; align-items: center; gap: 0.6rem; flex: 1; cursor: pointer; }
+.tp-name { font-size: 0.95rem; }
+.tp-mood { color: var(--muted); font-size: 0.8rem; }
+.tp-move { display: flex; gap: 0.25rem; }
+.tp-move button {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 5px;
+  padding: 0.1rem 0.45rem;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1;
+}
+.tp-move button:hover { border-color: var(--accent); color: var(--ink); }
+
+.settings-error { color: var(--red); font-size: 0.85rem; margin: 0.5rem 0 0; }
+.settings-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+
 /* Fixed, non-interactive "Correct!" toast. Same spot regardless of scroll. */
 .toast {
   position: fixed;

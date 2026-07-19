@@ -9,7 +9,10 @@ from __future__ import annotations
 
 from datetime import datetime
 
+from typing import Any
+
 from sqlalchemy import (
+    JSON,
     Boolean,
     DateTime,
     ForeignKey,
@@ -34,6 +37,20 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(320))
     name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class UserSettings(Base):
+    """Per-user preferences as one JSON blob, so new settings add keys, not
+    columns (and thus need no migration under the create_all-only schema).
+
+    Current keys: ``tenses`` — ``[{"key": <tense_key>, "enabled": bool}, …]`` in
+    display order. Absent ⇒ all tenses enabled in canonical order.
+    """
+
+    __tablename__ = "user_settings"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    data: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
 
 
 class Verb(Base):

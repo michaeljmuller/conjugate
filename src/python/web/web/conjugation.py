@@ -60,6 +60,35 @@ _PERSON_DISPLAY: dict[str, str] = {
 }
 
 
+_TENSE_BY_KEY: dict[str, dict[str, str]] = {t["key"]: t for t in TENSES}
+
+
+def resolve_tense_prefs(saved: list[dict]) -> list[dict]:
+    """Reconcile a (possibly stale) saved tense-preference list against ``TENSES``.
+
+    ``saved`` is ``[{"key", "enabled"}, …]`` in the user's chosen order. Unknown
+    or duplicate keys are dropped; valid keys keep their order and ``enabled``
+    flag; any canonical tense missing from ``saved`` is appended at the end as
+    enabled — so newly-added tenses show up by default rather than vanishing for
+    users who saved settings before the tense existed. An empty ``saved`` yields
+    every tense enabled in canonical order (the default, no-settings behavior).
+
+    Returns ``[{"key", "label", "mood", "enabled"}, …]`` ready for the UI.
+    """
+    resolved: list[dict] = []
+    seen: set[str] = set()
+    for item in saved:
+        key = item.get("key")
+        if key in _TENSE_BY_KEY and key not in seen:
+            seen.add(key)
+            t = _TENSE_BY_KEY[key]
+            resolved.append({**t, "enabled": bool(item.get("enabled", True))})
+    for t in TENSES:
+        if t["key"] not in seen:
+            resolved.append({**t, "enabled": True})
+    return resolved
+
+
 def person_label(tense: str, person: str) -> str:
     """Human label for a (tense, person) pair, e.g. ``que eu`` or ``nós``.
 
