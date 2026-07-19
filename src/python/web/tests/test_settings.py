@@ -115,6 +115,50 @@ def test_default_order_then_reorder_and_disable(tmp_path):
         app.dependency_overrides.clear()
 
 
+def test_interface_defaults_and_partial_updates(tmp_path):
+    client, _ = _make_client(tmp_path)
+    try:
+        # No settings yet → interface defaults.
+        iface = client.get("/api/settings").json()["interface"]
+        assert iface == {"labels": "en", "show_accents": False}
+
+        # Saving interface alone must not require or wipe tenses.
+        r = client.put("/api/settings", json={"interface": {"labels": "pt", "show_accents": True}})
+        assert r.status_code == 200
+        assert r.json()["interface"] == {"labels": "pt", "show_accents": True}
+        assert len(r.json()["tenses"]) == len(TENSE_KEYS)  # tenses untouched → full default list
+
+        # A partial interface update leaves the unspecified field intact.
+        r = client.put("/api/settings", json={"interface": {"show_accents": False}})
+        assert r.json()["interface"] == {"labels": "pt", "show_accents": False}
+
+        # Saving tenses alone must not clobber the stored interface prefs.
+        client.put("/api/settings", json={"tenses": [{"key": "preterite", "enabled": True}]})
+        assert client.get("/api/settings").json()["interface"]["labels"] == "pt"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_interface_rejects_bad_language(tmp_path):
+    client, _ = _make_client(tmp_path)
+    try:
+        assert client.put(
+            "/api/settings", json={"interface": {"labels": "fr"}}
+        ).status_code == 400
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_forms_carry_both_label_languages(tmp_path):
+    client, vid = _make_client(tmp_path)
+    try:
+        block = client.get(f"/api/verbs/{vid}/forms").json()["blocks"][0]
+        assert {"label", "mood", "label_pt", "mood_pt"} <= block.keys()
+        assert block["label"] == "Present" and block["label_pt"] == "Presente"
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_put_rejects_unknown_key_and_all_disabled(tmp_path):
     client, _ = _make_client(tmp_path)
     try:

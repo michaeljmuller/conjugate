@@ -27,6 +27,21 @@ def _load_settings(db: Session, user: User) -> dict:
     return dict(row.data) if row else {}
 
 
+# Interface prefs and their defaults. ``labels`` chooses English vs European
+# Portuguese for tense/mood names; ``show_accents`` reveals the accent-button bar.
+_DEFAULT_INTERFACE = {"labels": "en", "show_accents": False}
+_LABEL_LANGS = ("en", "pt")
+
+
+def _resolve_interface(settings: dict) -> dict:
+    """Merge the saved interface blob over defaults, ignoring unknown keys."""
+    saved = settings.get("interface", {})
+    return {
+        "labels": saved.get("labels") if saved.get("labels") in _LABEL_LANGS else _DEFAULT_INTERFACE["labels"],
+        "show_accents": bool(saved.get("show_accents", _DEFAULT_INTERFACE["show_accents"])),
+    }
+
+
 def _enabled_tenses(db: Session, user: User) -> list[dict]:
     """Tenses to drill, in the user's chosen order (enabled only)."""
     prefs = resolve_tense_prefs(_load_settings(db, user).get("tenses", []))
@@ -49,14 +64,29 @@ class TensePref(BaseModel):
     enabled: bool
 
 
+class InterfaceIn(BaseModel):
+    labels: str | None = None
+    show_accents: bool | None = None
+
+
 class SettingsIn(BaseModel):
-    tenses: list[TensePref]
+    # Both optional so the tense panel and the interface panel can each save
+    # their own slice without clobbering the other.
+    tenses: list[TensePref] | None = None
+    interface: InterfaceIn | None = None
+
+
+def _settings_response(settings: dict) -> dict:
+    return {
+        "tenses": resolve_tense_prefs(settings.get("tenses", [])),
+        "interface": _resolve_interface(settings),
+    }
 
 
 @router.get("/settings")
 def get_settings(db: Session = Depends(get_db), user: User = Depends(current_user)):
     """Full, reconciled settings for the UI (every catalog tense, flagged)."""
-    return {"tenses": resolve_tense_prefs(_load_settings(db, user).get("tenses", []))}
+    return _settings_response(_load_settings(db, user))
 
 
 @router.put("/settings")
@@ -65,21 +95,34 @@ def put_settings(
     db: Session = Depends(get_db),
     user: User = Depends(current_user),
 ):
-    unknown = [t.key for t in payload.tenses if t.key not in TENSE_KEYS]
-    if unknown:
-        raise HTTPException(status_code=400, detail=f"unknown tenses: {unknown}")
-    if not any(t.enabled for t in payload.tenses):
-        raise HTTPException(status_code=400, detail="enable at least one tense")
+    updates: dict = {}
+    if payload.tenses is not None:
+        unknown = [t.key for t in payload.tenses if t.key not in TENSE_KEYS]
+        if unknown:
+            raise HTTPException(status_code=400, detail=f"unknown tenses: {unknown}")
+        if not any(t.enabled for t in payload.tenses):
+            raise HTTPException(status_code=400, detail="enable at least one tense")
+        updates["tenses"] = [{"key": t.key, "enabled": t.enabled} for t in payload.tenses]
 
-    tenses = [{"key": t.key, "enabled": t.enabled} for t in payload.tenses]
+    if payload.interface is not None:
+        if payload.interface.labels is not None and payload.interface.labels not in _LABEL_LANGS:
+            raise HTTPException(status_code=400, detail="labels must be 'en' or 'pt'")
+        row_iface = _load_settings(db, user).get("interface", {})
+        iface = {**row_iface}
+        if payload.interface.labels is not None:
+            iface["labels"] = payload.interface.labels
+        if payload.interface.show_accents is not None:
+            iface["show_accents"] = payload.interface.show_accents
+        updates["interface"] = iface
+
     row = db.get(UserSettings, user.id)
     if row is None:
         row = UserSettings(user_id=user.id, data={})
         db.add(row)
     # Reassign a new dict so SQLAlchemy detects the change on the JSON column.
-    row.data = {**row.data, "tenses": tenses}
+    row.data = {**row.data, **updates}
     db.commit()
-    return {"tenses": resolve_tense_prefs(tenses)}
+    return _settings_response(dict(row.data))
 
 
 @router.get("/verbs")
@@ -134,6 +177,8 @@ def verb_forms(
                 "tense": tense["key"],
                 "label": tense["label"],
                 "mood": tense["mood"],
+                "label_pt": tense["label_pt"],
+                "mood_pt": tense["mood_pt"],
                 "rows": rows,
             }
         )
@@ -233,6 +278,8 @@ def progress(db: Session = Depends(get_db), user: User = Depends(current_user)):
                 "tense": tense["key"],
                 "label": tense["label"],
                 "mood": tense["mood"],
+                "label_pt": tense["label_pt"],
+                "mood_pt": tense["mood_pt"],
                 "attempts": stat["attempts"],
                 "correct": stat["correct"],
             }

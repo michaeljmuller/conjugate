@@ -33,7 +33,69 @@ body {
   border-bottom: 1px solid var(--line);
 }
 .topbar h1 { font-size: 1.15rem; margin: 0; }
-.user-area { font-size: 0.9rem; color: var(--muted); display: flex; gap: 0.75rem; align-items: center; }
+.user-area { font-size: 0.9rem; color: var(--muted); position: relative; }
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+}
+.avatar-lg { width: 38px; height: 38px; }
+
+.user-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.4rem;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--ink);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.user-menu-btn:hover { background: var(--bg); }
+.umb-caret { font-size: 0.65rem; color: var(--muted); }
+
+.user-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  z-index: 20;
+  min-width: 15rem;
+  padding: 0.4rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+.um-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem 0.7rem;
+  margin-bottom: 0.3rem;
+  border-bottom: 1px solid var(--line);
+}
+.um-email { font-size: 0.95rem; color: var(--ink); overflow: hidden; text-overflow: ellipsis; }
+.um-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--ink);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.um-item:hover { background: var(--bg); }
+.um-divider { height: 1px; background: var(--line); margin: 0.3rem 0; }
+.um-danger { color: var(--red); }
+.um-arrow { margin-right: 0.35rem; }
 
 .signed-out { max-width: 30rem; margin: 4rem auto; text-align: center; }
 
@@ -261,24 +323,33 @@ select {
   margin-bottom: 0.4rem;
   background: var(--bg);
 }
+.tense-pref.dragging { opacity: 0.5; border-color: var(--accent); }
+.tp-grip {
+  cursor: grab;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1;
+  user-select: none;
+  touch-action: none;
+}
+.tense-pref.dragging .tp-grip { cursor: grabbing; }
 .tp-toggle { display: flex; align-items: center; gap: 0.6rem; flex: 1; cursor: pointer; }
 .tp-name { font-size: 0.95rem; }
 .tp-mood { color: var(--muted); font-size: 0.8rem; }
-.tp-move { display: flex; gap: 0.25rem; }
-.tp-move button {
-  border: 1px solid var(--line);
-  background: var(--panel);
-  border-radius: 5px;
-  padding: 0.1rem 0.45rem;
-  cursor: pointer;
-  color: var(--muted);
-  font-size: 0.8rem;
-  line-height: 1;
-}
-.tp-move button:hover { border-color: var(--accent); color: var(--ink); }
 
 .settings-error { color: var(--red); font-size: 0.85rem; margin: 0.5rem 0 0; }
 .settings-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+
+/* Interface panel: label-language radios and the accent-buttons checkbox. */
+.iface-group {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem 0.75rem;
+  margin: 0 0 0.9rem;
+}
+.iface-group legend { padding: 0 0.35rem; font-size: 0.85rem; color: var(--muted); }
+.iface-radio { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0; cursor: pointer; }
+.iface-check { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
 
 /* Fixed, non-interactive "Correct!" toast. Same spot regardless of scroll. */
 .toast {

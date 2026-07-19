@@ -17,21 +17,23 @@ PAST_PARTICIPLE_TENSE = "past_participle"
 PRESENT_PARTICIPLE_TENSE = "present_participle"
 
 # Ordered tenses. The original Excel block comes first; the added slots follow.
+# Each carries both English (``label``/``mood``) and European-Portuguese
+# (``label_pt``/``mood_pt``) names; the UI's Interface setting picks which to show.
 TENSES: list[dict[str, str]] = [
-    {"key": "present_indicative", "label": "Present", "mood": "indicative"},
-    {"key": "preterite", "label": "Preterite", "mood": "indicative"},
-    {"key": "past_imperfect_indicative", "label": "Past imperfect", "mood": "indicative"},
-    {"key": "past_pluperfect", "label": "Pluperfect", "mood": "indicative"},
-    {"key": "future_indicative", "label": "Future", "mood": "indicative"},
-    {"key": "conditional", "label": "Conditional", "mood": "conditional"},
-    {"key": "present_subjunctive", "label": "Present", "mood": "subjunctive"},
-    {"key": "past_imperfect_subjunctive", "label": "Past imperfect", "mood": "subjunctive"},
-    {"key": "future_subjunctive", "label": "Future", "mood": "subjunctive"},
-    {"key": "imperative_affirmative", "label": "Imperative (affirmative)", "mood": "imperative"},
-    {"key": "imperative_negative", "label": "Imperative (negative)", "mood": "imperative"},
-    {"key": "personal_infinitive", "label": "Personal infinitive", "mood": "infinitive"},
-    {"key": PAST_PARTICIPLE_TENSE, "label": "Past participle", "mood": "participle"},
-    {"key": PRESENT_PARTICIPLE_TENSE, "label": "Present participle", "mood": "participle"},
+    {"key": "present_indicative", "label": "Present", "mood": "indicative", "label_pt": "Presente", "mood_pt": "indicativo"},
+    {"key": "preterite", "label": "Preterite", "mood": "indicative", "label_pt": "Pretérito perfeito", "mood_pt": "indicativo"},
+    {"key": "past_imperfect_indicative", "label": "Past imperfect", "mood": "indicative", "label_pt": "Pretérito imperfeito", "mood_pt": "indicativo"},
+    {"key": "past_pluperfect", "label": "Pluperfect", "mood": "indicative", "label_pt": "Pretérito mais-que-perfeito", "mood_pt": "indicativo"},
+    {"key": "future_indicative", "label": "Future", "mood": "indicative", "label_pt": "Futuro", "mood_pt": "indicativo"},
+    {"key": "conditional", "label": "Conditional", "mood": "conditional", "label_pt": "Condicional", "mood_pt": "condicional"},
+    {"key": "present_subjunctive", "label": "Present", "mood": "subjunctive", "label_pt": "Presente", "mood_pt": "conjuntivo"},
+    {"key": "past_imperfect_subjunctive", "label": "Past imperfect", "mood": "subjunctive", "label_pt": "Pretérito imperfeito", "mood_pt": "conjuntivo"},
+    {"key": "future_subjunctive", "label": "Future", "mood": "subjunctive", "label_pt": "Futuro", "mood_pt": "conjuntivo"},
+    {"key": "imperative_affirmative", "label": "Imperative (affirmative)", "mood": "imperative", "label_pt": "Imperativo (afirmativo)", "mood_pt": "imperativo"},
+    {"key": "imperative_negative", "label": "Imperative (negative)", "mood": "imperative", "label_pt": "Imperativo (negativo)", "mood_pt": "imperativo"},
+    {"key": "personal_infinitive", "label": "Personal infinitive", "mood": "infinitive", "label_pt": "Infinitivo pessoal", "mood_pt": "infinitivo"},
+    {"key": PAST_PARTICIPLE_TENSE, "label": "Past participle", "mood": "participle", "label_pt": "Particípio passado", "mood_pt": "particípio"},
+    {"key": PRESENT_PARTICIPLE_TENSE, "label": "Present participle", "mood": "participle", "label_pt": "Gerúndio", "mood_pt": "gerúndio"},
 ]
 
 TENSE_KEYS: list[str] = [t["key"] for t in TENSES]

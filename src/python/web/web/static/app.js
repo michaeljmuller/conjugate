@@ -9,6 +9,11 @@ let lastFocused = null; // input to receive accent-bar insertions
 let currentVerbId = null;
 let rows = [];          // MODEL: one entry per form, the single source of truth.
                         // The DOM is a projection of this — never read back for state.
+let ui = { labels: "en", show_accents: false }; // interface prefs, loaded at init
+
+// Tense/mood names come in both languages from the server; pick per interface pref.
+const labelOf = (o) => (ui.labels === "pt" && o.label_pt) || o.label;
+const moodOf = (o) => (ui.labels === "pt" && o.mood_pt) || o.mood;
 
 async function api(path, opts = {}) {
   const res = await fetch(path, {
@@ -27,16 +32,13 @@ async function init() {
     return;
   }
   el("app").classList.remove("hidden");
-  el("user-area").innerHTML =
-    `<span>${me.name || me.email}</span>` +
-    `<button class="btn ghost" id="logout">Sign out</button>`;
-  el("logout").addEventListener("click", async () => {
-    await api("/auth/logout", { method: "POST" });
-    location.reload();
-  });
+  buildUserMenu(me.name || me.email, me.email);
 
   buildAccentBar();
   wireControls();
+
+  ui = (await api("/api/settings")).interface;
+  applyInterface();
 
   const verbs = await api("/api/verbs");
   const options = verbs
@@ -72,11 +74,63 @@ function buildAccentBar() {
 }
 
 function wireControls() {
-  el("toggle-accents").addEventListener("click", toggleAccents);
   el("again").addEventListener("click", () => startVerb(currentVerbId));
-  el("open-settings").addEventListener("click", openSettings);
   el("settings-save").addEventListener("click", saveSettings);
   el("settings-close").addEventListener("click", closeSettings);
+  el("interface-save").addEventListener("click", saveInterface);
+  el("interface-close").addEventListener("click", closeInterface);
+}
+
+// The user's name is a dropdown: "Tense configuration" opens the settings
+// panel, and "Sign out" sits last. Closes on outside click or Escape.
+function buildUserMenu(name, email) {
+  const area = el("user-area");
+  area.innerHTML =
+    `<button class="user-menu-btn" id="user-menu-btn" aria-haspopup="true" aria-expanded="false">` +
+    `<img class="avatar" src="/static/user.png" alt="" />` +
+    `<span class="umb-name"></span><span class="umb-caret" aria-hidden="true">▾</span>` +
+    `</button>` +
+    `<div class="user-menu hidden" id="user-menu" role="menu">` +
+    `<div class="um-header">` +
+    `<img class="avatar avatar-lg" src="/static/user.png" alt="" />` +
+    `<span class="um-email"></span>` +
+    `</div>` +
+    `<button class="um-item" role="menuitem" id="menu-tenses">Tense configuration</button>` +
+    `<button class="um-item" role="menuitem" id="menu-interface">Interface</button>` +
+    `<div class="um-divider" role="separator"></div>` +
+    `<button class="um-item um-danger" role="menuitem" id="menu-logout">` +
+    `<span class="um-arrow" aria-hidden="true">→</span> Sign out</button>` +
+    `</div>`;
+  // textContent: name/email are untrusted profile data.
+  area.querySelector(".umb-name").textContent = name;
+  area.querySelector(".um-email").textContent = email;
+
+  const btn = el("user-menu-btn");
+  const menu = el("user-menu");
+  const setOpen = (open) => {
+    menu.classList.toggle("hidden", !open);
+    btn.setAttribute("aria-expanded", String(open));
+  };
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setOpen(menu.classList.contains("hidden"));
+  });
+  document.addEventListener("click", () => setOpen(false));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+  el("menu-tenses").addEventListener("click", () => {
+    setOpen(false);
+    openSettings();
+  });
+  el("menu-interface").addEventListener("click", () => {
+    setOpen(false);
+    openInterface();
+  });
+  el("menu-logout").addEventListener("click", async () => {
+    await api("/auth/logout", { method: "POST" });
+    location.reload();
+  });
 }
 
 // ---- Settings: which tenses to drill, and in what order -----------------
@@ -92,8 +146,8 @@ function closeSettings() {
   el("settings-panel").classList.add("hidden");
 }
 
-// One row per tense: an enable checkbox plus up/down reordering. Labels come
-// from the server (trusted constants), so innerHTML is safe here.
+// One row per tense: an enable checkbox plus a drag handle for reordering.
+// Labels come from the server (trusted constants), so innerHTML is safe here.
 function renderTensePrefs(tenses) {
   const ul = el("tense-prefs");
   ul.innerHTML = "";
@@ -101,27 +155,42 @@ function renderTensePrefs(tenses) {
     const li = document.createElement("li");
     li.className = "tense-pref";
     li.dataset.key = t.key;
+    li.draggable = true;
     li.innerHTML =
+      `<span class="tp-grip" aria-hidden="true">⣿</span>` +
       `<label class="tp-toggle">` +
       `<input type="checkbox" ${t.enabled ? "checked" : ""} />` +
-      `<span class="tp-name">${t.label} <span class="tp-mood">${t.mood}</span></span>` +
-      `</label>` +
-      `<span class="tp-move">` +
-      `<button type="button" class="tp-up" aria-label="Move up">▲</button>` +
-      `<button type="button" class="tp-down" aria-label="Move down">▼</button>` +
-      `</span>`;
-    li.querySelector(".tp-up").addEventListener("click", () => movePref(li, -1));
-    li.querySelector(".tp-down").addEventListener("click", () => movePref(li, 1));
+      `<span class="tp-name">${labelOf(t)} <span class="tp-mood">${moodOf(t)}</span></span>` +
+      `</label>`;
     ul.appendChild(li);
   }
+  wireDragReorder(ul);
 }
 
-function movePref(li, dir) {
-  const ul = li.parentElement;
-  if (dir < 0 && li.previousElementSibling)
-    ul.insertBefore(li, li.previousElementSibling);
-  else if (dir > 0 && li.nextElementSibling)
-    ul.insertBefore(li.nextElementSibling, li);
+// HTML5 drag-and-drop reordering. On dragover we splice the dragged row in
+// before/after the row under the cursor based on which half it's over.
+function wireDragReorder(ul) {
+  let dragged = null;
+  ul.addEventListener("dragstart", (e) => {
+    dragged = e.target.closest(".tense-pref");
+    if (!dragged) return;
+    dragged.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+  });
+  ul.addEventListener("dragend", () => {
+    dragged?.classList.remove("dragging");
+    dragged = null;
+  });
+  ul.addEventListener("dragover", (e) => {
+    if (!dragged) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    const over = e.target.closest(".tense-pref");
+    if (!over || over === dragged) return;
+    const rect = over.getBoundingClientRect();
+    const after = e.clientY > rect.top + rect.height / 2;
+    ul.insertBefore(dragged, after ? over.nextElementSibling : over);
+  });
 }
 
 async function saveSettings() {
@@ -140,11 +209,38 @@ async function saveSettings() {
   if (currentVerbId) await loadVerb(currentVerbId); // re-render with new order/selection
 }
 
-// Show/hide the accent-helper buttons (hidden by default). The bar lives in the
-// sticky header, so its height changes what the drill must scroll clear of.
-function toggleAccents() {
-  const hidden = el("accent-bar").classList.toggle("hidden");
-  el("toggle-accents").textContent = hidden ? "Show accent buttons" : "Hide accent buttons";
+// ---- Interface settings: label language + accent-button visibility ------
+
+function openInterface() {
+  el("iface-accents").checked = ui.show_accents;
+  for (const r of document.getElementsByName("iface-labels"))
+    r.checked = r.value === ui.labels;
+  el("interface-panel").classList.remove("hidden");
+}
+
+function closeInterface() {
+  el("interface-panel").classList.add("hidden");
+}
+
+async function saveInterface() {
+  const labels =
+    [...document.getElementsByName("iface-labels")].find((r) => r.checked)?.value || "en";
+  const show_accents = el("iface-accents").checked;
+  const data = await api("/api/settings", {
+    method: "PUT",
+    body: JSON.stringify({ interface: { labels, show_accents } }),
+  });
+  ui = data.interface;
+  applyInterface();
+  closeInterface();
+  if (currentVerbId) await loadVerb(currentVerbId); // relabel the drill in the new language
+}
+
+// Reflect the current interface prefs in the DOM: show/hide the accent bar.
+// The bar lives in the sticky header, so its height changes what the drill must
+// scroll clear of — recompute the sticky offset whenever it toggles.
+function applyInterface() {
+  el("accent-bar").classList.toggle("hidden", !ui.show_accents);
   updateStickyHeight();
 }
 
@@ -190,7 +286,7 @@ function renderDrill(data) {
   for (const block of data.blocks) {
     const wrap = document.createElement("div");
     wrap.className = "tense-block";
-    wrap.innerHTML = `<h3>${block.label} <span class="mood">${block.mood}</span></h3>`;
+    wrap.innerHTML = `<h3>${labelOf(block)} <span class="mood">${moodOf(block)}</span></h3>`;
     for (const r of block.rows) {
       const row = makeRow(r);
       wrap.appendChild(row.el);
