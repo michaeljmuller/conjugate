@@ -1,0 +1,15 @@
+# Secrets / runtime config
+src/docker/.env
+**/settings.local.json
+
+# Runtime state
+/data/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+
+*.env

@@ -1,0 +1,14 @@
+- design an abstraction that will allow the support of conjugation in other languages
+- general refactoring pass
+- add audio of the conjugated word being spoken after each correct response
+- alternatively add ding correct response audio indicator
+- add bzzt buzzer after each incorrect response?
+- preferences?
+  - audio (positive / negative)
+  - accent button display
+  - vós (for pt-br)
+  - scramble order of tenses
+  - scramble all the tenses / person
+- add missing tenses (imperative, participles)
+  - challenge: some verbs have TWO past participles (none of the ones currently configured, though)
+  

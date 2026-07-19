@@ -1,0 +1,49 @@
+# Conjugation practice tool: FastAPI app + Postgres.
+# Built on the server via `git pull` (no registry); runs identically under
+# docker/arm64 (dev) and podman/amd64 (prod). Caddy fronts the app on the host.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-conjugate}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-conjugate}
+      POSTGRES_DB: ${POSTGRES_DB:-conjugate}
+    # Named volume, not a bind mount: the postgres image's uid 999 makes a
+    # bind-mounted data dir painful under rootless Podman.
+    volumes:
+      - conjugate-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-conjugate}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      # Context is the component dir so the Dockerfile can COPY ./web.
+      context: ../python/web
+      dockerfile: ../../docker/web/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-conjugate}:${POSTGRES_PASSWORD:-conjugate}@db:5432/${POSTGRES_DB:-conjugate}
+      SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET in .env}
+      # Browser talks HTTPS to Caddy, so the session cookie stays Secure in prod.
+      SESSION_HTTPS_ONLY: ${SESSION_HTTPS_ONLY:-1}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      ALLOWED_EMAILS: ${ALLOWED_EMAILS:-}
+      # DEV_LOGIN=1 bypasses Google for local testing. Never set in prod.
+      DEV_LOGIN: ${DEV_LOGIN:-}
+    ports:
+      # Host port 8081 -> conjugate.themullers.org (see ports registry).
+      - "8081:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  conjugate-db:
