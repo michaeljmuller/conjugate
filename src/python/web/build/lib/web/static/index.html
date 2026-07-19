@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Conjugation Practice</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Conjugation Practice</h1>
+    <div id="user-area" class="user-area"></div>
+  </header>
+
+  <!-- Signed-out view -->
+  <section id="signed-out" class="signed-out hidden">
+    <p>Practice European-Portuguese verb conjugations.</p>
+    <a class="btn primary" href="/auth/login">Sign in with Google</a>
+  </section>
+
+  <!-- Signed-in view -->
+  <main id="app" class="app hidden">
+    <div class="controls">
+      <label for="verb-select">Verb</label>
+      <select id="verb-select"></select>
+      <button id="toggle-accents" class="btn ghost" type="button">Show accent buttons</button>
+    </div>
+
+    <!-- Verb banner + accent bar stay pinned to the top together while scrolling. -->
+    <div id="sticky-header" class="sticky-header">
+      <div id="verb-indicator" class="verb-indicator hidden">
+        <span class="vi-label">Conjugating</span>
+        <span class="vi-verb"></span>
+        <span class="vi-progress"></span>
+      </div>
+      <div class="accent-bar hidden" id="accent-bar" aria-label="Insert accented character"></div>
+    </div>
+
+    <div id="drill" class="drill"></div>
+
+    <!-- Revealed once every field is answered, echoing the header summary. -->
+    <div id="footer-controls" class="footer-controls hidden">
+      <span id="footer-summary" class="footer-summary"></span>
+      <button id="again" class="btn" type="button">Conjugate this verb again</button>
+      <div class="next-verb">
+        <label for="verb-select-bottom">now conjugate:</label>
+        <select id="verb-select-bottom"></select>
+      </div>
+    </div>
+  </main>
+
+  <!-- Transient "Correct!" toast; fixed position, never takes focus. -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

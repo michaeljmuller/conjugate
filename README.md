@@ -1,8 +1,7 @@
 # Conjugation Practice
 
-A web port of the Excel "Conjugation Practice Tool" for European-Portuguese verbs.
-Pick a verb, type each conjugation, and check it against the answer key — the same
-type-and-check drill as the spreadsheet, plus per-user progress tracking.
+A web to aid in learning the conjugation European-Portuguese verbs.
+Pick a verb, type each conjugation, and get immediate feedback.
 
 - **Drilled:** 7 tenses × 5 persons (`eu, tu, ele, nós, eles`). `vós` is stored but
   skipped in the drill, matching the original sheet.
@@ -58,7 +57,7 @@ Each drilled form can carry an example sentence in **English** (`example_en`, th
 always-visible prompt — faint under the field, bold when focused) and its **European
 Portuguese** translation (`example_pt`, revealed under it only *after* the form is
 answered, since it contains the answer word). They live in `web/data/examples.json`, a
-fill-out form covering all 350 drilled forms (10 verbs × 7 tenses × 5 persons):
+fill-out form covering all drilled forms (all the verbs × 7 tenses × 5 persons):
 
 1. Hand `examples.json` to a capable model — the embedded `_instructions` and
    `_guidance` tell it to fill each `example_en` and matching pt-PT `example_pt`.
@@ -69,6 +68,4 @@ fill-out form covering all 350 drilled forms (10 verbs × 7 tenses × 5 persons)
 
 ## Future add-ons (schema already supports)
 
-- Web UI to add verbs (`verbs.created_by` is wired).
-- Editing example sentences in-app (currently seeded from `examples.json`).
 - Pronunciation audio per form (`forms.audio_url`).

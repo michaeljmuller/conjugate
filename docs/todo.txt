@@ -11,4 +11,5 @@
   - scramble all the tenses / person
 - add missing tenses (imperative, participles)
   - challenge: some verbs have TWO past participles (none of the ones currently configured, though)
-  
+- remove the audio created by db column that the AI over-helpfully added
+- src/python/web/web/ ... seems wrong.
