@@ -27,7 +27,16 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Conjugation Practice", lifespan=lifespan)
+# docs/openapi off by default so the public deployment doesn't advertise its whole
+# API surface to scanners; set ENABLE_DOCS=1 (dev) to get the Swagger UI back.
+_docs_on = os.environ.get("ENABLE_DOCS") == "1"
+app = FastAPI(
+    title="Conjugation Practice",
+    lifespan=lifespan,
+    docs_url="/docs" if _docs_on else None,
+    redoc_url=None,
+    openapi_url="/openapi.json" if _docs_on else None,
+)
 
 # Signed session cookie holds only the user id. Secret must be set in prod.
 app.add_middleware(
