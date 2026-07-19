@@ -311,177 +311,177 @@
         {
           "tense": "past_pluperfect",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "fora",
+          "example_en": "I had been his student many years earlier.",
+          "example_pt": "Eu fora aluno dele muitos anos antes."
         },
         {
           "tense": "past_pluperfect",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "foras",
+          "example_en": "You had been warned, but you paid no attention.",
+          "example_pt": "Foras avisado, mas não ligaste."
         },
         {
           "tense": "past_pluperfect",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "fora",
+          "example_en": "The house had been a school.",
+          "example_pt": "A casa fora uma escola."
         },
         {
           "tense": "past_pluperfect",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "fôramos",
+          "example_en": "We had been colleagues years before.",
+          "example_pt": "Fôramos colegas anos antes."
         },
         {
           "tense": "past_pluperfect",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "foram",
+          "example_en": "The two companies had been partners before they split.",
+          "example_pt": "As duas empresas foram sócias antes de se separarem."
         },
         {
           "tense": "future_indicative",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "serei",
+          "example_en": "One day I will be a doctor.",
+          "example_pt": "Um dia serei médico."
         },
         {
           "tense": "future_indicative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "serás",
+          "example_en": "You will be a great father.",
+          "example_pt": "Serás um ótimo pai."
         },
         {
           "tense": "future_indicative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "será",
+          "example_en": "Dinner will be at eight.",
+          "example_pt": "O jantar será às oito."
         },
         {
           "tense": "future_indicative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "seremos",
+          "example_en": "We will be on time tomorrow.",
+          "example_pt": "Amanhã seremos pontuais."
         },
         {
           "tense": "future_indicative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "serão",
+          "example_en": "The results will be published tomorrow.",
+          "example_pt": "Os resultados serão publicados amanhã."
         },
         {
           "tense": "imperative_affirmative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "sê",
+          "example_en": "Be brave!",
+          "example_pt": "Sê corajoso!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "seja",
+          "example_en": "Be welcome.",
+          "example_pt": "Seja bem-vindo."
         },
         {
           "tense": "imperative_affirmative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "sejamos",
+          "example_en": "Let's be honest.",
+          "example_pt": "Sejamos honestos."
         },
         {
           "tense": "imperative_affirmative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "sejam",
+          "example_en": "Be sensible, everyone.",
+          "example_pt": "Sejam prudentes."
         },
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não sejas",
+          "example_en": "Don't be silly!",
+          "example_pt": "Não sejas tonto!"
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não seja",
+          "example_en": "Don't be so modest.",
+          "example_pt": "Não seja tão modesto."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não sejamos",
+          "example_en": "Let's not be pessimistic.",
+          "example_pt": "Não sejamos pessimistas."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não sejam",
+          "example_en": "Don't be cruel.",
+          "example_pt": "Não sejam cruéis."
         },
         {
           "tense": "personal_infinitive",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "ser",
+          "example_en": "They chose me to be the spokesperson.",
+          "example_pt": "Escolheram-me para eu ser o porta-voz."
         },
         {
           "tense": "personal_infinitive",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "seres",
+          "example_en": "What matters is for you to be happy.",
+          "example_pt": "O importante é seres feliz."
         },
         {
           "tense": "personal_infinitive",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "ser",
+          "example_en": "The fact that he is a foreigner doesn't matter.",
+          "example_pt": "O facto de ele ser estrangeiro não importa."
         },
         {
           "tense": "personal_infinitive",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "sermos",
+          "example_en": "They praised us for being punctual.",
+          "example_pt": "Elogiaram-nos por sermos pontuais."
         },
         {
           "tense": "personal_infinitive",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "serem",
+          "example_en": "It's strange for them to be so quiet.",
+          "example_pt": "É estranho serem tão calados."
         },
         {
           "tense": "past_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "sido",
+          "example_en": "He has been very patient.",
+          "example_pt": "Ele tem sido muito paciente."
         },
         {
           "tense": "present_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "sendo",
+          "example_en": "That being so, let's go.",
+          "example_pt": "Sendo assim, vamos embora."
         }
       ]
     },
@@ -737,177 +737,177 @@
         {
           "tense": "past_pluperfect",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estivera",
+          "example_en": "I had been in that hotel years before.",
+          "example_pt": "Eu estivera naquele hotel anos antes."
         },
         {
           "tense": "past_pluperfect",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estiveras",
+          "example_en": "You had never been so happy.",
+          "example_pt": "Nunca estiveras tão feliz."
         },
         {
           "tense": "past_pluperfect",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estivera",
+          "example_en": "He had been ill weeks before.",
+          "example_pt": "Ele estivera doente semanas antes."
         },
         {
           "tense": "past_pluperfect",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estivéramos",
+          "example_en": "We had been there the previous winter.",
+          "example_pt": "Estivéramos lá no inverno anterior."
         },
         {
           "tense": "past_pluperfect",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estiveram",
+          "example_en": "They had been together until dawn.",
+          "example_pt": "Estiveram juntos até de madrugada."
         },
         {
           "tense": "future_indicative",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estarei",
+          "example_en": "I will be at the office at nine.",
+          "example_pt": "Estarei no escritório às nove."
         },
         {
           "tense": "future_indicative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estarás",
+          "example_en": "You will be tired tomorrow.",
+          "example_pt": "Amanhã estarás cansado."
         },
         {
           "tense": "future_indicative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estará",
+          "example_en": "Dinner will be ready soon.",
+          "example_pt": "O jantar estará pronto em breve."
         },
         {
           "tense": "future_indicative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estaremos",
+          "example_en": "We will be waiting for you.",
+          "example_pt": "Estaremos à tua espera."
         },
         {
           "tense": "future_indicative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estarão",
+          "example_en": "They will be at the airport at noon.",
+          "example_pt": "Eles estarão no aeroporto ao meio-dia."
         },
         {
           "tense": "imperative_affirmative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "está",
+          "example_en": "Keep still!",
+          "example_pt": "Está quieto!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "esteja",
+          "example_en": "Make yourself at home.",
+          "example_pt": "Esteja à vontade."
         },
         {
           "tense": "imperative_affirmative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estejamos",
+          "example_en": "Let's stay alert.",
+          "example_pt": "Estejamos atentos."
         },
         {
           "tense": "imperative_affirmative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estejam",
+          "example_en": "Be ready at eight, everyone.",
+          "example_pt": "Estejam prontos às oito."
         },
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não estejas",
+          "example_en": "Don't be sad.",
+          "example_pt": "Não estejas triste."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não esteja",
+          "example_en": "Don't be worried.",
+          "example_pt": "Não esteja preocupado."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não estejamos",
+          "example_en": "Let's not be distracted during the meeting.",
+          "example_pt": "Não estejamos distraídos durante a reunião."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não estejam",
+          "example_en": "Don't be late tomorrow.",
+          "example_pt": "Não estejam atrasados amanhã."
         },
         {
           "tense": "personal_infinitive",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estar",
+          "example_en": "It's better for me to be present at the meeting.",
+          "example_pt": "É melhor eu estar presente na reunião."
         },
         {
           "tense": "personal_infinitive",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estares",
+          "example_en": "I'm happy that you're here.",
+          "example_pt": "Fico feliz por estares aqui."
         },
         {
           "tense": "personal_infinitive",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estar",
+          "example_en": "The fact that he is tired explains everything.",
+          "example_pt": "O facto de ele estar cansado explica tudo."
         },
         {
           "tense": "personal_infinitive",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estarmos",
+          "example_en": "Even though we were tired, we kept going.",
+          "example_pt": "Apesar de estarmos cansados, continuámos."
         },
         {
           "tense": "personal_infinitive",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estarem",
+          "example_en": "It's rare for them all to be at home.",
+          "example_pt": "É raro estarem todos em casa."
         },
         {
           "tense": "past_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estado",
+          "example_en": "I have been ill lately.",
+          "example_pt": "Tenho estado doente ultimamente."
         },
         {
           "tense": "present_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "estando",
+          "example_en": "The weather being nice, we ate outside.",
+          "example_pt": "Estando o tempo bom, comemos lá fora."
         }
       ]
     },
@@ -1163,177 +1163,177 @@
         {
           "tense": "past_pluperfect",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tivera",
+          "example_en": "I had had the same idea years earlier.",
+          "example_pt": "Eu tivera a mesma ideia anos antes."
         },
         {
           "tense": "past_pluperfect",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tiveras",
+          "example_en": "You had been lucky until that day.",
+          "example_pt": "Tiveras sorte até àquele dia."
         },
         {
           "tense": "past_pluperfect",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tivera",
+          "example_en": "He had had a difficult childhood.",
+          "example_pt": "Ele tivera uma infância difícil."
         },
         {
           "tense": "past_pluperfect",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tivéramos",
+          "example_en": "We had had little time to prepare.",
+          "example_pt": "Tivéramos pouco tempo para nos prepararmos."
         },
         {
           "tense": "past_pluperfect",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tiveram",
+          "example_en": "They had had many problems before that.",
+          "example_pt": "Eles tiveram muitos problemas antes disso."
         },
         {
           "tense": "future_indicative",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "terei",
+          "example_en": "I will be glad to help.",
+          "example_pt": "Terei todo o gosto em ajudar."
         },
         {
           "tense": "future_indicative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "terás",
+          "example_en": "You will have a surprise tomorrow.",
+          "example_pt": "Terás uma surpresa amanhã."
         },
         {
           "tense": "future_indicative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "terá",
+          "example_en": "She will be twenty in May.",
+          "example_pt": "Ela terá vinte anos em maio."
         },
         {
           "tense": "future_indicative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "teremos",
+          "example_en": "We will have visitors on Sunday.",
+          "example_pt": "Teremos visitas no domingo."
         },
         {
           "tense": "future_indicative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "terão",
+          "example_en": "They will have to wait.",
+          "example_pt": "Eles terão de esperar."
         },
         {
           "tense": "imperative_affirmative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tem",
+          "example_en": "Be patient!",
+          "example_pt": "Tem paciência!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tenha",
+          "example_en": "Have a nice day.",
+          "example_pt": "Tenha um bom dia."
         },
         {
           "tense": "imperative_affirmative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tenhamos",
+          "example_en": "Let's stay calm.",
+          "example_pt": "Tenhamos calma."
         },
         {
           "tense": "imperative_affirmative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tenham",
+          "example_en": "Be careful on the road, everyone.",
+          "example_pt": "Tenham cuidado na estrada."
         },
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não tenhas",
+          "example_en": "Don't be afraid.",
+          "example_pt": "Não tenhas medo."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não tenha",
+          "example_en": "Don't be in a hurry.",
+          "example_pt": "Não tenha pressa."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não tenhamos",
+          "example_en": "Let's have no illusions.",
+          "example_pt": "Não tenhamos ilusões."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não tenham",
+          "example_en": "Don't be embarrassed to ask.",
+          "example_pt": "Não tenham vergonha de perguntar."
         },
         {
           "tense": "personal_infinitive",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "ter",
+          "example_en": "To be sure, I checked twice.",
+          "example_pt": "Para eu ter a certeza, verifiquei duas vezes."
         },
         {
           "tense": "personal_infinitive",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "teres",
+          "example_en": "I'm glad you have time for us.",
+          "example_pt": "Fico contente por teres tempo para nós."
         },
         {
           "tense": "personal_infinitive",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "ter",
+          "example_en": "The fact that he has a car helps a lot.",
+          "example_pt": "O facto de ele ter carro ajuda muito."
         },
         {
           "tense": "personal_infinitive",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "termos",
+          "example_en": "Even though we were in a hurry, we stopped for lunch.",
+          "example_pt": "Apesar de termos pressa, parámos para almoçar."
         },
         {
           "tense": "personal_infinitive",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "terem",
+          "example_en": "It's rare for them to have holidays in August.",
+          "example_pt": "É raro eles terem férias em agosto."
         },
         {
           "tense": "past_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tido",
+          "example_en": "He has had a lot of work lately.",
+          "example_pt": "Ele tem tido muito trabalho ultimamente."
         },
         {
           "tense": "present_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "tendo",
+          "example_en": "Having finished the work, he went home.",
+          "example_pt": "Tendo terminado o trabalho, foi para casa."
         }
       ]
     },
@@ -1589,177 +1589,177 @@
         {
           "tense": "past_pluperfect",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "pudera",
+          "example_en": "I had not been able to say goodbye to him.",
+          "example_pt": "Eu não pudera despedir-me dele."
         },
         {
           "tense": "past_pluperfect",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "puderas",
+          "example_en": "You had never been able to travel until then.",
+          "example_pt": "Nunca puderas viajar até então."
         },
         {
           "tense": "past_pluperfect",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "pudera",
+          "example_en": "He had not been able to come to the ceremony.",
+          "example_pt": "Ele não pudera vir à cerimónia."
         },
         {
           "tense": "past_pluperfect",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "pudéramos",
+          "example_en": "We had not been able to warn anyone.",
+          "example_pt": "Não pudéramos avisar ninguém."
         },
         {
           "tense": "past_pluperfect",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "puderam",
+          "example_en": "They had not been able to say goodbye before the departure.",
+          "example_pt": "Eles não puderam despedir-se antes da partida."
         },
         {
           "tense": "future_indicative",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "poderei",
+          "example_en": "Tomorrow I will be able to answer for sure.",
+          "example_pt": "Amanhã poderei responder com certeza."
         },
         {
           "tense": "future_indicative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "poderás",
+          "example_en": "Soon you will be able to drive.",
+          "example_pt": "Em breve poderás conduzir."
         },
         {
           "tense": "future_indicative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "poderá",
+          "example_en": "She will be able to start on Monday.",
+          "example_pt": "Ela poderá começar na segunda-feira."
         },
         {
           "tense": "future_indicative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "poderemos",
+          "example_en": "After the works, we will be able to use the kitchen.",
+          "example_pt": "Depois das obras, poderemos usar a cozinha."
         },
         {
           "tense": "future_indicative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "poderão",
+          "example_en": "The members will be able to vote by post.",
+          "example_pt": "Os sócios poderão votar por correio."
         },
         {
           "tense": "imperative_affirmative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "pode",
+          "example_en": "Come in, it's open!",
+          "example_pt": "Pode entrar, está aberto!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "possa",
+          "example_en": "May you have many years of health!",
+          "example_pt": "Que possa ter muitos anos de saúde!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "possamos",
+          "example_en": "May we come back here one day!",
+          "example_pt": "Que possamos voltar aqui um dia!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "possam",
+          "example_en": "May you both be very happy together!",
+          "example_pt": "Que possam ser muito felizes juntos!"
         },
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não possas",
+          "example_en": "I hope you can't guess the surprise.",
+          "example_pt": "Espero que não possas adivinhar a surpresa."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não possa",
+          "example_en": "I hope he can't hear us.",
+          "example_pt": "Espero que ele não possa ouvir-nos."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não possamos",
+          "example_en": "It's a shame we can't stay longer.",
+          "example_pt": "É pena que não possamos ficar mais tempo."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não possam",
+          "example_en": "I'm sorry you can't come to the wedding.",
+          "example_pt": "Lamento que não possam vir ao casamento."
         },
         {
           "tense": "personal_infinitive",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "poder",
+          "example_en": "He called me early so that I could plan the day.",
+          "example_pt": "Ligou-me cedo para eu poder planear o dia."
         },
         {
           "tense": "personal_infinitive",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "poderes",
+          "example_en": "I'll leave you the car so you can go shopping.",
+          "example_pt": "Deixo-te o carro para poderes ir às compras."
         },
         {
           "tense": "personal_infinitive",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "poder",
+          "example_en": "I opened the door so he could come in.",
+          "example_pt": "Abri a porta para ele poder entrar."
         },
         {
           "tense": "personal_infinitive",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "podermos",
+          "example_en": "We left early so we could catch the train.",
+          "example_pt": "Saímos cedo para podermos apanhar o comboio."
         },
         {
           "tense": "personal_infinitive",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "poderem",
+          "example_en": "I bought tickets so they could come too.",
+          "example_pt": "Comprei bilhetes para eles poderem vir também."
         },
         {
           "tense": "past_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "podido",
+          "example_en": "Lately I haven't been able to sleep well.",
+          "example_pt": "Ultimamente não tenho podido dormir bem."
         },
         {
           "tense": "present_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "podendo",
+          "example_en": "Given the choice, I prefer the sea.",
+          "example_pt": "Podendo escolher, prefiro o mar."
         }
       ]
     },
@@ -2015,177 +2015,177 @@
         {
           "tense": "past_pluperfect",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "fora",
+          "example_en": "I had gone to the market that morning.",
+          "example_pt": "Eu fora ao mercado nessa manhã."
         },
         {
           "tense": "past_pluperfect",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "foras",
+          "example_en": "You had left before the speech.",
+          "example_pt": "Tu foras embora antes do discurso."
         },
         {
           "tense": "past_pluperfect",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "fora",
+          "example_en": "He had gone to Paris the year before.",
+          "example_pt": "Ele fora a Paris no ano anterior."
         },
         {
           "tense": "past_pluperfect",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "fôramos",
+          "example_en": "We had gone there the previous summer.",
+          "example_pt": "Fôramos lá no verão anterior."
         },
         {
           "tense": "past_pluperfect",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "foram",
+          "example_en": "They had left long before the party ended.",
+          "example_pt": "Eles foram embora muito antes de a festa acabar."
         },
         {
           "tense": "future_indicative",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "irei",
+          "example_en": "I will go to Rome in the spring.",
+          "example_pt": "Irei a Roma na primavera."
         },
         {
           "tense": "future_indicative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "irás",
+          "example_en": "You will go far.",
+          "example_pt": "Irás longe."
         },
         {
           "tense": "future_indicative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "irá",
+          "example_en": "She will go by plane.",
+          "example_pt": "Ela irá de avião."
         },
         {
           "tense": "future_indicative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "iremos",
+          "example_en": "We will drive to the Algarve.",
+          "example_pt": "Iremos de carro até ao Algarve."
         },
         {
           "tense": "future_indicative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "irão",
+          "example_en": "They will go with us next year.",
+          "example_pt": "Eles irão connosco no próximo ano."
         },
         {
           "tense": "imperative_affirmative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vai",
+          "example_en": "Go to bed!",
+          "example_pt": "Vai para a cama!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vá",
+          "example_en": "Go down this street.",
+          "example_pt": "Vá por esta rua."
         },
         {
           "tense": "imperative_affirmative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vamos",
+          "example_en": "Let's go!",
+          "example_pt": "Vamos embora!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vão",
+          "example_en": "Go home, everyone — it's late.",
+          "example_pt": "Vão para casa, já é tarde."
         },
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não vás",
+          "example_en": "Don't leave yet.",
+          "example_pt": "Não vás embora ainda."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não vá",
+          "example_en": "Don't go that way, it's under construction.",
+          "example_pt": "Não vá por aí, está em obras."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não vamos",
+          "example_en": "Let's not go this way.",
+          "example_pt": "Não vamos por este caminho."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não vão",
+          "example_en": "Don't go without me!",
+          "example_pt": "Não vão sem mim!"
         },
         {
           "tense": "personal_infinitive",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "ir",
+          "example_en": "It's better for me to go now.",
+          "example_pt": "É melhor eu ir agora."
         },
         {
           "tense": "personal_infinitive",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "ires",
+          "example_en": "Before you go, close the windows.",
+          "example_pt": "Antes de ires, fecha as janelas."
         },
         {
           "tense": "personal_infinitive",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "ir",
+          "example_en": "The plan is for him to go first.",
+          "example_pt": "O plano é ele ir à frente."
         },
         {
           "tense": "personal_infinitive",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "irmos",
+          "example_en": "It's time for us to go.",
+          "example_pt": "Está na hora de irmos."
         },
         {
           "tense": "personal_infinitive",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "irem",
+          "example_en": "I lent them the map so they could go on their own.",
+          "example_pt": "Emprestei-lhes o mapa para irem sozinhos."
         },
         {
           "tense": "past_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "ido",
+          "example_en": "When I arrived, they had already left.",
+          "example_pt": "Quando cheguei, eles já tinham ido embora."
         },
         {
           "tense": "present_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "indo",
+          "example_en": "Going by this road, you get there faster.",
+          "example_pt": "Indo por esta estrada, chega-se mais depressa."
         }
       ]
     },
@@ -2441,177 +2441,177 @@
         {
           "tense": "past_pluperfect",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "viera",
+          "example_en": "I had come on foot from the station.",
+          "example_pt": "Eu viera a pé desde a estação."
         },
         {
           "tense": "past_pluperfect",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vieras",
+          "example_en": "You had come to warn us the day before.",
+          "example_pt": "Tu vieras avisar-nos na véspera."
         },
         {
           "tense": "past_pluperfect",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "viera",
+          "example_en": "He had come from far away to see her.",
+          "example_pt": "Ele viera de longe para a ver."
         },
         {
           "tense": "past_pluperfect",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "viéramos",
+          "example_en": "We had come by train the night before.",
+          "example_pt": "Viéramos de comboio na noite anterior."
         },
         {
           "tense": "past_pluperfect",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vieram",
+          "example_en": "They had come from another city days earlier.",
+          "example_pt": "Eles vieram de outra cidade dias antes."
         },
         {
           "tense": "future_indicative",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "virei",
+          "example_en": "I will come and pick you up at eight.",
+          "example_pt": "Virei buscar-te às oito."
         },
         {
           "tense": "future_indicative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "virás",
+          "example_en": "Will you come with us next year?",
+          "example_pt": "Virás connosco para o ano?"
         },
         {
           "tense": "future_indicative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "virá",
+          "example_en": "The technician will come tomorrow morning.",
+          "example_pt": "O técnico virá amanhã de manhã."
         },
         {
           "tense": "future_indicative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "viremos",
+          "example_en": "We will come and visit you at Christmas.",
+          "example_pt": "Viremos visitar-vos no Natal."
         },
         {
           "tense": "future_indicative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "virão",
+          "example_en": "They will come for dinner on Saturday.",
+          "example_pt": "Eles virão jantar no sábado."
         },
         {
           "tense": "imperative_affirmative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vem",
+          "example_en": "Come here!",
+          "example_pt": "Vem cá!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "venha",
+          "example_en": "Come with me, please.",
+          "example_pt": "Venha comigo, por favor."
         },
         {
           "tense": "imperative_affirmative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "venhamos",
+          "example_en": "Let's get to the point.",
+          "example_pt": "Venhamos ao assunto."
         },
         {
           "tense": "imperative_affirmative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "venham",
+          "example_en": "Come quickly, everyone!",
+          "example_pt": "Venham depressa!"
         },
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não venhas",
+          "example_en": "Don't come home late.",
+          "example_pt": "Não venhas tarde."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não venha",
+          "example_en": "Don't come before nine.",
+          "example_pt": "Não venha antes das nove."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não venhamos",
+          "example_en": "Let's not all come at the same time.",
+          "example_pt": "Não venhamos todos ao mesmo tempo."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não venham",
+          "example_en": "Don't come without letting us know.",
+          "example_pt": "Não venham sem avisar."
         },
         {
           "tense": "personal_infinitive",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vir",
+          "example_en": "They asked me to come earlier.",
+          "example_pt": "Pediram-me para eu vir mais cedo."
         },
         {
           "tense": "personal_infinitive",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vires",
+          "example_en": "Let me know before you come.",
+          "example_pt": "Avisa-me antes de vires."
         },
         {
           "tense": "personal_infinitive",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vir",
+          "example_en": "It's hard for him to come during the week.",
+          "example_pt": "É difícil ele vir durante a semana."
         },
         {
           "tense": "personal_infinitive",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "virmos",
+          "example_en": "It's better for us to come early.",
+          "example_pt": "É melhor virmos cedo."
         },
         {
           "tense": "personal_infinitive",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "virem",
+          "example_en": "I left the door open so they can come whenever they want.",
+          "example_pt": "Deixei a porta aberta para eles virem quando quiserem."
         },
         {
           "tense": "past_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vindo",
+          "example_en": "They have been coming round to our house a lot.",
+          "example_pt": "Eles têm vindo cá a casa muitas vezes."
         },
         {
           "tense": "present_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vindo",
+          "example_en": "Coming by car, it takes you half an hour.",
+          "example_pt": "Vindo de carro, demoras meia hora."
         }
       ]
     },
@@ -2867,177 +2867,177 @@
         {
           "tense": "past_pluperfect",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vira",
+          "example_en": "I had seen that film years before.",
+          "example_pt": "Eu vira aquele filme anos antes."
         },
         {
           "tense": "past_pluperfect",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "viras",
+          "example_en": "You had seen the sea for the first time that summer.",
+          "example_pt": "Tu viras o mar pela primeira vez nesse verão."
         },
         {
           "tense": "past_pluperfect",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vira",
+          "example_en": "He had seen that face somewhere before.",
+          "example_pt": "Ele já vira aquela cara algures."
         },
         {
           "tense": "past_pluperfect",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "víramos",
+          "example_en": "We had never seen so much snow.",
+          "example_pt": "Nunca víramos tanta neve."
         },
         {
           "tense": "past_pluperfect",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "viram",
+          "example_en": "They had already seen the worst of the storm.",
+          "example_pt": "Eles já viram o pior da tempestade."
         },
         {
           "tense": "future_indicative",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "verei",
+          "example_en": "I will see what to do later.",
+          "example_pt": "Logo verei o que fazer."
         },
         {
           "tense": "future_indicative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "verás",
+          "example_en": "One day you will see that I'm right.",
+          "example_pt": "Um dia verás que tenho razão."
         },
         {
           "tense": "future_indicative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "verá",
+          "example_en": "She will see the results tomorrow.",
+          "example_pt": "Ela verá os resultados amanhã."
         },
         {
           "tense": "future_indicative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "veremos",
+          "example_en": "We will look at that calmly tomorrow.",
+          "example_pt": "Veremos isso com calma amanhã."
         },
         {
           "tense": "future_indicative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "verão",
+          "example_en": "They will see the photos on Sunday.",
+          "example_pt": "Eles verão as fotografias no domingo."
         },
         {
           "tense": "imperative_affirmative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vê",
+          "example_en": "See who's at the door.",
+          "example_pt": "Vê quem está à porta."
         },
         {
           "tense": "imperative_affirmative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "veja",
+          "example_en": "Look carefully before signing.",
+          "example_pt": "Veja bem antes de assinar."
         },
         {
           "tense": "imperative_affirmative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vejamos",
+          "example_en": "Let's look at the facts.",
+          "example_pt": "Vejamos os factos."
         },
         {
           "tense": "imperative_affirmative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vejam",
+          "example_en": "Look at this view, everyone!",
+          "example_pt": "Vejam esta vista!"
         },
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não vejas",
+          "example_en": "Don't watch the end of the film without me.",
+          "example_pt": "Não vejas o fim do filme sem mim."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não veja",
+          "example_en": "Don't watch television so late.",
+          "example_pt": "Não veja televisão até tão tarde."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não vejamos",
+          "example_en": "Let's not see only the flaws.",
+          "example_pt": "Não vejamos só os defeitos."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não vejam",
+          "example_en": "Don't watch that film, it's terrible.",
+          "example_pt": "Não vejam esse filme, é péssimo."
         },
         {
           "tense": "personal_infinitive",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "ver",
+          "example_en": "They brought the photos for me to see.",
+          "example_pt": "Trouxeram as fotos para eu ver."
         },
         {
           "tense": "personal_infinitive",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "veres",
+          "example_en": "I kept the newspaper so you could see the article.",
+          "example_pt": "Guardei o jornal para veres a notícia."
         },
         {
           "tense": "personal_infinitive",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "ver",
+          "example_en": "I left the light on so he could see the way.",
+          "example_pt": "Deixei a luz acesa para ele ver o caminho."
         },
         {
           "tense": "personal_infinitive",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vermos",
+          "example_en": "We stopped at the viewpoint to watch the sunset.",
+          "example_pt": "Parámos no miradouro para vermos o pôr do sol."
         },
         {
           "tense": "personal_infinitive",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "verem",
+          "example_en": "I sent the video for them to see.",
+          "example_pt": "Enviei o vídeo para eles verem."
         },
         {
           "tense": "past_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "visto",
+          "example_en": "I had never seen anything like it.",
+          "example_pt": "Nunca tinha visto nada assim."
         },
         {
           "tense": "present_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "vendo",
+          "example_en": "Come to think of it, it's not a bad idea.",
+          "example_pt": "Vendo bem, não é má ideia."
         }
       ]
     },
@@ -3293,177 +3293,177 @@
         {
           "tense": "past_pluperfect",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falara",
+          "example_en": "I had spoken to her the day before.",
+          "example_pt": "Eu falara com ela na véspera."
         },
         {
           "tense": "past_pluperfect",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falaras",
+          "example_en": "You had mentioned it weeks earlier.",
+          "example_pt": "Tu falaras nisso semanas antes."
         },
         {
           "tense": "past_pluperfect",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falara",
+          "example_en": "He had spoken to the director that morning.",
+          "example_pt": "Ele falara com o diretor de manhã."
         },
         {
           "tense": "past_pluperfect",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "faláramos",
+          "example_en": "We had talked about it at dinner.",
+          "example_pt": "Faláramos sobre isso ao jantar."
         },
         {
           "tense": "past_pluperfect",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falaram",
+          "example_en": "They had talked about it long before it happened.",
+          "example_pt": "Eles falaram disso muito antes de acontecer."
         },
         {
           "tense": "future_indicative",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falarei",
+          "example_en": "I will speak to him tomorrow.",
+          "example_pt": "Falarei com ele amanhã."
         },
         {
           "tense": "future_indicative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falarás",
+          "example_en": "Soon you will speak Portuguese very well.",
+          "example_pt": "Em breve falarás português muito bem."
         },
         {
           "tense": "future_indicative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falará",
+          "example_en": "The director will speak at the end of the meeting.",
+          "example_pt": "A diretora falará no fim da reunião."
         },
         {
           "tense": "future_indicative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falaremos",
+          "example_en": "We will talk about that later.",
+          "example_pt": "Falaremos disso mais tarde."
         },
         {
           "tense": "future_indicative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falarão",
+          "example_en": "The experts will speak at the conference.",
+          "example_pt": "Os especialistas falarão na conferência."
         },
         {
           "tense": "imperative_affirmative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "fala",
+          "example_en": "Speak louder, please.",
+          "example_pt": "Fala mais alto, por favor."
         },
         {
           "tense": "imperative_affirmative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "fale",
+          "example_en": "Speak slowly, please.",
+          "example_pt": "Fale devagar, por favor."
         },
         {
           "tense": "imperative_affirmative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falemos",
+          "example_en": "Let's talk about good things.",
+          "example_pt": "Falemos de coisas boas."
         },
         {
           "tense": "imperative_affirmative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falem",
+          "example_en": "Speak one at a time.",
+          "example_pt": "Falem um de cada vez."
         },
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não fales",
+          "example_en": "Don't talk with your mouth full.",
+          "example_pt": "Não fales de boca cheia."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não fale",
+          "example_en": "Don't speak so loudly, please.",
+          "example_pt": "Não fale tão alto, por favor."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não falemos",
+          "example_en": "Let's not talk about work at dinner.",
+          "example_pt": "Não falemos de trabalho ao jantar."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não falem",
+          "example_en": "Don't talk during the film.",
+          "example_pt": "Não falem durante o filme."
         },
         {
           "tense": "personal_infinitive",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falar",
+          "example_en": "They waited in silence for me to speak first.",
+          "example_pt": "Esperaram em silêncio para eu falar primeiro."
         },
         {
           "tense": "personal_infinitive",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falares",
+          "example_en": "Think before you speak.",
+          "example_pt": "Antes de falares, pensa."
         },
         {
           "tense": "personal_infinitive",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falar",
+          "example_en": "The best thing is for him to talk to the doctor.",
+          "example_pt": "O melhor é ele falar com o médico."
         },
         {
           "tense": "personal_infinitive",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falarmos",
+          "example_en": "We arranged to meet for coffee so we could talk properly.",
+          "example_pt": "Marcámos um café para falarmos com calma."
         },
         {
           "tense": "personal_infinitive",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falarem",
+          "example_en": "It's good for them to talk about the problem.",
+          "example_pt": "É bom eles falarem sobre o problema."
         },
         {
           "tense": "past_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falado",
+          "example_en": "We have talked a lot lately.",
+          "example_pt": "Temos falado muito ultimamente."
         },
         {
           "tense": "present_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "falando",
+          "example_en": "Speaking of which, did you see the game?",
+          "example_pt": "Falando nisso, viste o jogo?"
         }
       ]
     },
@@ -3719,177 +3719,177 @@
         {
           "tense": "past_pluperfect",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correra",
+          "example_en": "I had run the marathon the year before.",
+          "example_pt": "Eu correra a maratona no ano anterior."
         },
         {
           "tense": "past_pluperfect",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correras",
+          "example_en": "You had taken many risks until then.",
+          "example_pt": "Tu correras muitos riscos até aí."
         },
         {
           "tense": "past_pluperfect",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correra",
+          "example_en": "The game had gone badly from the start.",
+          "example_pt": "O jogo correra mal desde o início."
         },
         {
           "tense": "past_pluperfect",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "corrêramos",
+          "example_en": "We had run ten kilometres before breakfast.",
+          "example_pt": "Corrêramos dez quilómetros antes do pequeno-almoço."
         },
         {
           "tense": "past_pluperfect",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correram",
+          "example_en": "They had run the same race years earlier.",
+          "example_pt": "Eles correram a mesma prova anos antes."
         },
         {
           "tense": "future_indicative",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correrei",
+          "example_en": "I will run the half-marathon in October.",
+          "example_pt": "Correrei a meia-maratona em outubro."
         },
         {
           "tense": "future_indicative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correrás",
+          "example_en": "With training, you will run faster.",
+          "example_pt": "Com treino, correrás mais depressa."
         },
         {
           "tense": "future_indicative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correrá",
+          "example_en": "Everything will go well.",
+          "example_pt": "Tudo correrá bem."
         },
         {
           "tense": "future_indicative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correremos",
+          "example_en": "We will run together on Sunday.",
+          "example_pt": "Correremos juntos no domingo."
         },
         {
           "tense": "future_indicative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correrão",
+          "example_en": "The athletes will run in the afternoon.",
+          "example_pt": "Os atletas correrão à tarde."
         },
         {
           "tense": "imperative_affirmative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "corre",
+          "example_en": "Run, the bus is coming!",
+          "example_pt": "Corre, que o autocarro está a chegar!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "corra",
+          "example_en": "Run, you can still catch the train!",
+          "example_pt": "Corra, ainda apanha o comboio!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "corramos",
+          "example_en": "Let's run to that tree!",
+          "example_pt": "Corramos até àquela árvore!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "corram",
+          "example_en": "Run, kids, it's raining!",
+          "example_pt": "Corram, meninos, está a chover!"
         },
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não corras",
+          "example_en": "Don't run in the corridors.",
+          "example_pt": "Não corras nos corredores."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não corra",
+          "example_en": "Don't run by the pool.",
+          "example_pt": "Não corra à beira da piscina."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não corramos",
+          "example_en": "Let's not take unnecessary risks.",
+          "example_pt": "Não corramos riscos desnecessários."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não corram",
+          "example_en": "Don't run inside the house!",
+          "example_pt": "Não corram dentro de casa!"
         },
         {
           "tense": "personal_infinitive",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correr",
+          "example_en": "They bought me new trainers so I could run.",
+          "example_pt": "Compraram-me sapatilhas novas para eu correr."
         },
         {
           "tense": "personal_infinitive",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correres",
+          "example_en": "After you run, stretch well.",
+          "example_pt": "Depois de correres, alonga bem."
         },
         {
           "tense": "personal_infinitive",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correr",
+          "example_en": "It's rare for him to run in the morning.",
+          "example_pt": "É raro ele correr de manhã."
         },
         {
           "tense": "personal_infinitive",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "corrermos",
+          "example_en": "We woke up early to run on the beach.",
+          "example_pt": "Acordámos cedo para corrermos na praia."
         },
         {
           "tense": "personal_infinitive",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correrem",
+          "example_en": "The coach set a time for them to run.",
+          "example_pt": "O treinador marcou uma hora para eles correrem."
         },
         {
           "tense": "past_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "corrido",
+          "example_en": "I have been running every morning.",
+          "example_pt": "Tenho corrido todas as manhãs."
         },
         {
           "tense": "present_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "correndo",
+          "example_en": "If all goes well, we sign tomorrow.",
+          "example_pt": "Correndo tudo bem, assinamos amanhã."
         }
       ]
     },
@@ -4145,177 +4145,177 @@
         {
           "tense": "past_pluperfect",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormira",
+          "example_en": "I had slept badly the night before.",
+          "example_pt": "Eu dormira mal na noite anterior."
         },
         {
           "tense": "past_pluperfect",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormiras",
+          "example_en": "You had slept only three hours.",
+          "example_pt": "Tu dormiras apenas três horas."
         },
         {
           "tense": "past_pluperfect",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormira",
+          "example_en": "He had slept on the sofa that night.",
+          "example_pt": "Ele dormira no sofá nessa noite."
         },
         {
           "tense": "past_pluperfect",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormíramos",
+          "example_en": "We had slept little during the trip.",
+          "example_pt": "Dormíramos pouco durante a viagem."
         },
         {
           "tense": "past_pluperfect",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormiram",
+          "example_en": "They had taken a nap before going out.",
+          "example_pt": "Eles dormiram a sesta antes de sair."
         },
         {
           "tense": "future_indicative",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormirei",
+          "example_en": "Tonight I will sleep early.",
+          "example_pt": "Hoje dormirei cedo."
         },
         {
           "tense": "future_indicative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormirás",
+          "example_en": "After the hike, you will sleep well.",
+          "example_pt": "Depois da caminhada, dormirás bem."
         },
         {
           "tense": "future_indicative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormirá",
+          "example_en": "The baby will sleep all afternoon.",
+          "example_pt": "O bebé dormirá a tarde toda."
         },
         {
           "tense": "future_indicative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormiremos",
+          "example_en": "We will sleep at grandma's house.",
+          "example_pt": "Dormiremos na casa da avó."
         },
         {
           "tense": "future_indicative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormirão",
+          "example_en": "The kids will sleep in the living room.",
+          "example_pt": "Os miúdos dormirão na sala."
         },
         {
           "tense": "imperative_affirmative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dorme",
+          "example_en": "Sleep well!",
+          "example_pt": "Dorme bem!"
         },
         {
           "tense": "imperative_affirmative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "durma",
+          "example_en": "Sleep well, see you tomorrow.",
+          "example_pt": "Durma bem, até amanhã."
         },
         {
           "tense": "imperative_affirmative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "durmamos",
+          "example_en": "Let's sleep early tonight.",
+          "example_pt": "Durmamos cedo hoje."
         },
         {
           "tense": "imperative_affirmative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "durmam",
+          "example_en": "Sleep well, kids.",
+          "example_pt": "Durmam bem, meninos."
         },
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não durmas",
+          "example_en": "Don't sleep on the sofa.",
+          "example_pt": "Não durmas no sofá."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não durma",
+          "example_en": "Don't sleep with the window open.",
+          "example_pt": "Não durma com a janela aberta."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não durmamos",
+          "example_en": "Let's not sleep in tomorrow.",
+          "example_pt": "Não durmamos até tarde amanhã."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "não durmam",
+          "example_en": "Don't sleep during the journey.",
+          "example_pt": "Não durmam durante a viagem."
         },
         {
           "tense": "personal_infinitive",
           "person": "eu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormir",
+          "example_en": "They turned off the music so I could sleep.",
+          "example_pt": "Desligaram a música para eu dormir."
         },
         {
           "tense": "personal_infinitive",
           "person": "tu",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormires",
+          "example_en": "After you sleep, you'll feel better.",
+          "example_pt": "Depois de dormires, vais sentir-te melhor."
         },
         {
           "tense": "personal_infinitive",
           "person": "ele",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormir",
+          "example_en": "It's important for him to sleep eight hours.",
+          "example_pt": "É importante ele dormir oito horas."
         },
         {
           "tense": "personal_infinitive",
           "person": "nos",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormirmos",
+          "example_en": "We closed the blinds so we could sleep better.",
+          "example_pt": "Fechámos as persianas para dormirmos melhor."
         },
         {
           "tense": "personal_infinitive",
           "person": "eles",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormirem",
+          "example_en": "I got the room ready for them to sleep over.",
+          "example_pt": "Preparei o quarto para eles dormirem cá."
         },
         {
           "tense": "past_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormido",
+          "example_en": "I haven't been sleeping well.",
+          "example_pt": "Não tenho dormido bem."
         },
         {
           "tense": "present_participle",
           "person": "inv",
-          "form": "",
-          "example_en": "",
-          "example_pt": ""
+          "form": "dormindo",
+          "example_en": "When you sleep well, everything seems easier.",
+          "example_pt": "Dormindo bem, tudo parece mais fácil."
         }
       ]
     }

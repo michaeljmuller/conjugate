@@ -29,20 +29,20 @@
         "eles": "eram"
       },
       "past_pluperfect": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "fora",
+        "tu": "foras",
+        "ele": "fora",
+        "nos": "fôramos",
+        "vos": "fôreis",
+        "eles": "foram"
       },
       "future_indicative": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "serei",
+        "tu": "serás",
+        "ele": "será",
+        "nos": "seremos",
+        "vos": "sereis",
+        "eles": "serão"
       },
       "conditional": {
         "eu": "seria",
@@ -77,24 +77,24 @@
         "eles": "forem"
       },
       "imperative_affirmative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "sê",
+        "ele": "seja",
+        "nos": "sejamos",
+        "eles": "sejam"
       },
       "imperative_negative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "não sejas",
+        "ele": "não seja",
+        "nos": "não sejamos",
+        "eles": "não sejam"
       },
       "personal_infinitive": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "ser",
+        "tu": "seres",
+        "ele": "ser",
+        "nos": "sermos",
+        "vos": "serdes",
+        "eles": "serem"
       }
     }
   },
@@ -128,20 +128,20 @@
         "eles": "estavam"
       },
       "past_pluperfect": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "estivera",
+        "tu": "estiveras",
+        "ele": "estivera",
+        "nos": "estivéramos",
+        "vos": "estivéreis",
+        "eles": "estiveram"
       },
       "future_indicative": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "estarei",
+        "tu": "estarás",
+        "ele": "estará",
+        "nos": "estaremos",
+        "vos": "estareis",
+        "eles": "estarão"
       },
       "conditional": {
         "eu": "estaria",
@@ -176,24 +176,24 @@
         "eles": "estiverem"
       },
       "imperative_affirmative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "está",
+        "ele": "esteja",
+        "nos": "estejamos",
+        "eles": "estejam"
       },
       "imperative_negative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "não estejas",
+        "ele": "não esteja",
+        "nos": "não estejamos",
+        "eles": "não estejam"
       },
       "personal_infinitive": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "estar",
+        "tu": "estares",
+        "ele": "estar",
+        "nos": "estarmos",
+        "vos": "estardes",
+        "eles": "estarem"
       }
     }
   },
@@ -227,20 +227,20 @@
         "eles": "tinham"
       },
       "past_pluperfect": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "tivera",
+        "tu": "tiveras",
+        "ele": "tivera",
+        "nos": "tivéramos",
+        "vos": "tivéreis",
+        "eles": "tiveram"
       },
       "future_indicative": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "terei",
+        "tu": "terás",
+        "ele": "terá",
+        "nos": "teremos",
+        "vos": "tereis",
+        "eles": "terão"
       },
       "conditional": {
         "eu": "teria",
@@ -275,24 +275,24 @@
         "eles": "tiverem"
       },
       "imperative_affirmative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "tem",
+        "ele": "tenha",
+        "nos": "tenhamos",
+        "eles": "tenham"
       },
       "imperative_negative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "não tenhas",
+        "ele": "não tenha",
+        "nos": "não tenhamos",
+        "eles": "não tenham"
       },
       "personal_infinitive": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "ter",
+        "tu": "teres",
+        "ele": "ter",
+        "nos": "termos",
+        "vos": "terdes",
+        "eles": "terem"
       }
     }
   },
@@ -326,20 +326,20 @@
         "eles": "podiam"
       },
       "past_pluperfect": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "pudera",
+        "tu": "puderas",
+        "ele": "pudera",
+        "nos": "pudéramos",
+        "vos": "pudéreis",
+        "eles": "puderam"
       },
       "future_indicative": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "poderei",
+        "tu": "poderás",
+        "ele": "poderá",
+        "nos": "poderemos",
+        "vos": "podereis",
+        "eles": "poderão"
       },
       "conditional": {
         "eu": "poderia",
@@ -374,24 +374,24 @@
         "eles": "puderem"
       },
       "imperative_affirmative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "pode",
+        "ele": "possa",
+        "nos": "possamos",
+        "eles": "possam"
       },
       "imperative_negative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "não possas",
+        "ele": "não possa",
+        "nos": "não possamos",
+        "eles": "não possam"
       },
       "personal_infinitive": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "poder",
+        "tu": "poderes",
+        "ele": "poder",
+        "nos": "podermos",
+        "vos": "poderdes",
+        "eles": "poderem"
       }
     }
   },
@@ -425,20 +425,20 @@
         "eles": "iam"
       },
       "past_pluperfect": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "fora",
+        "tu": "foras",
+        "ele": "fora",
+        "nos": "fôramos",
+        "vos": "fôreis",
+        "eles": "foram"
       },
       "future_indicative": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "irei",
+        "tu": "irás",
+        "ele": "irá",
+        "nos": "iremos",
+        "vos": "ireis",
+        "eles": "irão"
       },
       "conditional": {
         "eu": "iria",
@@ -473,24 +473,24 @@
         "eles": "forem"
       },
       "imperative_affirmative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "vai",
+        "ele": "vá",
+        "nos": "vamos",
+        "eles": "vão"
       },
       "imperative_negative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "não vás",
+        "ele": "não vá",
+        "nos": "não vamos",
+        "eles": "não vão"
       },
       "personal_infinitive": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "ir",
+        "tu": "ires",
+        "ele": "ir",
+        "nos": "irmos",
+        "vos": "irdes",
+        "eles": "irem"
       }
     }
   },
@@ -524,20 +524,20 @@
         "eles": "vinham"
       },
       "past_pluperfect": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "viera",
+        "tu": "vieras",
+        "ele": "viera",
+        "nos": "viéramos",
+        "vos": "viéreis",
+        "eles": "vieram"
       },
       "future_indicative": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "virei",
+        "tu": "virás",
+        "ele": "virá",
+        "nos": "viremos",
+        "vos": "vireis",
+        "eles": "virão"
       },
       "conditional": {
         "eu": "viria",
@@ -572,24 +572,24 @@
         "eles": "vierem"
       },
       "imperative_affirmative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "vem",
+        "ele": "venha",
+        "nos": "venhamos",
+        "eles": "venham"
       },
       "imperative_negative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "não venhas",
+        "ele": "não venha",
+        "nos": "não venhamos",
+        "eles": "não venham"
       },
       "personal_infinitive": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "vir",
+        "tu": "vires",
+        "ele": "vir",
+        "nos": "virmos",
+        "vos": "virdes",
+        "eles": "virem"
       }
     }
   },
@@ -623,20 +623,20 @@
         "eles": "viam"
       },
       "past_pluperfect": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "vira",
+        "tu": "viras",
+        "ele": "vira",
+        "nos": "víramos",
+        "vos": "víreis",
+        "eles": "viram"
       },
       "future_indicative": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "verei",
+        "tu": "verás",
+        "ele": "verá",
+        "nos": "veremos",
+        "vos": "vereis",
+        "eles": "verão"
       },
       "conditional": {
         "eu": "veria",
@@ -671,24 +671,24 @@
         "eles": "virem"
       },
       "imperative_affirmative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "vê",
+        "ele": "veja",
+        "nos": "vejamos",
+        "eles": "vejam"
       },
       "imperative_negative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "não vejas",
+        "ele": "não veja",
+        "nos": "não vejamos",
+        "eles": "não vejam"
       },
       "personal_infinitive": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "ver",
+        "tu": "veres",
+        "ele": "ver",
+        "nos": "vermos",
+        "vos": "verdes",
+        "eles": "verem"
       }
     }
   },
@@ -722,20 +722,20 @@
         "eles": "falavam"
       },
       "past_pluperfect": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "falara",
+        "tu": "falaras",
+        "ele": "falara",
+        "nos": "faláramos",
+        "vos": "faláreis",
+        "eles": "falaram"
       },
       "future_indicative": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "falarei",
+        "tu": "falarás",
+        "ele": "falará",
+        "nos": "falaremos",
+        "vos": "falareis",
+        "eles": "falarão"
       },
       "conditional": {
         "eu": "falaria",
@@ -770,24 +770,24 @@
         "eles": "falarem"
       },
       "imperative_affirmative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "fala",
+        "ele": "fale",
+        "nos": "falemos",
+        "eles": "falem"
       },
       "imperative_negative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "não fales",
+        "ele": "não fale",
+        "nos": "não falemos",
+        "eles": "não falem"
       },
       "personal_infinitive": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "falar",
+        "tu": "falares",
+        "ele": "falar",
+        "nos": "falarmos",
+        "vos": "falardes",
+        "eles": "falarem"
       }
     }
   },
@@ -821,20 +821,20 @@
         "eles": "corriam"
       },
       "past_pluperfect": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "correra",
+        "tu": "correras",
+        "ele": "correra",
+        "nos": "corrêramos",
+        "vos": "corrêreis",
+        "eles": "correram"
       },
       "future_indicative": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "correrei",
+        "tu": "correrás",
+        "ele": "correrá",
+        "nos": "correremos",
+        "vos": "correreis",
+        "eles": "correrão"
       },
       "conditional": {
         "eu": "correria",
@@ -869,24 +869,24 @@
         "eles": "correrem"
       },
       "imperative_affirmative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "corre",
+        "ele": "corra",
+        "nos": "corramos",
+        "eles": "corram"
       },
       "imperative_negative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "não corras",
+        "ele": "não corra",
+        "nos": "não corramos",
+        "eles": "não corram"
       },
       "personal_infinitive": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "correr",
+        "tu": "correres",
+        "ele": "correr",
+        "nos": "corrermos",
+        "vos": "correrdes",
+        "eles": "correrem"
       }
     }
   },
@@ -920,20 +920,20 @@
         "eles": "dormiam"
       },
       "past_pluperfect": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "dormira",
+        "tu": "dormiras",
+        "ele": "dormira",
+        "nos": "dormíramos",
+        "vos": "dormíreis",
+        "eles": "dormiram"
       },
       "future_indicative": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "dormirei",
+        "tu": "dormirás",
+        "ele": "dormirá",
+        "nos": "dormiremos",
+        "vos": "dormireis",
+        "eles": "dormirão"
       },
       "conditional": {
         "eu": "dormiria",
@@ -968,24 +968,24 @@
         "eles": "dormirem"
       },
       "imperative_affirmative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "dorme",
+        "ele": "durma",
+        "nos": "durmamos",
+        "eles": "durmam"
       },
       "imperative_negative": {
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "eles": ""
+        "tu": "não durmas",
+        "ele": "não durma",
+        "nos": "não durmamos",
+        "eles": "não durmam"
       },
       "personal_infinitive": {
-        "eu": "",
-        "tu": "",
-        "ele": "",
-        "nos": "",
-        "vos": "",
-        "eles": ""
+        "eu": "dormir",
+        "tu": "dormires",
+        "ele": "dormir",
+        "nos": "dormirmos",
+        "vos": "dormirdes",
+        "eles": "dormirem"
       }
     }
   }
