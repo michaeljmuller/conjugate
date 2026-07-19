@@ -15,6 +15,15 @@ let ui = { labels: "en", show_accents: false }; // interface prefs, loaded at in
 const labelOf = (o) => (ui.labels === "pt" && o.label_pt) || o.label;
 const moodOf = (o) => (ui.labels === "pt" && o.mood_pt) || o.mood;
 
+// The mood tag, as an HTML fragment — but suppressed when the label already
+// contains it (e.g. "Conditional" / conditional, "Past participle" / participle),
+// so we never render "Conditional conditional".
+function moodSpan(o, cls) {
+  const mood = moodOf(o);
+  if (labelOf(o).toLowerCase().includes(mood.toLowerCase())) return "";
+  return ` <span class="${cls}">${mood}</span>`;
+}
+
 async function api(path, opts = {}) {
   const res = await fetch(path, {
     headers: { "Content-Type": "application/json" },
@@ -160,7 +169,7 @@ function renderTensePrefs(tenses) {
       `<span class="tp-grip" aria-hidden="true">⣿</span>` +
       `<label class="tp-toggle">` +
       `<input type="checkbox" ${t.enabled ? "checked" : ""} />` +
-      `<span class="tp-name">${labelOf(t)} <span class="tp-mood">${moodOf(t)}</span></span>` +
+      `<span class="tp-name">${labelOf(t)}${moodSpan(t, "tp-mood")}</span>` +
       `</label>`;
     ul.appendChild(li);
   }
@@ -286,7 +295,7 @@ function renderDrill(data) {
   for (const block of data.blocks) {
     const wrap = document.createElement("div");
     wrap.className = "tense-block";
-    wrap.innerHTML = `<h3>${labelOf(block)} <span class="mood">${moodOf(block)}</span></h3>`;
+    wrap.innerHTML = `<h3>${labelOf(block)}${moodSpan(block, "mood")}</h3>`;
     for (const r of block.rows) {
       const row = makeRow(r);
       wrap.appendChild(row.el);

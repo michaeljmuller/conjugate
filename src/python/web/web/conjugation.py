@@ -21,9 +21,9 @@ PRESENT_PARTICIPLE_TENSE = "present_participle"
 # (``label_pt``/``mood_pt``) names; the UI's Interface setting picks which to show.
 TENSES: list[dict[str, str]] = [
     {"key": "present_indicative", "label": "Present", "mood": "indicative", "label_pt": "Presente", "mood_pt": "indicativo"},
-    {"key": "preterite", "label": "Preterite", "mood": "indicative", "label_pt": "Pretérito perfeito", "mood_pt": "indicativo"},
+    {"key": "preterite", "label": "Preterite (simple past)", "mood": "indicative", "label_pt": "Pretérito perfeito", "mood_pt": "indicativo"},
     {"key": "past_imperfect_indicative", "label": "Past imperfect", "mood": "indicative", "label_pt": "Pretérito imperfeito", "mood_pt": "indicativo"},
-    {"key": "past_pluperfect", "label": "Pluperfect", "mood": "indicative", "label_pt": "Pretérito mais-que-perfeito", "mood_pt": "indicativo"},
+    {"key": "past_pluperfect", "label": "Pluperfect (perfect past)", "mood": "indicative", "label_pt": "Pretérito mais-que-perfeito", "mood_pt": "indicativo"},
     {"key": "future_indicative", "label": "Future", "mood": "indicative", "label_pt": "Futuro", "mood_pt": "indicativo"},
     {"key": "conditional", "label": "Conditional", "mood": "conditional", "label_pt": "Condicional", "mood_pt": "condicional"},
     {"key": "present_subjunctive", "label": "Present", "mood": "subjunctive", "label_pt": "Presente", "mood_pt": "conjuntivo"},
