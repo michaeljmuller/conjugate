@@ -4,6 +4,7 @@
 services:
   db:
     image: postgres:16
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-conjugate}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-conjugate}
@@ -19,6 +20,7 @@ services:
       retries: 10
 
   web:
+    restart: unless-stopped
     build:
       # Context is the component dir so the Dockerfile can COPY ./web.
       context: ../python/web
