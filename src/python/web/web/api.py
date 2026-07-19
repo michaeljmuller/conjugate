@@ -70,6 +70,10 @@ def verb_forms(
                     "example_pt": form.example_pt,
                 }
             )
+        if not rows:
+            # Tense not yet seeded for this verb (e.g. an unfilled placeholder):
+            # omit it entirely rather than render a bare heading with no inputs.
+            continue
         blocks.append(
             {
                 "tense": tense["key"],

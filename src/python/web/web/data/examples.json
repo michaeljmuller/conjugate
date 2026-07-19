@@ -7,7 +7,8 @@
       "tu": "you (one person, informal)",
       "ele": "he / she / it",
       "nos": "we",
-      "eles": "they"
+      "eles": "they",
+      "inv": "(no subject — participle / gerund)"
     },
     "subjunctive_prefixes": {
       "present_subjunctive": "que (that ...)",
@@ -21,7 +22,14 @@
       "present_subjunctive": "Subjunctive triggered by wish, doubt, emotion, or necessity — usually a 'that ...' clause. Show the trigger.",
       "past_imperfect_subjunctive": "Hypothetical or counterfactual, usually after 'if'.",
       "future_subjunctive": "A future condition or 'when/if ...' clause about the future (specific to Portuguese).",
-      "conditional": "The 'would' form — the result of a hypothetical."
+      "conditional": "The 'would' form — the result of a hypothetical.",
+      "past_pluperfect": "Synthetic pluperfect ('had ...-ed'), the literary one-word form.",
+      "future_indicative": "Simple future ('will ...'), the one-word synthetic form.",
+      "imperative_affirmative": "A command ('Do it!'). No first-person singular.",
+      "imperative_negative": "A negative command ('Don't do it!'). No first-person singular.",
+      "personal_infinitive": "Portuguese inflected infinitive, e.g. 'para eu ser ...' / 'antes de saíres'.",
+      "past_participle": "Invariable participle used in an example (e.g. an adjective or 'ter ...-ido').",
+      "present_participle": "The gerund; in pt-PT usually 'a + infinitive' ('estou a correr')."
     },
     "style_examples": [
       {
@@ -299,6 +307,181 @@
           "form": "seriam",
           "example_en": "They would be perfect for this job.",
           "example_pt": "Seriam perfeitos para este trabalho."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
         }
       ]
     },
@@ -550,6 +733,181 @@
           "form": "estariam",
           "example_en": "They would be safer at home.",
           "example_pt": "Estariam mais seguros em casa."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
         }
       ]
     },
@@ -801,6 +1159,181 @@
           "form": "teriam",
           "example_en": "With this plan, they would have fewer expenses.",
           "example_pt": "Com este plano, teriam menos despesas."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
         }
       ]
     },
@@ -1052,6 +1585,181 @@
           "form": "poderiam",
           "example_en": "They could win the championship.",
           "example_pt": "Eles poderiam ganhar o campeonato."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
         }
       ]
     },
@@ -1303,6 +2011,181 @@
           "form": "iriam",
           "example_en": "They would go with us, but they can't.",
           "example_pt": "Iriam connosco, mas não podem."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
         }
       ]
     },
@@ -1554,6 +2437,181 @@
           "form": "viriam",
           "example_en": "They would come, but the flight is expensive.",
           "example_pt": "Eles viriam, mas o voo é caro."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
         }
       ]
     },
@@ -1805,6 +2863,181 @@
           "form": "veriam",
           "example_en": "With more light, they would see better.",
           "example_pt": "Com mais luz, veriam melhor."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
         }
       ]
     },
@@ -2056,6 +3289,181 @@
           "form": "falariam",
           "example_en": "They would talk to you, but they're busy.",
           "example_pt": "Falariam contigo, mas estão ocupados."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
         }
       ]
     },
@@ -2307,6 +3715,181 @@
           "form": "correriam",
           "example_en": "They would run better with training.",
           "example_pt": "Eles correriam melhor com treino."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
         }
       ]
     },
@@ -2558,6 +4141,181 @@
           "form": "dormiriam",
           "example_en": "They would sleep better with less noise.",
           "example_pt": "Dormiriam melhor com menos barulho."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "",
+          "example_en": "",
+          "example_pt": ""
         }
       ]
     }

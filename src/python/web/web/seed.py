@@ -8,6 +8,11 @@ from pathlib import Path
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from .conjugation import (
+    INVARIABLE_PERSON,
+    PAST_PARTICIPLE_TENSE,
+    PRESENT_PARTICIPLE_TENSE,
+)
 from .models import Base, Form, Verb
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -28,6 +33,12 @@ def seed_verbs(db: Session) -> int:
     redeploy introduce a new tense (e.g. the imperative) just by extending
     ``verbs_seed.json`` — no wipe, no schema change. Existing forms are left
     untouched (their text/examples are owned elsewhere); only gaps are filled.
+
+    Blank cells are skipped, so the seed can carry empty placeholders for slots
+    that aren't filled in yet — they become real forms once populated and the app
+    is redeployed. The two participles have no person, so they are stored as forms
+    under the invariable pseudo-person, sourced from the verb's top-level
+    ``past_participle`` / ``present_participle`` fields.
     """
     data = json.loads(SEED_FILE.read_text(encoding="utf-8"))
     inserted = 0
@@ -47,13 +58,29 @@ def seed_verbs(db: Session) -> int:
             if verb.present_participle is None:
                 verb.present_participle = entry.get("present_participle")
 
+        # Person-inflected forms from the JSON, plus the two personless participles
+        # synthesized from the verb's top-level fields.
+        candidates = [
+            (tense, person, text)
+            for tense, persons in entry["forms"].items()
+            for person, text in persons.items()
+        ]
+        candidates.append(
+            (PAST_PARTICIPLE_TENSE, INVARIABLE_PERSON, entry.get("past_participle"))
+        )
+        candidates.append(
+            (PRESENT_PARTICIPLE_TENSE, INVARIABLE_PERSON, entry.get("present_participle"))
+        )
+
         existing = {(f.tense, f.person) for f in verb.forms}
-        for tense, persons in entry["forms"].items():
-            for person, text in persons.items():
-                if (tense, person) in existing:
-                    continue
-                verb.forms.append(Form(tense=tense, person=person, form_text=text))
-                inserted += 1
+        for tense, person, text in candidates:
+            if not (text or "").strip():
+                continue  # unfilled placeholder — leave it for a later redeploy
+            if (tense, person) in existing:
+                continue
+            verb.forms.append(Form(tense=tense, person=person, form_text=text))
+            existing.add((tense, person))
+            inserted += 1
     # Commit unconditionally: new verbs and participle backfills are dirty even
     # when no new forms were inserted.
     db.commit()
