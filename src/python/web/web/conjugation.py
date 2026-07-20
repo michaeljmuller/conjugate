@@ -3,8 +3,9 @@
 Started from the original Excel tool (7 tenses, 5 drilled persons — ``vos`` is
 stored for completeness but skipped in the drill, as in the sheet), then extended
 with the imperative, future, personal infinitive, past pluperfect, and the two
-participles. Subjunctive tenses display a pronoun prefix (que / se / quando) — a
-presentation detail kept here, not in the database.
+participles. Some tenses display a prefix before the person (que / se / quando for
+the subjunctives, não for the negative imperative) — a presentation detail kept
+here, not in the database.
 
 Participles have no person, so they are stored as forms under a pseudo-person
 (``INVARIABLE_PERSON``) and rendered with an empty person label.
@@ -44,11 +45,14 @@ TENSE_KEYS: list[str] = [t["key"] for t in TENSES]
 PERSONS: list[str] = ["eu", "tu", "ele", "nos", "vos", "eles"]
 DRILL_PERSONS: list[str] = ["eu", "tu", "ele", "nos", "eles", INVARIABLE_PERSON]
 
-# Pronoun prefix shown before the person in subjunctive tenses.
-_SUBJUNCTIVE_PREFIX: dict[str, str] = {
+# Prefix shown before the person for tenses whose stored answer isn't the bare
+# verb form: the subjunctive cue words, and the negative imperative's "não"
+# (answers are stored as "não sejas", so the prompt has to ask for it).
+_PERSON_PREFIX: dict[str, str] = {
     "present_subjunctive": "que",
     "past_imperfect_subjunctive": "se",
     "future_subjunctive": "quando",
+    "imperative_negative": "não",
 }
 
 # Display spelling for each person (the DB stores ascii-safe keys).
@@ -92,7 +96,7 @@ def resolve_tense_prefs(saved: list[dict]) -> list[dict]:
 
 
 def person_label(tense: str, person: str) -> str:
-    """Human label for a (tense, person) pair, e.g. ``que eu`` or ``nós``.
+    """Human label for a (tense, person) pair, e.g. ``que eu``, ``não tu``, ``nós``.
 
     Participles are personless, so their row carries no label — the tense heading
     ("Past participle") is the whole prompt.
@@ -100,5 +104,5 @@ def person_label(tense: str, person: str) -> str:
     if person == INVARIABLE_PERSON:
         return ""
     base = _PERSON_DISPLAY.get(person, person)
-    prefix = _SUBJUNCTIVE_PREFIX.get(tense)
+    prefix = _PERSON_PREFIX.get(tense)
     return f"{prefix} {base}" if prefix else base

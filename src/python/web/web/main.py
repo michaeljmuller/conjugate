@@ -13,7 +13,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from . import api, auth
 from .db import SessionLocal, engine
-from .seed import init_db, seed_examples, seed_verbs
+from .seed import init_db, seed_examples, seed_verbs, strip_negative_imperative_prefix
 
 STATIC_DIR = Path(__file__).parent / "static"
 
@@ -23,6 +23,7 @@ async def lifespan(app: FastAPI):
     init_db(engine)
     with SessionLocal() as db:
         seed_verbs(db)
+        strip_negative_imperative_prefix(db)
         seed_examples(db)
     yield
 

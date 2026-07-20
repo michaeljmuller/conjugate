@@ -13,3 +13,11 @@
   - challenge: some verbs have TWO past participles (none of the ones currently configured, though)
 - remove the audio created by db column that the AI over-helpfully added
 - src/python/web/web/ ... seems wrong.
+- pluperfect and future, simple vs compound:
+  - display the compound version
+    - before or after submitting the response for the simple form?
+    - this will "give away" the answer for the past participle
+  - have a separate section for the compound form
+  - accept either form?
+- have pluperfect be disabled by default?
+- remove the one-time "não" stripping code

@@ -83,10 +83,10 @@
         "eles": "sejam"
       },
       "imperative_negative": {
-        "tu": "não sejas",
-        "ele": "não seja",
-        "nos": "não sejamos",
-        "eles": "não sejam"
+        "tu": "sejas",
+        "ele": "seja",
+        "nos": "sejamos",
+        "eles": "sejam"
       },
       "personal_infinitive": {
         "eu": "ser",
@@ -182,10 +182,10 @@
         "eles": "estejam"
       },
       "imperative_negative": {
-        "tu": "não estejas",
-        "ele": "não esteja",
-        "nos": "não estejamos",
-        "eles": "não estejam"
+        "tu": "estejas",
+        "ele": "esteja",
+        "nos": "estejamos",
+        "eles": "estejam"
       },
       "personal_infinitive": {
         "eu": "estar",
@@ -281,10 +281,10 @@
         "eles": "tenham"
       },
       "imperative_negative": {
-        "tu": "não tenhas",
-        "ele": "não tenha",
-        "nos": "não tenhamos",
-        "eles": "não tenham"
+        "tu": "tenhas",
+        "ele": "tenha",
+        "nos": "tenhamos",
+        "eles": "tenham"
       },
       "personal_infinitive": {
         "eu": "ter",
@@ -380,10 +380,10 @@
         "eles": "possam"
       },
       "imperative_negative": {
-        "tu": "não possas",
-        "ele": "não possa",
-        "nos": "não possamos",
-        "eles": "não possam"
+        "tu": "possas",
+        "ele": "possa",
+        "nos": "possamos",
+        "eles": "possam"
       },
       "personal_infinitive": {
         "eu": "poder",
@@ -479,10 +479,10 @@
         "eles": "vão"
       },
       "imperative_negative": {
-        "tu": "não vás",
-        "ele": "não vá",
-        "nos": "não vamos",
-        "eles": "não vão"
+        "tu": "vás",
+        "ele": "vá",
+        "nos": "vamos",
+        "eles": "vão"
       },
       "personal_infinitive": {
         "eu": "ir",
@@ -578,10 +578,10 @@
         "eles": "venham"
       },
       "imperative_negative": {
-        "tu": "não venhas",
-        "ele": "não venha",
-        "nos": "não venhamos",
-        "eles": "não venham"
+        "tu": "venhas",
+        "ele": "venha",
+        "nos": "venhamos",
+        "eles": "venham"
       },
       "personal_infinitive": {
         "eu": "vir",
@@ -677,10 +677,10 @@
         "eles": "vejam"
       },
       "imperative_negative": {
-        "tu": "não vejas",
-        "ele": "não veja",
-        "nos": "não vejamos",
-        "eles": "não vejam"
+        "tu": "vejas",
+        "ele": "veja",
+        "nos": "vejamos",
+        "eles": "vejam"
       },
       "personal_infinitive": {
         "eu": "ver",
@@ -776,10 +776,10 @@
         "eles": "falem"
       },
       "imperative_negative": {
-        "tu": "não fales",
-        "ele": "não fale",
-        "nos": "não falemos",
-        "eles": "não falem"
+        "tu": "fales",
+        "ele": "fale",
+        "nos": "falemos",
+        "eles": "falem"
       },
       "personal_infinitive": {
         "eu": "falar",
@@ -875,10 +875,10 @@
         "eles": "corram"
       },
       "imperative_negative": {
-        "tu": "não corras",
-        "ele": "não corra",
-        "nos": "não corramos",
-        "eles": "não corram"
+        "tu": "corras",
+        "ele": "corra",
+        "nos": "corramos",
+        "eles": "corram"
       },
       "personal_infinitive": {
         "eu": "correr",
@@ -974,10 +974,10 @@
         "eles": "durmam"
       },
       "imperative_negative": {
-        "tu": "não durmas",
-        "ele": "não durma",
-        "nos": "não durmamos",
-        "eles": "não durmam"
+        "tu": "durmas",
+        "ele": "durma",
+        "nos": "durmamos",
+        "eles": "durmam"
       },
       "personal_infinitive": {
         "eu": "dormir",
