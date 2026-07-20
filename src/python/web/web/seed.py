@@ -87,30 +87,6 @@ def seed_verbs(db: Session) -> int:
     return inserted
 
 
-def strip_negative_imperative_prefix(db: Session) -> int:
-    """Drop a leading "não " from stored negative-imperative forms.
-
-    These were originally seeded as ``"não sejas"``, which made the drill demand
-    the ``não`` even though nothing in the prompt asked for it. The ``não`` now
-    lives in the person label (see ``conjugation._PERSON_PREFIX``), matching how
-    the subjunctives show ``que`` / ``se`` / ``quando`` without storing them. This
-    migrates rows seeded before that change; it is idempotent and a no-op on a
-    fresh DB. Returns the number of rows rewritten.
-    """
-    forms = db.scalars(
-        select(Form).where(Form.tense == "imperative_negative")
-    ).all()
-    fixed = 0
-    for form in forms:
-        text = (form.form_text or "").strip()
-        if text.lower().startswith("não "):
-            form.form_text = text[4:].strip()
-            fixed += 1
-    if fixed:
-        db.commit()
-    return fixed
-
-
 def seed_examples(db: Session) -> int:
     """Sync example sentences (English + pt-PT) from examples.json into forms.
 

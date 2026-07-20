@@ -20,4 +20,3 @@
   - have a separate section for the compound form
   - accept either form?
 - have pluperfect be disabled by default?
-- remove the one-time "não" stripping code
