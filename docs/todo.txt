@@ -1,22 +1,24 @@
 - design an abstraction that will allow the support of conjugation in other languages
 - general refactoring pass
+  - src/python/web/web/ ... seems wrong.
 - add audio of the conjugated word being spoken after each correct response
 - alternatively add ding correct response audio indicator
 - add bzzt buzzer after each incorrect response?
-- preferences?
+- preferences
   - audio (positive / negative)
   - accent button display
-  - vós (for pt-br)
   - scramble order of tenses
   - scramble all the tenses / person
-- add missing tenses (imperative, participles)
-  - challenge: some verbs have TWO past participles (none of the ones currently configured, though)
-- remove the audio created by db column that the AI over-helpfully added
-- src/python/web/web/ ... seems wrong.
+- challenge: some verbs have TWO past participles (none of the ones currently configured, though)
+- remove the "audio created by" db column that the AI over-helpfully added
 - pluperfect and future, simple vs compound:
   - display the compound version
     - before or after submitting the response for the simple form?
     - this will "give away" the answer for the past participle
   - have a separate section for the compound form
   - accept either form?
-- have pluperfect be disabled by default?
+- when the user clicks "just a typo", put the focus on the next text box (unless we're at the end)
+- add partir (and think about removing dormir)
+- get rid of the rule/line between the last tense and the end "score" and controls to start a new conjugation
+- bug: can type a verb correctly quickly followed by a typo
+  - result: the red shaded box that you can't tab out of, but not marked as an error.

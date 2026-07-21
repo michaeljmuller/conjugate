@@ -1,3 +1,5 @@
+name: conjugate
+
 # Conjugation practice tool: FastAPI app + Postgres.
 # Built on the server via `git pull` (no registry); runs identically under
 # docker/arm64 (dev) and podman/amd64 (prod). Caddy fronts the app on the host.
