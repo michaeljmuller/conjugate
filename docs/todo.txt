@@ -20,5 +20,4 @@
 - when the user clicks "just a typo", put the focus on the next text box (unless we're at the end)
 - add partir (and think about removing dormir)
 - get rid of the rule/line between the last tense and the end "score" and controls to start a new conjugation
-- bug: can type a verb correctly quickly followed by a typo
-  - result: the red shaded box that you can't tab out of, but not marked as an error.
+- at the end, when you show the controls for the next, give a summary of the errors

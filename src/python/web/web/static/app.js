@@ -359,53 +359,69 @@ function makeRow(data) {
     if (!input.value.trim()) return;
 
     // Grade first and control movement ourselves, so focus can't leave a wrong
-    // answer via the browser's default Tab — you stay put to fix it.
+    // answer via the browser's default Tab — you stay put to fix it. Grading is
+    // synchronous (a local string compare), so focus moves this same tick: there
+    // is no network gap in which the next keystroke could land in this field.
     e.preventDefault();
-    gradeRow(row).then(() => {
-      if (!row.correct) return; // wrong: keep focus on this field
-      // Drill just finished: let the footer reveal/scroll win — don't navigate
-      // focus (which would scroll the field back into view over the footer).
-      if (rows.every((r) => r.graded)) return;
-      if (isLastInSection(input)) scrollToNextSection(div); // next tense to top
-      else focusNextInput(input); // next person
-    });
+    gradeRow(row);
+    if (!row.correct) return; // wrong: keep focus on this field
+    // Drill just finished: let the footer reveal/scroll win — don't navigate
+    // focus (which would scroll the field back into view over the footer).
+    if (rows.every((r) => r.graded)) return;
+    if (isLastInSection(input)) scrollToNextSection(div); // next tense to top
+    else focusNextInput(input); // next person
   });
   return row;
 }
 
 // ---- State transitions --------------------------------------------------
 
-async function gradeRow(row) {
+// Grade a row against the answer. This is synchronous and local — the server's
+// grading is byte-for-byte the same normalization, so we never wait on it to
+// decide correctness or to move focus. The first attempt is persisted in the
+// background (recordAttempt), which is all the server round-trip is for.
+function gradeRow(row) {
   const text = row.input.value.trim();
   if (!text) return;
-
-  // Record only the FIRST attempt per form — that's the honest score.
-  if (!row.recorded) {
-    row.recorded = true;
-    let result;
-    try {
-      result = await api("/api/attempts", {
-        method: "POST",
-        body: JSON.stringify({ form_id: row.formId, submitted_text: text }),
-      });
-    } catch (e) {
-      row.recorded = false; // let the user retry if the request failed
-      throw e;
-    }
-    if (!result.is_correct) {
-      row.firstWrong = true;
-      row.attemptId = result.attempt_id;
-      row.typedWrong = text;
-    }
-  }
 
   const wasCorrect = row.graded && row.correct;
   row.correct = normalize(text) === normalize(row.answer);
   row.graded = true;
 
+  // Record only the FIRST attempt per form — that's the honest score.
+  if (!row.recorded) {
+    row.recorded = true;
+    recordAttempt(row, text);
+  }
+
   renderRow(row);
   renderProgress();
   if (row.correct && !wasCorrect) showToast("Correct!"); // pop once, on the transition
+}
+
+// Persist the first attempt in the background. The server also returns the
+// authoritative verdict and an attempt id; if it was wrong, surface the "missed
+// it" note (which needs that id for the "just a typo" reclassification). Grading
+// and focus never wait on this — it runs after the row is already marked.
+async function recordAttempt(row, text) {
+  let result;
+  try {
+    result = await api("/api/attempts", {
+      method: "POST",
+      body: JSON.stringify({ form_id: row.formId, submitted_text: text }),
+    });
+  } catch (e) {
+    row.recorded = false; // let a later grade (blur/re-tab) retry the record
+    console.error("recording attempt failed", e);
+    return;
+  }
+  if (!result.is_correct) {
+    row.firstWrong = true;
+    row.attemptId = result.attempt_id;
+    row.typedWrong = text;
+    renderRow(row);   // reveal the note now that the id exists
+    renderProgress(); // and count the mistake
+  }
 }
 
 async function dismissTypo(row) {
