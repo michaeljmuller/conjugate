@@ -458,3 +458,23 @@ select {
   color: var(--accent);
 }
 .row-alts:empty { display: none; }
+
+/* End-of-drill review: what was missed, with the answer and the attempt.
+   Its own line in the footer, like the summary above it. */
+.footer-mistakes {
+  flex-basis: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: 0.15rem 1rem;
+  align-items: baseline;
+  font-size: 0.9rem;
+}
+.footer-mistakes:empty { display: none; }
+.footer-mistakes li { display: contents; }
+.fm-where { color: var(--muted); }
+.fm-answer { color: var(--green); }
+.fm-typed { color: var(--muted); }
+.fm-typed s { color: var(--red); text-decoration-color: var(--red); }

@@ -19,7 +19,6 @@
 - when the user clicks "just a typo", put the focus on the next text box (unless we're at the end)
 - add partir (and think about removing dormir)
 - get rid of the rule/line between the last tense and the end "score" and controls to start a new conjugation
-- at the end, when you show the controls for the next, give a summary of the errors
 - add the 20 most common verbs: https://www.babbel.com/en/magazine/common-portuguese-verbs
   (now just repeated use of "Add a verb" — but a batch run would be nicer)
 

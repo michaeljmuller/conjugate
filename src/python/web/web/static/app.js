@@ -494,7 +494,7 @@ function renderDrill(data) {
     wrap.className = "tense-block";
     wrap.innerHTML = `<h3>${labelOf(block)}${moodSpan(block, "mood")}</h3>`;
     for (const r of block.rows) {
-      const row = makeRow(r);
+      const row = makeRow(r, labelOf(block));
       wrap.appendChild(row.el);
       rows.push(row);
     }
@@ -505,7 +505,7 @@ function renderDrill(data) {
 
 // Build a row's DOM once and return its state object. All later changes go
 // through the state + renderRow(); the element is never queried for truth.
-function makeRow(data) {
+function makeRow(data, tenseLabel) {
   const div = document.createElement("div");
   div.className = "row";
   div.innerHTML =
@@ -527,6 +527,10 @@ function makeRow(data) {
     // immutable form data
     formId: data.form_id,
     answer: data.answer,
+    // Where this row sits, so the end-of-drill summary can name it without
+    // reading it back out of the DOM.
+    tenseLabel,
+    personLabel: data.label,
     // Other forms that are equally correct — Portuguese offers genuine
     // alternatives in some cells (oiço/ouço; the two past participles). The
     // server grades against the same list; this copy is what lets grading stay
@@ -734,8 +738,38 @@ function renderProgress() {
   summary.textContent = complete ? text : "";
   summary.classList.toggle("perfect", perfect);
 
+  renderMistakes(complete);
+
   // Bring the freshly revealed controls into view (they're below the fold).
   if (justRevealed) footer.scrollIntoView({ behavior: "smooth", block: "end" });
+}
+
+// The end-of-drill review: every form that was missed first time, with the
+// answer alongside what was actually typed. Same set the score counts, so a
+// mistake forgiven as a typo drops out of both.
+//
+// Only rendered once the drill is complete — mid-drill it would be a running
+// tally of failures next to the fields still being worked on.
+function renderMistakes(complete) {
+  const list = el("footer-mistakes");
+  list.innerHTML = "";
+  if (!complete) return;
+
+  for (const row of rows.filter((r) => r.firstWrong && !r.dismissedTypo)) {
+    const li = document.createElement("li");
+    li.innerHTML =
+      `<span class="fm-where"></span>` +
+      `<b class="fm-answer"></b>` +
+      `<span class="fm-typed">you typed <s></s></span>`;
+    // textContent throughout: the answer is model-generated and the typed value
+    // is whatever the user put in the box.
+    li.querySelector(".fm-where").textContent = row.personLabel
+      ? `${row.tenseLabel} · ${row.personLabel}`
+      : row.tenseLabel;
+    li.querySelector(".fm-answer").textContent = row.answer;
+    li.querySelector(".fm-typed s").textContent = row.typedWrong;
+    list.appendChild(li);
+  }
 }
 
 // Brief fixed-position "Correct!" toast. Never focusable, so it doesn't
