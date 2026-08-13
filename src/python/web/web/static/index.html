@@ -83,7 +83,7 @@
   <!-- Add-a-verb modal. The form is replaced by the job's progress on submit. -->
   <div id="add-verb-panel" class="settings-panel hidden" role="dialog" aria-modal="true" aria-label="Add a verb">
     <div class="settings-card">
-      <h2>Add a verb</h2>
+      <h2>Add a verb <span id="add-verb-subject" class="add-verb-subject"></span></h2>
       <div id="add-verb-form">
         <p class="settings-hint">
           Type an infinitive. Its conjugation is looked up and checked, then
@@ -94,6 +94,7 @@
         <p id="add-verb-error" class="settings-error hidden"></p>
       </div>
       <ol id="add-verb-steps" class="job-steps hidden" aria-live="polite"></ol>
+      <p id="add-verb-question" class="add-verb-question hidden"></p>
       <ul id="add-verb-notes" class="job-notes hidden"></ul>
       <div class="settings-actions">
         <button id="add-verb-go" class="btn primary" type="button">Add</button>

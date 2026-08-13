@@ -449,6 +449,21 @@ select {
 }
 .job-notes li + li { margin-top: 0.3rem; }
 
+/* The verb the open job is working on, named beside the panel heading. */
+.add-verb-subject { color: var(--accent); font-weight: 400; }
+.add-verb-subject:empty { display: none; }
+
+/* A decision the job is waiting on — a warning, not an error, so it reads like
+   the notes rather than the red validation line above it. */
+.add-verb-question {
+  margin: 0.9rem 0 0;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: var(--amber-bg);
+  color: var(--ink);
+  font-size: 0.88rem;
+}
+
 /* Other forms that would also have been accepted. Revealed with the pt-PT
    example, once the row has been answered. */
 .row-alts {

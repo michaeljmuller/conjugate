@@ -151,6 +151,8 @@ _SSE_KEEPALIVE_SECONDS = 15
 
 class AddVerbIn(BaseModel):
     infinitive: str
+    # Answers yes to a job that stopped to ask about a regular verb.
+    force: bool = False
 
 
 @router.post("/verbs", status_code=202)
@@ -178,7 +180,7 @@ async def add_verb(
             status_code=503,
             detail="Adding a verb needs ANTHROPIC_API_KEY, which is not set on the server.",
         )
-    return jobs.start(infinitive, user.id).as_dict()
+    return jobs.start(infinitive, user.id, force=payload.force).as_dict()
 
 
 @router.get("/verbs/jobs/{job_id}")

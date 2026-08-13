@@ -17,6 +17,7 @@ from web import jobs
 from web.auth import current_user
 from web.languages import NotAVerb, UnknownWord
 from web.languages.base import Cell, Paradigm
+from web.languages.regular import regular_forms
 from web.db import get_db
 from web.main import app
 from web.models import Base, Form, User, Verb
@@ -290,3 +291,75 @@ def test_a_non_verb_is_rejected(env, monkeypatch):
 def test_unknown_job_id_is_404(env):
     client, _ = env
     assert client.get("/api/verbs/jobs/nope").status_code == 404
+
+
+# ---- the regular-verb question -------------------------------------------
+
+def _regular_paradigm(infinitive="falar"):
+    """A verb with nothing but predictable forms, built from the same ending
+    table the check uses."""
+    return Paradigm(
+        infinitive=infinitive,
+        cells={key: Cell((form,)) for key, form in regular_forms(infinitive).items()},
+    )
+
+
+def _stub_regular_lookup(monkeypatch):
+    class _Adapter:
+        code = "pt-PT"
+
+        async def paradigm(self, infinitive):
+            return _regular_paradigm(infinitive)
+
+    monkeypatch.setattr(jobs, "get_adapter", lambda *a, **k: _Adapter())
+
+
+def test_a_regular_verb_stops_to_ask_before_the_expensive_half(env, monkeypatch):
+    client, TS = env
+    _stub_regular_lookup(monkeypatch)
+
+    called = []
+
+    async def _never(paradigm, **kw):
+        called.append(paradigm.infinitive)
+        raise AssertionError("examples must not be written before the user says yes")
+
+    monkeypatch.setattr(jobs.llm, "generate_examples", _never)
+
+    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "jogar"}).json()["job_id"])
+
+    assert job["status"] == "needs_confirmation"
+    assert job["question"] == "jogar is a regular verb; are you sure you want to add it?"
+    assert called == []
+    steps = {s["key"]: s for s in job["steps"]}
+    assert steps["look_up"]["status"] == "done"  # the lookup itself succeeded
+    assert steps["draft"]["status"] == "pending"
+    with TS() as db:
+        assert db.scalar(select(Verb).where(Verb.infinitive == "jogar")) is None
+
+
+def test_saying_yes_adds_the_verb(env, monkeypatch):
+    client, TS = env
+    _stub_regular_lookup(monkeypatch)
+
+    job = _await_job(
+        client,
+        client.post("/api/verbs", json={"infinitive": "jogar", "force": True}).json()["job_id"],
+    )
+
+    assert job["status"] == "done", job
+    with TS() as db:
+        verb = db.scalar(select(Verb).where(Verb.infinitive == "jogar"))
+        assert verb is not None
+        forms = {(f.tense, f.person): f.form_text for f in verb.forms}
+    assert forms[("present_subjunctive", "eu")] == "jogue"  # the spelling rule survived
+
+
+def test_an_irregular_verb_is_never_questioned(env, monkeypatch):
+    client, _ = env
+    _stub_lookup(monkeypatch)  # `partir` stub, which carries an oiça/ouça cell
+
+    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "partir"}).json()["job_id"])
+
+    assert job["status"] == "done"
+    assert job["question"] == ""

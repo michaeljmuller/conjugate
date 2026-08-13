@@ -101,7 +101,7 @@ function wireControls() {
   el("settings-close").addEventListener("click", closeSettings);
   el("interface-save").addEventListener("click", saveInterface);
   el("interface-close").addEventListener("click", closeInterface);
-  el("add-verb-go").addEventListener("click", submitAddVerb);
+  el("add-verb-go").addEventListener("click", () => addGoAction());
   el("add-verb-close").addEventListener("click", closeAddVerb);
   el("add-verb-input").addEventListener("keydown", (e) => {
     if (e.key === "Enter") submitAddVerb();
@@ -275,16 +275,22 @@ async function saveInterface() {
 // drill uses for `rows`. Nothing is ever read back out of the DOM.
 let addStream = null;  // live EventSource, if any
 let addOnClose = null; // what to do once the panel closes (e.g. drill the new verb)
+// What the panel's primary button does right now. Normally it submits the typed
+// infinitive; while a question is on screen it answers yes to that question.
+let addGoAction = () => submitAddVerb();
 
 const STEP_GLYPH = { pending: "○", running: "◐", done: "✓", failed: "✗", skipped: "–" };
 
 function openAddVerb() {
   closeAddStream();
   addOnClose = null;
+  addGoAction = () => submitAddVerb();
   el("add-verb-form").classList.remove("hidden");
   el("add-verb-steps").classList.add("hidden");
   el("add-verb-notes").classList.add("hidden");
   el("add-verb-error").classList.add("hidden");
+  el("add-verb-question").classList.add("hidden");
+  el("add-verb-subject").textContent = "";
   el("add-verb-input").value = "";
   setAddButtons("Add", "Cancel");
   el("add-verb-panel").classList.remove("hidden");
@@ -319,10 +325,12 @@ function showAddError(message) {
   err.classList.remove("hidden");
 }
 
-async function submitAddVerb() {
+// `force` waives the regular-verb question, and is how "Yes, add it" answers it.
+async function submitAddVerb(force = false) {
   const infinitive = el("add-verb-input").value.trim();
   if (!infinitive) return;
   el("add-verb-error").classList.add("hidden");
+  el("add-verb-question").classList.add("hidden");
 
   // Not via api(): a 400/409 here carries a message worth showing verbatim.
   let res;
@@ -330,7 +338,7 @@ async function submitAddVerb() {
     res = await fetch("/api/verbs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ infinitive }),
+      body: JSON.stringify({ infinitive, force }),
     });
   } catch (e) {
     return showAddError("Could not reach the server.");
@@ -342,6 +350,7 @@ async function submitAddVerb() {
 
   const job = await res.json();
   el("add-verb-form").classList.add("hidden");
+  addGoAction = () => submitAddVerb();
   setAddButtons("", "Close");
   renderJob(job);
   followJob(job.job_id);
@@ -389,6 +398,17 @@ async function pollJob(jobId) {
 }
 
 async function finishJob(job) {
+  // The lookup found a verb whose every form is predictable. Nothing has been
+  // written and no sentences drafted yet, so the answer costs only a re-lookup.
+  if (job.status === "needs_confirmation") {
+    const question = el("add-verb-question");
+    question.textContent = job.question;
+    question.classList.remove("hidden");
+    addGoAction = () => submitAddVerb(true);
+    setAddButtons("Yes, add it", "No");
+    return;
+  }
+
   if (job.status === "failed") {
     // Keep the typed infinitive so a typo can be fixed and retried.
     el("add-verb-form").classList.remove("hidden");
@@ -407,6 +427,10 @@ async function finishJob(job) {
 }
 
 function renderJob(job) {
+  // Name the verb in the heading: once the form is hidden the steps are the
+  // only thing on screen, and none of them says what is being added.
+  el("add-verb-subject").textContent = job.infinitive;
+
   const list = el("add-verb-steps");
   list.classList.remove("hidden");
   list.innerHTML = "";

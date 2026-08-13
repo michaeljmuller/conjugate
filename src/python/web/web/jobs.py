@@ -23,6 +23,7 @@ from sqlalchemy import select
 from . import llm
 from .db import SessionLocal
 from .languages import NotAVerb, Paradigm, SourceUnavailable, UnknownWord, get_adapter
+from .languages.regular import is_regular
 from .models import Verb
 from .seed import apply_examples, upsert_verb
 
@@ -32,6 +33,9 @@ log = logging.getLogger(__name__)
 MAX_RETAINED = 32
 
 PENDING, RUNNING, DONE, FAILED = "pending", "running", "done", "failed"
+# Terminal, like done/failed: the job stops after the lookup and the client
+# decides whether to start another with the check waived.
+NEEDS_CONFIRMATION = "needs_confirmation"
 
 STEP_LOOKUP = "look_up"
 STEP_DRAFT = "draft"
@@ -70,8 +74,10 @@ class Step:
 class Job:
     id: str
     infinitive: str
-    status: str = RUNNING  # running | done | failed
+    status: str = RUNNING  # running | done | failed | needs_confirmation
     error: str = ""
+    # Set with NEEDS_CONFIRMATION: what the user is being asked to approve.
+    question: str = ""
     verb_id: int | None = None
     # Things worth telling the user afterwards but not worth blocking on —
     # example sentences that stayed weak after the revision rounds.
@@ -101,6 +107,15 @@ class Job:
         self.status, self.verb_id = DONE, verb_id
         self._touch()
 
+    def ask(self, message: str) -> None:
+        """Stop and put the decision to the user.
+
+        Terminal: nothing is waiting on an answer, so an abandoned question
+        costs nothing. Saying yes starts a fresh job with the check waived.
+        """
+        self.status, self.question = NEEDS_CONFIRMATION, message
+        self._touch()
+
     def fail(self, key: str, message: str) -> None:
         self.update(key, status=FAILED, detail=message)
         self.status, self.error = FAILED, message
@@ -125,6 +140,7 @@ class Job:
             "infinitive": self.infinitive,
             "status": self.status,
             "error": self.error,
+            "question": self.question,
             "verb_id": self.verb_id,
             "notes": list(self.notes),
             "steps": [s.as_dict() for s in self.steps],
@@ -163,18 +179,28 @@ def _evict() -> None:
 # --- the work ------------------------------------------------------------
 
 
-def start(infinitive: str, user_id: int | None) -> Job:
-    """Register a job and kick it off in the background."""
+def start(infinitive: str, user_id: int | None, force: bool = False) -> Job:
+    """Register a job and kick it off in the background.
+
+    ``force`` waives the regular-verb question, and is how the client answers
+    yes to one.
+    """
     job = create(normalize_infinitive(infinitive))
-    task = asyncio.create_task(_run(job, user_id))
+    task = asyncio.create_task(_run(job, user_id, force))
     # Hold a reference so the task isn't garbage-collected mid-flight.
     job._task = task  # type: ignore[attr-defined]
     return job
 
 
-async def _run(job: Job, user_id: int | None) -> None:
+async def _run(job: Job, user_id: int | None, force: bool) -> None:
     try:
         paradigm = await _look_up(job)
+        # Ask before the expensive half: a regular verb is fully predictable
+        # from its infinitive, so drilling it teaches nothing the model verb
+        # hasn't, and writing ~60 example sentences for it is the wasteful part.
+        if not force and is_regular(paradigm):
+            job.ask(f"{job.infinitive} is a regular verb; are you sure you want to add it?")
+            return
         slots = await _write_examples(job, paradigm)
         job.finish(_save(job, paradigm, slots, user_id))
     except _StepFailed:
