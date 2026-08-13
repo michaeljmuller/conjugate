@@ -573,11 +573,7 @@ function makeRow(data, tenseLabel) {
     e.preventDefault();
     gradeRow(row);
     if (!row.correct) return; // wrong: keep focus on this field
-    // Drill just finished: let the footer reveal/scroll win — don't navigate
-    // focus (which would scroll the field back into view over the footer).
-    if (rows.every((r) => r.graded)) return;
-    if (isLastInSection(input)) scrollToNextSection(div); // next tense to top
-    else focusNextInput(input); // next person
+    advanceFrom(row);
   });
   return row;
 }
@@ -641,8 +637,9 @@ async function dismissTypo(row) {
     body: JSON.stringify({ verdict: "typo" }),
   });
   row.dismissedTypo = true;
-  renderRow(row);   // drops the note
+  renderRow(row);   // drops the note — and with it the button holding focus
   renderProgress(); // one fewer mistake on record
+  advanceFrom(row); // carry on where the keyboard left off
 }
 
 // ---- Projections: model -> DOM -----------------------------------------
@@ -784,6 +781,16 @@ function showToast(msg) {
 }
 
 // ---- Navigation helpers (view concerns: focus + scroll) -----------------
+
+// Leave a finished row: the next person, or the next tense block's first field
+// when this was the section's last. No-op once every field is answered — the
+// footer reveal wins there, and moving focus would scroll the field back into
+// view over it.
+function advanceFrom(row) {
+  if (rows.every((r) => r.graded)) return;
+  if (isLastInSection(row.input)) scrollToNextSection(row.el); // next tense to top
+  else focusNextInput(row.input); // next person
+}
 
 function focusNextInput(input) {
   const inputs = rows.map((r) => r.input);
