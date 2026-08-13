@@ -79,6 +79,28 @@
     </div>
   </div>
 
+  <!-- Add-a-verb modal. The form is replaced by the job's progress on submit. -->
+  <div id="add-verb-panel" class="settings-panel hidden" role="dialog" aria-modal="true" aria-label="Add a verb">
+    <div class="settings-card">
+      <h2>Add a verb</h2>
+      <div id="add-verb-form">
+        <p class="settings-hint">
+          Type an infinitive. Its conjugation is looked up and checked, then
+          example sentences are written for every form.
+        </p>
+        <input id="add-verb-input" class="add-verb-input" type="text" autocomplete="off"
+               autocapitalize="off" spellcheck="false" placeholder="e.g. partir" />
+        <p id="add-verb-error" class="settings-error hidden"></p>
+      </div>
+      <ol id="add-verb-steps" class="job-steps hidden" aria-live="polite"></ol>
+      <ul id="add-verb-notes" class="job-notes hidden"></ul>
+      <div class="settings-actions">
+        <button id="add-verb-go" class="btn primary" type="button">Add</button>
+        <button id="add-verb-close" class="btn ghost" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Transient "Correct!" toast; fixed position, never takes focus. -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 

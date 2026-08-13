@@ -13,7 +13,15 @@ Participles have no person, so they are stored as forms under a pseudo-person
 
 # Placeholder person for personless forms (participles). Real conjugations never
 # use this key, so it only ever matches a participle row.
+#
+# The past participle is drilled as two rows, distinguished by the auxiliary the
+# form takes rather than by person: the regular participle goes with ter/haver
+# ("tinha aceitado") and the short one with ser/estar ("foi aceite"). Most verbs
+# have the same form in both. ``inv`` is a poor name for the first of those, but
+# it is what the existing rows are keyed on and renaming it would need a data
+# migration for no benefit.
 INVARIABLE_PERSON = "inv"
+SHORT_PERSON = "short"
 PAST_PARTICIPLE_TENSE = "past_participle"
 PRESENT_PARTICIPLE_TENSE = "present_participle"
 
@@ -43,7 +51,9 @@ TENSE_KEYS: list[str] = [t["key"] for t in TENSES]
 # invariable person is appended last so participle rows render after real persons
 # (for every other tense the (tense, "inv") lookup simply misses and is skipped).
 PERSONS: list[str] = ["eu", "tu", "ele", "nos", "vos", "eles"]
-DRILL_PERSONS: list[str] = ["eu", "tu", "ele", "nos", "eles", INVARIABLE_PERSON]
+DRILL_PERSONS: list[str] = [
+    "eu", "tu", "ele", "nos", "eles", INVARIABLE_PERSON, SHORT_PERSON,
+]
 
 # Prefix shown before the person for tenses whose stored answer isn't the bare
 # verb form: the subjunctive cue words, and the negative imperative's "não"
@@ -67,6 +77,19 @@ _PERSON_DISPLAY: dict[str, str] = {
 
 
 _TENSE_BY_KEY: dict[str, dict[str, str]] = {t["key"]: t for t in TENSES}
+
+# Reverse of _PERSON_DISPLAY. The conjugation lookup reads display spellings off
+# a web page ("nós") and needs the ascii key ("nos") the database stores.
+_PERSON_BY_DISPLAY: dict[str, str] = {v: k for k, v in _PERSON_DISPLAY.items()}
+
+
+def person_key(display: str) -> str | None:
+    """Ascii person key for a display spelling (``nós`` -> ``nos``).
+
+    Returns ``None`` for anything that isn't a person, which is how the
+    conjugation parser tells a pronoun apart from a cue word (``que``, ``não``).
+    """
+    return _PERSON_BY_DISPLAY.get(display.strip().lower())
 
 
 def resolve_tense_prefs(saved: list[dict]) -> list[dict]:
@@ -95,14 +118,24 @@ def resolve_tense_prefs(saved: list[dict]) -> list[dict]:
     return resolved
 
 
+# The past participle's two rows are labelled by the auxiliary they take. These
+# are verb names, so they read the same whichever interface language is chosen.
+_PARTICIPLE_LABELS: dict[tuple[str, str], str] = {
+    (PAST_PARTICIPLE_TENSE, INVARIABLE_PERSON): "ter / haver",
+    (PAST_PARTICIPLE_TENSE, SHORT_PERSON): "ser / estar",
+}
+
+
 def person_label(tense: str, person: str) -> str:
     """Human label for a (tense, person) pair, e.g. ``que eu``, ``não tu``, ``nós``.
 
-    Participles are personless, so their row carries no label — the tense heading
-    ("Past participle") is the whole prompt.
+    Participles have no person. The past participle's rows are labelled with the
+    auxiliary instead, which is the thing that actually distinguishes them; the
+    gerund has a single row and needs no label, since the tense heading is the
+    whole prompt.
     """
-    if person == INVARIABLE_PERSON:
-        return ""
+    if person in (INVARIABLE_PERSON, SHORT_PERSON):
+        return _PARTICIPLE_LABELS.get((tense, person), "")
     base = _PERSON_DISPLAY.get(person, person)
     prefix = _PERSON_PREFIX.get(tense)
     return f"{prefix} {base}" if prefix else base

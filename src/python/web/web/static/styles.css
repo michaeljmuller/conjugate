@@ -373,3 +373,88 @@ select {
   opacity: 1;
   transform: translate(-50%, 0);
 }
+
+/* Add-a-verb panel: the infinitive field, then the job's step list. */
+.add-verb-input {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-family: inherit;
+}
+.add-verb-input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+.job-steps { list-style: none; margin: 0.25rem 0 0; padding: 0; }
+.job-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+}
+.job-step + .job-step { border-top: 1px solid var(--line); }
+.js-glyph {
+  flex: none;
+  width: 1.1rem;
+  text-align: center;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.job-step.done .js-glyph { color: var(--green); }
+.job-step.failed .js-glyph { color: var(--red); }
+.job-step.running .js-glyph {
+  color: var(--accent);
+  animation: js-spin 1.1s linear infinite;
+}
+@keyframes js-spin { to { transform: rotate(360deg); } }
+/* Respect a reduced-motion preference: hold the glyph still. */
+@media (prefers-reduced-motion: reduce) {
+  .job-step.running .js-glyph { animation: none; }
+}
+
+.js-body { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; flex: 1; }
+.js-label { font-size: 0.95rem; }
+.job-step.pending .js-label,
+.job-step.skipped .js-label { color: var(--muted); }
+.job-step.running .js-label { font-weight: 600; }
+.js-detail { font-size: 0.8rem; color: var(--muted); }
+
+/* Determinate bar, on the steps that know a count. */
+.js-bar {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--line);
+  margin-top: 0.3rem;
+  overflow: hidden;
+}
+.js-bar > i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.25s ease;
+}
+.job-step.done .js-bar > i { background: var(--green); }
+
+/* Anything the job wants the user to actually read afterwards. */
+.job-notes {
+  margin: 0.9rem 0 0;
+  padding: 0.6rem 0.75rem 0.6rem 1.75rem;
+  border-radius: 8px;
+  background: var(--amber-bg);
+  color: var(--ink);
+  font-size: 0.82rem;
+}
+.job-notes li + li { margin-top: 0.3rem; }
+
+/* Other forms that would also have been accepted. Revealed with the pt-PT
+   example, once the row has been answered. */
+.row-alts {
+  padding-left: 7rem; /* aligns under the input, as .row-example-pt does */
+  margin-top: 0.05rem;
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+.row-alts:empty { display: none; }

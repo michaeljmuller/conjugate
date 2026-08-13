@@ -49,20 +49,33 @@ async function init() {
   ui = (await api("/api/settings")).interface;
   applyInterface();
 
-  const verbs = await api("/api/verbs");
-  const options = verbs
-    .map((v) => `<option value="${v.id}">${v.infinitive}</option>`)
-    .join("");
   const selTop = el("verb-select");
   const selBottom = el("verb-select-bottom");
-  selTop.innerHTML = options;
-  selBottom.innerHTML = options;
   selTop.addEventListener("change", () => startVerb(selTop.value));
   selBottom.addEventListener("change", () => startVerb(selBottom.value));
 
+  const verbs = await loadVerbs();
   if (verbs.length) await loadVerb(verbs[0].id);
   updateStickyHeight();
   window.addEventListener("resize", updateStickyHeight);
+}
+
+// (Re)fill both verb pickers from the server. Called at startup and again
+// whenever a verb is added, so the new one appears without a reload.
+async function loadVerbs() {
+  const verbs = await api("/api/verbs");
+  const options = verbs
+    .map((v) => `<option value="${v.id}"></option>`)
+    .join("");
+  for (const id of ["verb-select", "verb-select-bottom"]) {
+    const sel = el(id);
+    const keep = sel.value;
+    sel.innerHTML = options;
+    // textContent: infinitives are model-generated, so never interpolated as HTML.
+    [...sel.options].forEach((opt, i) => (opt.textContent = verbs[i].infinitive));
+    if (keep) sel.value = keep;
+  }
+  return verbs;
 }
 
 function buildAccentBar() {
@@ -88,6 +101,11 @@ function wireControls() {
   el("settings-close").addEventListener("click", closeSettings);
   el("interface-save").addEventListener("click", saveInterface);
   el("interface-close").addEventListener("click", closeInterface);
+  el("add-verb-go").addEventListener("click", submitAddVerb);
+  el("add-verb-close").addEventListener("click", closeAddVerb);
+  el("add-verb-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") submitAddVerb();
+  });
 }
 
 // The user's name is a dropdown: "Tense configuration" opens the settings
@@ -104,6 +122,7 @@ function buildUserMenu(name, email) {
     `<img class="avatar avatar-lg" src="/static/user.png" alt="" />` +
     `<span class="um-email"></span>` +
     `</div>` +
+    `<button class="um-item" role="menuitem" id="menu-add-verb">Add a verb</button>` +
     `<button class="um-item" role="menuitem" id="menu-tenses">Tense configuration</button>` +
     `<button class="um-item" role="menuitem" id="menu-interface">Interface</button>` +
     `<div class="um-divider" role="separator"></div>` +
@@ -127,6 +146,10 @@ function buildUserMenu(name, email) {
   document.addEventListener("click", () => setOpen(false));
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") setOpen(false);
+  });
+  el("menu-add-verb").addEventListener("click", () => {
+    setOpen(false);
+    openAddVerb();
   });
   el("menu-tenses").addEventListener("click", () => {
     setOpen(false);
@@ -245,6 +268,180 @@ async function saveInterface() {
   if (currentVerbId) await loadVerb(currentVerbId); // relabel the drill in the new language
 }
 
+// ---- Adding a verb ------------------------------------------------------
+
+// The job payload from the server is the single source of truth while the panel
+// is open, and renderJob() is a pure projection of it — the same discipline the
+// drill uses for `rows`. Nothing is ever read back out of the DOM.
+let addStream = null;  // live EventSource, if any
+let addOnClose = null; // what to do once the panel closes (e.g. drill the new verb)
+
+const STEP_GLYPH = { pending: "○", running: "◐", done: "✓", failed: "✗", skipped: "–" };
+
+function openAddVerb() {
+  closeAddStream();
+  addOnClose = null;
+  el("add-verb-form").classList.remove("hidden");
+  el("add-verb-steps").classList.add("hidden");
+  el("add-verb-notes").classList.add("hidden");
+  el("add-verb-error").classList.add("hidden");
+  el("add-verb-input").value = "";
+  setAddButtons("Add", "Cancel");
+  el("add-verb-panel").classList.remove("hidden");
+  el("add-verb-input").focus();
+}
+
+function closeAddVerb() {
+  closeAddStream();
+  el("add-verb-panel").classList.add("hidden");
+  const after = addOnClose;
+  addOnClose = null;
+  if (after) after();
+}
+
+function closeAddStream() {
+  if (addStream) addStream.close();
+  addStream = null;
+}
+
+// An empty `go` label hides the primary button — used while the job runs and
+// once it has succeeded, when the only thing left to do is close.
+function setAddButtons(go, close) {
+  const btn = el("add-verb-go");
+  btn.textContent = go;
+  btn.classList.toggle("hidden", !go);
+  el("add-verb-close").textContent = close;
+}
+
+function showAddError(message) {
+  const err = el("add-verb-error");
+  err.textContent = message;
+  err.classList.remove("hidden");
+}
+
+async function submitAddVerb() {
+  const infinitive = el("add-verb-input").value.trim();
+  if (!infinitive) return;
+  el("add-verb-error").classList.add("hidden");
+
+  // Not via api(): a 400/409 here carries a message worth showing verbatim.
+  let res;
+  try {
+    res = await fetch("/api/verbs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ infinitive }),
+    });
+  } catch (e) {
+    return showAddError("Could not reach the server.");
+  }
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    return showAddError(body.detail || `Could not add that verb (${res.status}).`);
+  }
+
+  const job = await res.json();
+  el("add-verb-form").classList.add("hidden");
+  setAddButtons("", "Close");
+  renderJob(job);
+  followJob(job.job_id);
+}
+
+// Watch the job over SSE, falling back to polling if the stream can't be held
+// open (a proxy timeout, or a browser that suspended the tab).
+function followJob(jobId) {
+  closeAddStream();
+  let polling = false;
+  const source = new EventSource(`/api/verbs/jobs/${jobId}/stream`);
+  addStream = source;
+
+  source.onmessage = (e) => {
+    const job = JSON.parse(e.data);
+    renderJob(job);
+    if (job.status !== "running") {
+      closeAddStream();
+      finishJob(job);
+    }
+  };
+  source.onerror = () => {
+    // Also fires when the server closes the stream after a finished job, which
+    // onmessage has already handled — only fall back if it's still running.
+    if (source !== addStream || polling) return;
+    closeAddStream();
+    polling = true;
+    pollJob(jobId);
+  };
+}
+
+async function pollJob(jobId) {
+  for (;;) {
+    let job;
+    try {
+      job = await api(`/api/verbs/jobs/${jobId}`);
+    } catch (e) {
+      return showAddError("Lost track of that job — reload to see if it finished.");
+    }
+    if (!job) return;
+    renderJob(job);
+    if (job.status !== "running") return finishJob(job);
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+}
+
+async function finishJob(job) {
+  if (job.status === "failed") {
+    // Keep the typed infinitive so a typo can be fixed and retried.
+    el("add-verb-form").classList.remove("hidden");
+    showAddError(job.error);
+    setAddButtons("Try again", "Close");
+    return;
+  }
+
+  await loadVerbs();
+  addOnClose = () => startVerb(job.verb_id);
+  // Notes are things the user should actually read — a form the check corrected,
+  // or a sentence that stayed weak. Hold the panel open for them; otherwise
+  // there's nothing to say, so get out of the way.
+  if (job.notes.length) setAddButtons("", `Drill ${job.infinitive}`);
+  else closeAddVerb();
+}
+
+function renderJob(job) {
+  const list = el("add-verb-steps");
+  list.classList.remove("hidden");
+  list.innerHTML = "";
+  for (const step of job.steps) {
+    const li = document.createElement("li");
+    li.className = `job-step ${step.status}`;
+    li.innerHTML =
+      `<span class="js-glyph" aria-hidden="true"></span>` +
+      `<span class="js-body">` +
+      `<span class="js-label"></span><span class="js-detail"></span>` +
+      `<span class="js-bar hidden"><i></i></span>` +
+      `</span>`;
+    li.querySelector(".js-glyph").textContent = STEP_GLYPH[step.status] || "○";
+    li.querySelector(".js-label").textContent = step.label;
+    // Details are server-composed and can quote model output: textContent only.
+    li.querySelector(".js-detail").textContent = step.detail || "";
+    if (step.total) {
+      const bar = li.querySelector(".js-bar");
+      bar.classList.remove("hidden");
+      const pct = Math.round((100 * (step.done || 0)) / step.total);
+      bar.querySelector("i").style.width = `${pct}%`;
+    }
+    list.appendChild(li);
+  }
+
+  const notes = el("add-verb-notes");
+  notes.innerHTML = "";
+  notes.classList.toggle("hidden", !job.notes.length);
+  for (const text of job.notes) {
+    const li = document.createElement("li");
+    li.textContent = text;
+    notes.appendChild(li);
+  }
+}
+
 // Reflect the current interface prefs in the DOM: show/hide the accent bar.
 // The bar lives in the sticky header, so its height changes what the drill must
 // scroll clear of — recompute the sticky offset whenever it toggles.
@@ -318,7 +515,8 @@ function makeRow(data) {
     `<span class="mark"></span>` +
     `</div>` +
     `<div class="row-example"></div>` +
-    `<div class="row-example-pt"></div>`;
+    `<div class="row-example-pt"></div>` +
+    `<div class="row-alts"></div>`;
   div.querySelector(".person").textContent = data.label;
   // English example is the always-visible prompt (textContent: model-generated).
   if (data.example_en)
@@ -329,13 +527,19 @@ function makeRow(data) {
     // immutable form data
     formId: data.form_id,
     answer: data.answer,
+    // Other forms that are equally correct — Portuguese offers genuine
+    // alternatives in some cells (oiço/ouço; the two past participles). The
+    // server grades against the same list; this copy is what lets grading stay
+    // local and synchronous.
+    variants: data.variants || [],
     examplePt: data.example_pt || "",
     el: div,
     input,
     note: null, // the "missed it" note element, when present
     // mutable answer state
     graded: false,       // has been checked with a non-empty value
-    correct: false,      // current value matches the answer
+    correct: false,      // current value matches one of the accepted forms
+    matched: null,       // which accepted form it matched, so alts can exclude it
     recorded: false,     // first attempt already sent to the server
     firstWrong: false,   // that first attempt was wrong (a mistake on record)
     typedWrong: "",      // what they first typed, for the resolved note
@@ -385,7 +589,10 @@ function gradeRow(row) {
   if (!text) return;
 
   const wasCorrect = row.graded && row.correct;
-  row.correct = normalize(text) === normalize(row.answer);
+  // Any accepted form counts. Whichever one they typed is remembered so the
+  // note afterwards can offer the ones they didn't.
+  row.matched = accepted(row).find((f) => normalize(f) === normalize(text)) || null;
+  row.correct = row.matched !== null;
   row.graded = true;
 
   // Record only the FIRST attempt per form — that's the honest score.
@@ -450,7 +657,25 @@ function renderRow(row) {
   div.querySelector(".row-example-pt").textContent =
     row.graded && row.examplePt ? row.examplePt : "";
 
+  renderAlternatives(row);
   renderNote(row);
+}
+
+// Every form that counts as correct here, displayed one first.
+function accepted(row) {
+  return [row.answer, ...row.variants];
+}
+
+// Once answered, name the other forms that would also have been accepted —
+// finding out `ouço` was fine too is the moment you learn it exists. Excludes
+// whatever they actually typed, so it reads the same whichever one they chose,
+// and stays silent when there's nothing to add (almost every row).
+function renderAlternatives(row) {
+  const el = row.el.querySelector(".row-alts");
+  const others = row.graded
+    ? accepted(row).filter((f) => normalize(f) !== normalize(row.matched || row.answer))
+    : [];
+  el.textContent = others.length ? `also correct: ${others.join(", ")}` : "";
 }
 
 // The "missed it first try" note exists iff a first wrong attempt stands

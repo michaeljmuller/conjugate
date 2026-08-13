@@ -12,6 +12,9 @@ dependencies = [
     "itsdangerous>=2.2",
     "httpx>=0.27",
     "pydantic>=2.7",
+    # Adding a verb: Claude writes its example sentences. The conjugation
+    # itself comes from cplp.org over httpx, which is already a dependency.
+    "anthropic>=0.40",
 ]
 
 [project.optional-dependencies]

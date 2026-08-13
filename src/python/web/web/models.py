@@ -82,6 +82,8 @@ class Form(Base):
     verb_id: Mapped[int] = mapped_column(ForeignKey("verbs.id"), index=True)
     tense: Mapped[str] = mapped_column(String(40))
     person: Mapped[str] = mapped_column(String(8))
+    # The form shown as the answer. Other equally valid forms hang off
+    # ``variants``; both grade as correct.
     form_text: Mapped[str] = mapped_column(String(64))
     # Example sentence illustrating this form, in English and its pt-PT translation.
     example_en: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -90,6 +92,38 @@ class Form(Base):
     audio_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
 
     verb: Mapped[Verb] = relationship(back_populates="forms")
+    variants: Mapped[list["FormVariant"]] = relationship(
+        back_populates="form", cascade="all, delete-orphan"
+    )
+
+    @property
+    def accepted(self) -> list[str]:
+        """Every form that counts as a correct answer, display form first."""
+        return [self.form_text, *(v.text for v in self.variants)]
+
+
+class FormVariant(Base):
+    """An alternative form that is just as correct as ``Form.form_text``.
+
+    Portuguese genuinely offers more than one form in some cells — ``oiço`` and
+    ``ouço`` are both current, and the past participle can have a regular and a
+    short version. The drill shows one and accepts them all.
+
+    A separate table rather than a column on ``forms`` because the schema is
+    created by ``create_all()`` alone: it adds missing *tables* to an existing
+    database but will not add a column, so a new table needs no migration.
+    """
+
+    __tablename__ = "form_variants"
+    __table_args__ = (
+        UniqueConstraint("form_id", "text", name="uq_form_variant_form_text"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    form_id: Mapped[int] = mapped_column(ForeignKey("forms.id"), index=True)
+    text: Mapped[str] = mapped_column(String(64))
+
+    form: Mapped[Form] = relationship(back_populates="variants")
 
 
 class Attempt(Base):

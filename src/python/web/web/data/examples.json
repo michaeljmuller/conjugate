@@ -1,7 +1,23 @@
 {
   "_instructions": "For every entry below, fill in TWO fields: \"example_en\" and \"example_pt\". \"example_en\" is ONE natural, everyday English sentence that illustrates the use of that specific verb form — it MUST reflect the SUBJECT (person) and the TENSE/ASPECT. \"example_pt\" is a faithful EUROPEAN Portuguese (Portugal, not Brazil) translation of that same sentence, and it MUST naturally contain the exact given \"form\". Keep both short and concrete. Do not change any field other than \"example_en\" and \"example_pt\"; leave the structure, order, and all \"form\" values exactly as they are. Return the whole JSON object with every pair filled.",
   "_guidance": {
-    "variety": "European Portuguese (Portugal). Use natural pt-PT phrasing (e.g. 'estar a correr' rather than 'estar correndo').",
+    "variety": {
+      "required": "European Portuguese (Portugal) ONLY. Every Portuguese sentence must use pt-PT grammar, vocabulary and spelling. Brazilian Portuguese is wrong here even when it is perfectly good Portuguese elsewhere — these sentences are read by someone learning the European variety.",
+      "grammar": [
+        "Continuous action: 'estar a' + infinitive. pt-PT 'estou a correr', NOT pt-BR 'estou correndo'.",
+        "Object pronouns follow the verb, joined by a hyphen, in affirmative main clauses: 'chamo-me Ana', 'dá-me o livro', 'sento-me aqui'. NOT pt-BR fronting: 'me chamo Ana', 'me dá o livro'.",
+        "Pronouns move before the verb after a negative, a question word, or a subordinating conjunction: 'não me dês', 'quando me deres', 'quem te viu'.",
+        "Second person singular is 'tu' with real 2nd-person verb endings ('tu partes', 'tu vais'). Never 'você' with a 3rd-person verb, which is the pt-BR default.",
+        "Avoid 'a gente' meaning 'we' — use 'nós'.",
+        "Use 'ir a'/'chegar a' for destinations, not pt-BR 'ir em'/'chegar em'."
+      ],
+      "vocabulary": "Prefer the pt-PT word wherever the two varieties differ. comboio (not trem), autocarro (not ônibus), telemóvel (not celular), casa de banho (not banheiro), pequeno-almoço (not café da manhã), sumo (not suco), gelado (not sorvete), frigorífico (not geladeira), ecrã (not tela), boleia (not carona), fato (not terno), relva (not grama), autocarro/paragem (not ônibus/ponto), casa de banho, talho (not açougue), fixe (not legal).",
+      "spelling": [
+        "Keep the acute where pt-BR uses a circumflex before a nasal: académico, género, António, económico, tónico — NOT acadêmico, gênero, Antônio.",
+        "First person plural preterite of -ar verbs takes the acute: 'falámos', 'chegámos' — NOT pt-BR 'falamos', 'chegamos'.",
+        "Mute consonants go BOTH ways — decided by pronunciation, not by which form is shorter. Checked against the VOP (Portugal's official vocabulary): pt-PT drops c/p where it is not articulated — receção, aspeto, ator (recepção, aspecto and actor are not Portuguese words at all). But pt-PT KEEPS the consonant in facto (a fact; 'fato' also exists but means a suit), dicção, sumptuoso. And pt-PT keeps b/g/m/t where pt-BR drops them: amnistia (not anistia), amígdala (not amídala). Some pairs are BOTH valid in Portugal — setor/sector, subtil/sutil — so do not 'correct' either one."
+      ]
+    },
     "persons": {
       "eu": "I",
       "tu": "you (one person, informal)",

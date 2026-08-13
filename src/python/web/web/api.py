@@ -2,11 +2,17 @@
 
 from __future__ import annotations
 
+import asyncio
+import json
+import re
+
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from sqlalchemy import Integer, func, select
 from sqlalchemy.orm import Session
 
+from . import jobs, llm
 from .auth import current_user
 from .conjugation import (
     DRILL_PERSONS,
@@ -134,6 +140,91 @@ def list_verbs(db: Session = Depends(get_db), user: User = Depends(current_user)
     ]
 
 
+# A single word of letters — accented ones included, digits and punctuation not.
+# Keeps junk out of the lookup URL; the site itself decides what's really a verb.
+_INFINITIVE_RE = re.compile(r"^[^\W\d_]{2,32}$", re.UNICODE)
+
+# How long the SSE stream waits before sending a comment to keep the connection
+# (and any proxy in front of it) from timing out on a slow model call.
+_SSE_KEEPALIVE_SECONDS = 15
+
+
+class AddVerbIn(BaseModel):
+    infinitive: str
+
+
+@router.post("/verbs", status_code=202)
+async def add_verb(
+    payload: AddVerbIn,
+    db: Session = Depends(get_db),
+    user: User = Depends(current_user),
+):
+    """Start a background job that looks a verb up, writes its example sentences
+    and saves it. Returns immediately with the job to follow.
+
+    Async because it schedules an asyncio task — a sync endpoint would run in a
+    worker thread with no running loop to schedule onto.
+    """
+    infinitive = jobs.normalize_infinitive(payload.infinitive)
+    if not _INFINITIVE_RE.match(infinitive):
+        raise HTTPException(status_code=400, detail="enter a single verb, letters only")
+    if jobs.verb_exists(db, infinitive):
+        raise HTTPException(status_code=409, detail=f'"{infinitive}" is already in the list')
+    if not llm.is_configured():
+        # A verb without example sentences isn't worth adding, so say so now
+        # rather than after a lookup that's about to be thrown away. A key that
+        # exists but is rejected or out of credit fails later, in the job.
+        raise HTTPException(
+            status_code=503,
+            detail="Adding a verb needs ANTHROPIC_API_KEY, which is not set on the server.",
+        )
+    return jobs.start(infinitive, user.id).as_dict()
+
+
+@router.get("/verbs/jobs/{job_id}")
+def get_verb_job(job_id: str, user: User = Depends(current_user)):
+    """Current job state. Polling fallback for clients without EventSource, and
+    the way a reconnecting page catches up."""
+    job = jobs.get(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="job not found")
+    return job.as_dict()
+
+
+@router.get("/verbs/jobs/{job_id}/stream")
+async def stream_verb_job(job_id: str, user: User = Depends(current_user)):
+    """Server-sent events: the job's full state on every change, then close."""
+    job = jobs.get(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="job not found")
+
+    async def events():
+        seen = -1
+        while True:
+            if job.version != seen:
+                seen = job.version
+                yield f"data: {json.dumps(job.as_dict())}\n\n"
+            if job.status != jobs.RUNNING:
+                return
+            try:
+                await asyncio.wait_for(
+                    job.wait_for_change(seen), timeout=_SSE_KEEPALIVE_SECONDS
+                )
+            except asyncio.TimeoutError:
+                yield ": keepalive\n\n"
+
+    return StreamingResponse(
+        events(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            # Tell any buffering reverse proxy to pass this straight through.
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
 @router.get("/verbs/{verb_id}/forms")
 def verb_forms(
     verb_id: int, db: Session = Depends(get_db), user: User = Depends(current_user)
@@ -158,10 +249,13 @@ def verb_forms(
                     "form_id": form.id,
                     "person": person,
                     "label": person_label(tense["key"], person),
-                    # Answer travels to the client only to power the "Reveal"
-                    # button (no attempt recorded). Acceptable for a personal
-                    # practice tool; typed checks still go through /api/attempts.
+                    # The client grades locally and synchronously so focus can
+                    # move without waiting on the network, so it needs both the
+                    # answer and every other form that counts as correct.
+                    # Attempts are still recorded via /api/attempts, which
+                    # re-grades against the same list.
                     "answer": form.form_text,
+                    "variants": [v.text for v in form.variants],
                     "example_en": form.example_en,
                     # pt-PT sentence contains the answer, so the client reveals it
                     # only after the form has been answered.
@@ -207,7 +301,7 @@ def submit_attempt(
     if form is None:
         raise HTTPException(status_code=404, detail="form not found")
 
-    result = grade(payload.submitted_text, form.form_text)
+    result = grade(payload.submitted_text, form.form_text, [v.text for v in form.variants])
     attempt = Attempt(
         user_id=user.id,
         form_id=form.id,

@@ -35,6 +35,9 @@ services:
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       ALLOWED_EMAILS: ${ALLOWED_EMAILS:-}
+      # Required to add a verb: writes its example sentences. Without it the
+      # add-verb endpoint returns 503; drilling is unaffected.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       # DEV_LOGIN=1 bypasses Google for local testing. Never set in prod.
       DEV_LOGIN: ${DEV_LOGIN:-}
     ports:
