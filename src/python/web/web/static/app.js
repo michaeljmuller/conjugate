@@ -398,14 +398,15 @@ async function pollJob(jobId) {
 }
 
 async function finishJob(job) {
-  // The lookup found a verb whose every form is predictable. Nothing has been
-  // written and no sentences drafted yet, so the answer costs only a re-lookup.
+  // The lookup succeeded and is reporting what it found before the expensive
+  // half runs. Nothing has been written and no sentences drafted yet, so the
+  // answer costs only a re-lookup.
   if (job.status === "needs_confirmation") {
     const question = el("add-verb-question");
     question.textContent = job.question;
     question.classList.remove("hidden");
     addGoAction = () => submitAddVerb(true);
-    setAddButtons("Yes, add it", "No");
+    setAddButtons("Add it", "Cancel");
     return;
   }
 

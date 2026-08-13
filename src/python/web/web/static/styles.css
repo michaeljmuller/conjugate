@@ -453,13 +453,14 @@ select {
 .add-verb-subject { color: var(--accent); font-weight: 400; }
 .add-verb-subject:empty { display: none; }
 
-/* A decision the job is waiting on — a warning, not an error, so it reads like
-   the notes rather than the red validation line above it. */
+/* What the lookup found, put to the user before the job goes on. Every add
+   passes through here, so it's a neutral report — not a warning. */
 .add-verb-question {
   margin: 0.9rem 0 0;
   padding: 0.6rem 0.75rem;
+  border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--amber-bg);
+  background: var(--bg);
   color: var(--ink);
   font-size: 0.88rem;
 }

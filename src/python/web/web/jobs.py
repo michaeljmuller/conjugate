@@ -23,7 +23,7 @@ from sqlalchemy import select
 from . import llm
 from .db import SessionLocal
 from .languages import NotAVerb, Paradigm, SourceUnavailable, UnknownWord, get_adapter
-from .languages.regular import is_regular
+from .languages.regular import classify
 from .models import Verb
 from .seed import apply_examples, upsert_verb
 
@@ -111,7 +111,7 @@ class Job:
         """Stop and put the decision to the user.
 
         Terminal: nothing is waiting on an answer, so an abandoned question
-        costs nothing. Saying yes starts a fresh job with the check waived.
+        costs nothing. Saying yes starts a fresh job that skips the question.
         """
         self.status, self.question = NEEDS_CONFIRMATION, message
         self._touch()
@@ -182,8 +182,8 @@ def _evict() -> None:
 def start(infinitive: str, user_id: int | None, force: bool = False) -> Job:
     """Register a job and kick it off in the background.
 
-    ``force`` waives the regular-verb question, and is how the client answers
-    yes to one.
+    Every add stops after the lookup to confirm; ``force`` skips that, and is
+    how the client answers yes.
     """
     job = create(normalize_infinitive(infinitive))
     task = asyncio.create_task(_run(job, user_id, force))
@@ -195,11 +195,12 @@ def start(infinitive: str, user_id: int | None, force: bool = False) -> Job:
 async def _run(job: Job, user_id: int | None, force: bool) -> None:
     try:
         paradigm = await _look_up(job)
-        # Ask before the expensive half: a regular verb is fully predictable
-        # from its infinitive, so drilling it teaches nothing the model verb
-        # hasn't, and writing ~60 example sentences for it is the wasteful part.
-        if not force and is_regular(paradigm):
-            job.ask(f"{job.infinitive} is a regular verb; are you sure you want to add it?")
+        # Confirm before the expensive half. What the lookup found is worth
+        # seeing either way — a fully regular verb teaches nothing the model
+        # verb hasn't — and writing ~60 example sentences is the wasteful part
+        # to undo.
+        if not force:
+            job.ask(f"{job.infinitive} {classify(paradigm).describe()} Add it?")
             return
         slots = await _write_examples(job, paradigm)
         job.finish(_save(job, paradigm, slots, user_id))

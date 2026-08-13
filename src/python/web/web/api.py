@@ -151,7 +151,7 @@ _SSE_KEEPALIVE_SECONDS = 15
 
 class AddVerbIn(BaseModel):
     infinitive: str
-    # Answers yes to a job that stopped to ask about a regular verb.
+    # Answers yes to a job that stopped to confirm, skipping the second ask.
     force: bool = False
 
 

@@ -1,11 +1,18 @@
-"""Is this verb entirely predictable from its infinitive?
+"""How predictable is this verb, given its infinitive?
 
-A regular verb teaches nothing a learner doesn't already know from the model
-verb, so the drill warns before adding one. "Regular" here means the strongest
-possible claim: *every* cell the source publishes is exactly what the ending
-table below produces from the infinitive. Anything else — an odd stem, a second
-participle, a cell with alternatives — makes the verb irregular and worth
-drilling.
+Adding a verb stops to confirm, and this is what that confirmation reports. A
+verb lands in one of three classes:
+
+``regular``
+    Every cell the source publishes is exactly what the ending table below
+    produces. Such a verb teaches nothing the model verb hasn't.
+``regular_with_spelling``
+    The same, but the stem is respelt throughout to keep its final consonant
+    sounding the same — ``jogar`` → ``jogue``, ``conhecer`` → ``conheço``. The
+    change is regular in its own right, so it is reported rather than hidden.
+``irregular``
+    Anything else — an odd stem, a second participle, a cell with alternatives.
+    Worth drilling.
 
 The table is not typed from memory. ``tools/regular_endings.py`` regenerates it
 by fetching cplp.org's own ``falar`` / ``comer`` / ``partir`` and subtracting
@@ -13,14 +20,21 @@ the stem, so the endings come from the same normative source as the verbs they
 are compared against, and the pt-PT ``-ámos`` selection is already applied.
 
 Errors here are one-sided by construction. A missing spelling rule makes a
-regular verb look irregular, which merely skips the warning; the reverse —
+regular verb look irregular, understating how predictable it is; the reverse —
 calling an irregular verb regular — would need the table to reproduce an
 irregular paradigm exactly, which it cannot.
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from .base import Paradigm
+
+# What the check can conclude about a verb.
+REGULAR = "regular"
+REGULAR_WITH_SPELLING = "regular_with_spelling"
+IRREGULAR = "irregular"
 
 # Ending per conjugation, in this order.
 CONJUGATIONS = ("ar", "er", "ir")
@@ -115,6 +129,21 @@ _FRONT_VOWELS = frozenset("ei")
 _BACK_VOWELS = frozenset("aou")
 
 
+def _rules_for(conjugation: str) -> tuple[tuple[tuple[str, str], ...], frozenset[str]]:
+    """The respelling rules that can fire for a conjugation, and what triggers
+    them."""
+    if conjugation == "ar":
+        return _BEFORE_FRONT_VOWEL, _FRONT_VOWELS
+    return _BEFORE_BACK_VOWEL, _BACK_VOWELS
+
+
+def _conjugation(infinitive: str) -> str | None:
+    for conjugation in CONJUGATIONS:
+        if infinitive.endswith(conjugation) and len(infinitive) > len(conjugation):
+            return conjugation
+    return None
+
+
 def _join(stem: str, ending: str, conjugation: str) -> str:
     """Stem + ending, respelling the stem where the ending's vowel would
     otherwise change how its final consonant sounds.
@@ -126,11 +155,7 @@ def _join(stem: str, ending: str, conjugation: str) -> str:
     ``conhec-`` is written against a front vowel, so only a back-vowel ending
     moves it (``conheço``), and ``conheceria`` stands.
     """
-    rules, trigger = (
-        (_BEFORE_FRONT_VOWEL, _FRONT_VOWELS)
-        if conjugation == "ar"
-        else (_BEFORE_BACK_VOWEL, _BACK_VOWELS)
-    )
+    rules, trigger = _rules_for(conjugation)
     if not ending or ending[0] not in trigger:
         return stem + ending
     for old, new in rules:
@@ -145,25 +170,103 @@ def regular_forms(infinitive: str) -> dict[tuple[str, str], str] | None:
     ``None`` for an infinitive outside the three conjugations (``pôr`` and its
     compounds), which is a closed class of irregular verbs anyway.
     """
-    for index, conjugation in enumerate(CONJUGATIONS):
-        if infinitive.endswith(conjugation) and len(infinitive) > len(conjugation):
-            stem = infinitive[: -len(conjugation)]
-            return {
-                key: _join(stem, endings[index], conjugation)
-                for key, endings in ENDINGS.items()
-            }
-    return None
+    conjugation = _conjugation(infinitive)
+    if conjugation is None:
+        return None
+    index = CONJUGATIONS.index(conjugation)
+    stem = infinitive[: -len(conjugation)]
+    return {
+        key: _join(stem, endings[index], conjugation) for key, endings in ENDINGS.items()
+    }
 
 
-def is_regular(paradigm: Paradigm) -> bool:
-    """True when the paradigm holds nothing the ending table doesn't predict.
+# Cells to quote a spelling change from, most recognisable first. Only those
+# that actually change are used, so an -ar verb shows `fique`/`fiquei` and an
+# -er verb shows `conheço`/`conheça` without either list being hard-coded.
+_EXAMPLE_CELLS = (
+    ("present_indicative", "eu"),
+    ("present_subjunctive", "eu"),
+    ("preterite", "eu"),
+)
 
-    Deliberately strict: the cells must match exactly, so a verb carrying an
-    extra accepted form (``aceitar``'s short participle ``aceite``) counts as
-    irregular and is added without a warning. That form is the whole reason to
-    drill it.
+
+@dataclass(frozen=True)
+class Spelling:
+    """A stem respelling that runs through a whole paradigm predictably."""
+
+    old: str
+    new: str
+    before: str  # the vowels that trigger it, e.g. "a/o"
+    examples: tuple[str, ...]
+
+    def describe(self) -> str:
+        return f"{self.old} → {self.new} before {self.before} ({', '.join(self.examples)})"
+
+
+def spelling_change(infinitive: str) -> Spelling | None:
+    """The one respelling this verb's stem needs, if any.
+
+    At most one can apply: the rules are tried in order and the first match
+    wins, exactly as ``_join`` does it.
+    """
+    conjugation = _conjugation(infinitive)
+    if conjugation is None:
+        return None
+    index = CONJUGATIONS.index(conjugation)
+    stem = infinitive[: -len(conjugation)]
+    rules, trigger = _rules_for(conjugation)
+
+    change = next(((o, n) for o, n in rules if stem.endswith(o) and o != n), None)
+    if change is None:
+        return None
+
+    vowels = sorted({e[index][0] for e in ENDINGS.values() if e[index][:1] and e[index][0] in trigger})
+    examples = [
+        form
+        for key in _EXAMPLE_CELLS
+        if (form := _join(stem, ENDINGS[key][index], conjugation))
+        != stem + ENDINGS[key][index]
+    ]
+    return Spelling(*change, before="/".join(vowels), examples=tuple(examples[:2]))
+
+
+@dataclass(frozen=True)
+class Classification:
+    kind: str
+    spelling: Spelling | None = None
+
+    @property
+    def is_regular(self) -> bool:
+        return self.kind != IRREGULAR
+
+    def describe(self) -> str:
+        """The verdict as a clause to follow the infinitive."""
+        if self.kind == IRREGULAR:
+            return "is an irregular verb."
+        if self.kind == REGULAR:
+            return "is a regular verb."
+        return f"is regular, apart from a spelling change: {self.spelling.describe()}."
+
+
+def classify(paradigm: Paradigm) -> Classification:
+    """Predictable, predictable-but-respelt, or worth drilling.
+
+    Deliberately strict about the last: the cells must match the ending table
+    exactly, so a verb carrying an extra accepted form (``aceitar``'s short
+    participle ``aceite``) is irregular. That form is the whole reason to drill
+    it.
     """
     expected = regular_forms(paradigm.infinitive)
     if expected is None or set(paradigm.cells) != set(expected):
-        return False
-    return all(cell.forms == (expected[key],) for key, cell in paradigm.cells.items())
+        return Classification(IRREGULAR)
+    if not all(cell.forms == (expected[key],) for key, cell in paradigm.cells.items()):
+        return Classification(IRREGULAR)
+    change = spelling_change(paradigm.infinitive)
+    return (
+        Classification(REGULAR_WITH_SPELLING, change) if change else Classification(REGULAR)
+    )
+
+
+def is_regular(paradigm: Paradigm) -> bool:
+    """True when the paradigm holds nothing the ending table doesn't predict."""
+    return classify(paradigm).is_regular

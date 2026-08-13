@@ -100,6 +100,15 @@ def _stub_lookup(monkeypatch, error=None):
     monkeypatch.setattr(jobs, "get_adapter", lambda *a, **k: _Adapter())
 
 
+def _confirmed(client, infinitive):
+    """Start a job past the confirmation.
+
+    Every add now stops after the lookup to report what it found, so a test
+    about anything later has to answer yes up front.
+    """
+    return client.post("/api/verbs", json={"infinitive": infinitive, "force": True})
+
+
 def _await_job(client, job_id, timeout=10.0):
     """Poll until the job leaves `running`. Polling also yields to the loop so
     the background task gets to run between requests."""
@@ -144,7 +153,7 @@ def test_job_saves_verb_with_forms_and_ownership(env, monkeypatch):
     client, TS = env
     _stub_lookup(monkeypatch)
 
-    started = client.post("/api/verbs", json={"infinitive": "partir"})
+    started = _confirmed(client, "partir")
     assert started.status_code == 202
     job = _await_job(client, started.json()["job_id"])
     assert job["status"] == "done", job
@@ -188,7 +197,7 @@ def test_a_failure_writing_examples_saves_nothing(env, monkeypatch):
 
     monkeypatch.setattr(jobs.llm, "generate_examples", boom)
 
-    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "partir"}).json()["job_id"])
+    job = _await_job(client, _confirmed(client, "partir").json()["job_id"])
     steps = {s["key"]: s for s in job["steps"]}
 
     assert job["status"] == "failed"
@@ -213,7 +222,7 @@ def test_examples_and_translation_are_applied(env, monkeypatch):
     monkeypatch.setattr(jobs.llm, "generate_examples", fake_generate)
     monkeypatch.setattr(jobs.llm, "is_configured", lambda: True)
 
-    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "partir"}).json()["job_id"])
+    job = _await_job(client, _confirmed(client, "partir").json()["job_id"])
     assert job["status"] == "done"
 
     with TS() as db:
@@ -229,7 +238,7 @@ def test_alternative_forms_are_stored_and_served(env, monkeypatch):
     client, TS = env
     _stub_lookup(monkeypatch)
 
-    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "partir"}).json()["job_id"])
+    job = _await_job(client, _confirmed(client, "partir").json()["job_id"])
 
     with TS() as db:
         verb = db.scalar(select(Verb).where(Verb.infinitive == "partir"))
@@ -248,7 +257,7 @@ def test_alternative_forms_are_stored_and_served(env, monkeypatch):
 def test_both_participle_rows_are_drilled(env, monkeypatch):
     client, TS = env
     _stub_lookup(monkeypatch)
-    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "partir"}).json()["job_id"])
+    job = _await_job(client, _confirmed(client, "partir").json()["job_id"])
 
     blocks = client.get(f"/api/verbs/{job['verb_id']}/forms").json()["blocks"]
     participle = next(b for b in blocks if b["tense"] == "past_participle")
@@ -264,7 +273,7 @@ def test_unknown_verb_fails_the_step_and_writes_nothing(env, monkeypatch):
     client, TS = env
     _stub_lookup(monkeypatch, error=UnknownWord("zzzz"))
 
-    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "zzzz"}).json()["job_id"])
+    job = _await_job(client, _confirmed(client, "zzzz").json()["job_id"])
     steps = {s["key"]: s for s in job["steps"]}
 
     assert job["status"] == "failed"
@@ -281,7 +290,7 @@ def test_a_non_verb_is_rejected(env, monkeypatch):
     client, TS = env
     _stub_lookup(monkeypatch, error=NotAVerb("mesa"))
 
-    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "mesa"}).json()["job_id"])
+    job = _await_job(client, _confirmed(client, "mesa").json()["job_id"])
     assert job["status"] == "failed"
     assert "is not a verb" in job["error"]
     with TS() as db:
@@ -293,7 +302,7 @@ def test_unknown_job_id_is_404(env):
     assert client.get("/api/verbs/jobs/nope").status_code == 404
 
 
-# ---- the regular-verb question -------------------------------------------
+# ---- the confirmation ----------------------------------------------------
 
 def _regular_paradigm(infinitive="falar"):
     """A verb with nothing but predictable forms, built from the same ending
@@ -314,7 +323,7 @@ def _stub_regular_lookup(monkeypatch):
     monkeypatch.setattr(jobs, "get_adapter", lambda *a, **k: _Adapter())
 
 
-def test_a_regular_verb_stops_to_ask_before_the_expensive_half(env, monkeypatch):
+def test_the_confirmation_comes_before_the_expensive_half(env, monkeypatch):
     client, TS = env
     _stub_regular_lookup(monkeypatch)
 
@@ -326,16 +335,48 @@ def test_a_regular_verb_stops_to_ask_before_the_expensive_half(env, monkeypatch)
 
     monkeypatch.setattr(jobs.llm, "generate_examples", _never)
 
-    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "jogar"}).json()["job_id"])
+    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "falar"}).json()["job_id"])
 
     assert job["status"] == "needs_confirmation"
-    assert job["question"] == "jogar is a regular verb; are you sure you want to add it?"
     assert called == []
     steps = {s["key"]: s for s in job["steps"]}
     assert steps["look_up"]["status"] == "done"  # the lookup itself succeeded
     assert steps["draft"]["status"] == "pending"
     with TS() as db:
-        assert db.scalar(select(Verb).where(Verb.infinitive == "jogar")) is None
+        assert db.scalar(select(Verb).where(Verb.infinitive == "falar")) is None
+
+
+def test_a_plainly_regular_verb_says_so(env, monkeypatch):
+    client, _ = env
+    _stub_regular_lookup(monkeypatch)
+
+    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "falar"}).json()["job_id"])
+    assert job["question"] == "falar is a regular verb. Add it?"
+
+
+def test_a_spelling_change_is_named_rather_than_hidden(env, monkeypatch):
+    """`jogar` is entirely predictable but respells its stem throughout, which
+    is worth saying out loud rather than filing under plain "regular"."""
+    client, _ = env
+    _stub_regular_lookup(monkeypatch)
+
+    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "jogar"}).json()["job_id"])
+    assert job["question"] == (
+        "jogar is regular, apart from a spelling change: g → gu before e "
+        "(jogue, joguei). Add it?"
+    )
+
+
+def test_an_irregular_verb_is_confirmed_too(env, monkeypatch):
+    """Confirmation is not a warning: it reports on every verb, including the
+    ones most worth adding."""
+    client, _ = env
+    _stub_lookup(monkeypatch)  # `partir` stub, which carries an oiça/ouça cell
+
+    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "partir"}).json()["job_id"])
+
+    assert job["status"] == "needs_confirmation"
+    assert job["question"] == "partir is an irregular verb. Add it?"
 
 
 def test_saying_yes_adds_the_verb(env, monkeypatch):
@@ -355,11 +396,11 @@ def test_saying_yes_adds_the_verb(env, monkeypatch):
     assert forms[("present_subjunctive", "eu")] == "jogue"  # the spelling rule survived
 
 
-def test_an_irregular_verb_is_never_questioned(env, monkeypatch):
+def test_confirming_skips_straight_to_the_work(env, monkeypatch):
     client, _ = env
-    _stub_lookup(monkeypatch)  # `partir` stub, which carries an oiça/ouça cell
+    _stub_lookup(monkeypatch)
 
-    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "partir"}).json()["job_id"])
+    job = _await_job(client, _confirmed(client, "partir").json()["job_id"])
 
     assert job["status"] == "done"
     assert job["question"] == ""

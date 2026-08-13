@@ -9,8 +9,18 @@ from pathlib import Path
 import pytest
 
 from web.languages import cplp
+from web.languages.base import Cell, Paradigm
 from web.languages.pt_pt import _to_paradigm
-from web.languages.regular import ENDINGS, is_regular, regular_forms
+from web.languages.regular import (
+    ENDINGS,
+    IRREGULAR,
+    REGULAR,
+    REGULAR_WITH_SPELLING,
+    classify,
+    is_regular,
+    regular_forms,
+    spelling_change,
+)
 
 FIXTURES = Path(__file__).parent / "fixtures" / "cplp"
 
@@ -84,3 +94,60 @@ def test_regular_forms_covers_every_cell_a_paradigm_has():
 @pytest.mark.parametrize("infinitive", ["pôr", "repor", "ar", "x"])
 def test_verbs_outside_the_three_conjugations_have_no_regular_pattern(infinitive):
     assert regular_forms(infinitive) is None
+
+
+# ---- the three-way verdict ----------------------------------------------
+
+def test_a_plain_verb_is_regular_with_nothing_to_report():
+    verdict = classify(paradigm("falar"))
+    assert verdict.kind == REGULAR
+    assert verdict.spelling is None
+
+
+@pytest.mark.parametrize("verb", ["ser", "ver", "ouvir", "aceitar"])
+def test_anything_unpredictable_is_irregular(verb):
+    verdict = classify(paradigm(verb))
+    assert verdict.kind == IRREGULAR
+    assert verdict.spelling is None
+
+
+@pytest.mark.parametrize(
+    "infinitive, described",
+    [
+        ("jogar", "g → gu before e (jogue, joguei)"),
+        ("ficar", "c → qu before e (fique, fiquei)"),
+        ("começar", "ç → c before e (comece, comecei)"),
+        ("conhecer", "c → ç before a/o (conheço, conheça)"),
+        ("proteger", "g → j before a/o (protejo, proteja)"),
+        ("erguer", "gu → g before a/o (ergo, erga)"),
+    ],
+)
+def test_a_spelling_change_is_described_with_its_own_examples(infinitive, described):
+    assert spelling_change(infinitive).describe() == described
+
+
+def test_a_respelt_verb_is_regular_but_reported_separately():
+    """The whole point of the third class: predictable, yet not silently so.
+
+    No fixture needed — a verb that is regular by definition is one whose cells
+    are exactly what the table produces.
+    """
+    jogar = Paradigm(
+        infinitive="jogar",
+        cells={key: Cell((form,)) for key, form in regular_forms("jogar").items()},
+    )
+    verdict = classify(jogar)
+    assert verdict.kind == REGULAR_WITH_SPELLING
+    assert verdict.is_regular is True
+    assert verdict.spelling.examples == ("jogue", "joguei")
+
+
+def test_a_stem_needing_no_respelling_has_no_change_to_report():
+    assert spelling_change("falar") is None
+    assert spelling_change("partir") is None
+
+
+def test_the_verdict_agrees_with_the_boolean():
+    for verb in ["falar", "partir", "ser", "ver", "ouvir", "aceitar", "abrir"]:
+        p = paradigm(verb)
+        assert is_regular(p) is (classify(p).kind != IRREGULAR)
