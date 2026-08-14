@@ -6,13 +6,14 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
 import web.seed as seed_mod
-from web.conjugation import (
+from web.languages.pt.catalogue import (
     INVARIABLE_PERSON,
     PAST_PARTICIPLE_TENSE,
     PRESENT_PARTICIPLE_TENSE,
     SHORT_PERSON,
 )
 from web.models import Base, Form, Verb
+from web.languages import get_adapter
 from web.languages.base import Cell, Paradigm
 from web.seed import (
     apply_examples,
@@ -20,6 +21,8 @@ from web.seed import (
     seed_verbs,
     upsert_verb,
 )
+
+ADAPTER = get_adapter()
 
 
 def _write_seed(tmp_path, data):
@@ -128,7 +131,7 @@ def test_upsert_verb_records_owner_and_translation(tmp_path):
         "forms": {"present_indicative": {"eu": "parto"}},
     }
     with Session() as db:
-        verb, inserted = upsert_verb(db, paradigm_from_entry(entry), created_by=7)
+        verb, inserted = upsert_verb(db, paradigm_from_entry(entry), adapter=ADAPTER, created_by=7)
         db.commit()
         assert inserted == 3  # the present form plus both participle rows
         assert verb.created_by == 7
@@ -140,12 +143,18 @@ def test_upsert_verb_never_overwrites_existing_form_text(tmp_path):
     through the app."""
     Session = _session(tmp_path)
     with Session() as db:
-        upsert_verb(db, paradigm_from_entry({"infinitive": "ir", "forms": {"present": {"eu": "vou"}}}))
+        upsert_verb(
+            db,
+            paradigm_from_entry({"infinitive": "ir", "forms": {"present": {"eu": "vou"}}}),
+            adapter=ADAPTER,
+        )
         db.commit()
     with Session() as db:
         # A later entry disagrees about the same cell.
         _, inserted = upsert_verb(
-            db, paradigm_from_entry({"infinitive": "ir", "forms": {"present": {"eu": "XXX"}}})
+            db,
+            paradigm_from_entry({"infinitive": "ir", "forms": {"present": {"eu": "XXX"}}}),
+            adapter=ADAPTER,
         )
         db.commit()
         assert inserted == 0
@@ -156,7 +165,9 @@ def test_apply_examples_fills_only_matching_slots(tmp_path):
     Session = _session(tmp_path)
     with Session() as db:
         verb, _ = upsert_verb(
-            db, paradigm_from_entry({"infinitive": "ir", "forms": {"present": {"eu": "vou"}}})
+            db,
+            paradigm_from_entry({"infinitive": "ir", "forms": {"present": {"eu": "vou"}}}),
+            adapter=ADAPTER,
         )
         db.flush()
         updated = apply_examples(
@@ -190,7 +201,7 @@ def test_upsert_verb_stores_alternative_forms(tmp_path):
         },
     )
     with Session() as db:
-        verb, inserted = upsert_verb(db, paradigm)
+        verb, inserted = upsert_verb(db, paradigm, adapter=ADAPTER)
         db.commit()
         assert inserted == 2
         by_key = {(f.tense, f.person): f for f in verb.forms}

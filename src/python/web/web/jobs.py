@@ -193,8 +193,9 @@ def start(infinitive: str, user_id: int | None, force: bool = False) -> Job:
 
 
 async def _run(job: Job, user_id: int | None, force: bool) -> None:
+    adapter = get_adapter()
     try:
-        paradigm = await _look_up(job)
+        paradigm = await _look_up(job, adapter)
         # Confirm before the expensive half. What the lookup found is worth
         # seeing either way — a fully regular verb teaches nothing the model
         # verb hasn't — and writing ~60 example sentences is the wasteful part
@@ -202,8 +203,8 @@ async def _run(job: Job, user_id: int | None, force: bool) -> None:
         if not force:
             job.ask(f"{job.infinitive} {classify(paradigm).describe()} Add it?")
             return
-        slots = await _write_examples(job, paradigm)
-        job.finish(_save(job, paradigm, slots, user_id))
+        slots = await _write_examples(job, paradigm, adapter)
+        job.finish(_save(job, paradigm, slots, user_id, adapter))
     except _StepFailed:
         pass  # already recorded on the job
     except Exception as exc:  # noqa: BLE001 - last resort, must not kill the task
@@ -216,8 +217,7 @@ class _StepFailed(Exception):
     """Raised after a step has recorded its own failure on the job."""
 
 
-async def _look_up(job: Job) -> Paradigm:
-    adapter = get_adapter()
+async def _look_up(job: Job, adapter) -> Paradigm:
     job.update(STEP_LOOKUP, status=RUNNING, detail=f"cplp.org · {job.infinitive}")
     try:
         paradigm = await adapter.paradigm(job.infinitive)
@@ -243,7 +243,7 @@ async def _look_up(job: Job) -> Paradigm:
     return paradigm
 
 
-async def _write_examples(job: Job, paradigm: Paradigm) -> list[dict]:
+async def _write_examples(job: Job, paradigm: Paradigm, adapter) -> list[dict]:
     def progress(event: str, **kw) -> None:
         if event == "drafting":
             job.update(
@@ -268,7 +268,7 @@ async def _write_examples(job: Job, paradigm: Paradigm) -> list[dict]:
             job.update(STEP_REFINE, status=RUNNING, detail=f"rewriting {kw.get('total', 0)}")
 
     try:
-        result = await llm.generate_examples(paradigm, progress=progress)
+        result = await llm.generate_examples(paradigm, adapter, progress=progress)
     except llm.ExamplesUnavailable as exc:
         # Fatal by design: a verb whose rows have no prompt is worse than no
         # verb, and nothing has been written yet, so failing here leaves the
@@ -294,7 +294,9 @@ async def _write_examples(job: Job, paradigm: Paradigm) -> list[dict]:
     return llm.example_slots(result)
 
 
-def _save(job: Job, paradigm: Paradigm, slots: list[dict], user_id: int | None) -> int:
+def _save(
+    job: Job, paradigm: Paradigm, slots: list[dict], user_id: int | None, adapter
+) -> int:
     """Write the verb — the only step that touches the database, so a failure
     anywhere earlier leaves nothing behind.
 
@@ -304,7 +306,7 @@ def _save(job: Job, paradigm: Paradigm, slots: list[dict], user_id: int | None) 
     """
     job.update(STEP_SAVE, status=RUNNING, detail="")
     with SessionLocal() as db:
-        verb, inserted = upsert_verb(db, paradigm, created_by=user_id)
+        verb, inserted = upsert_verb(db, paradigm, adapter=adapter, created_by=user_id)
         db.flush()  # assign verb.id and make the new forms visible to apply_examples
         written = apply_examples(verb, slots) // 2  # two columns per sentence pair
         db.commit()

@@ -28,7 +28,6 @@ import anthropic
 from anthropic import AsyncAnthropic
 from pydantic import BaseModel, Field
 
-from .conjugation import DRILL_PERSONS, TENSE_KEYS
 from .languages.base import Paradigm
 from .seed import EXAMPLES_FILE
 
@@ -124,17 +123,18 @@ class Slot:
         return (self.tense, self.person)
 
 
-def slots_for(paradigm: Paradigm) -> list[Slot]:
+def slots_for(paradigm: Paradigm, adapter) -> list[Slot]:
     """Every cell the drill will actually show, in display order.
 
-    Mirrors ``api.verb_forms``: drilled persons only (``vós`` is stored but
-    never asked). Generating examples for rows nobody sees would just burn
-    tokens. Only the displayed form of a cell gets a sentence — the sentence has
-    to contain the exact form, so an alternative would need its own.
+    Mirrors ``api.verb_forms``: the adapter's drilled persons only (pt-PT
+    stores ``vós`` but never asks for it). Generating examples for rows nobody
+    sees would just burn tokens. Only the displayed form of a cell gets a
+    sentence — the sentence has to contain the exact form, so an alternative
+    would need its own.
     """
     out: list[Slot] = []
-    for tense in TENSE_KEYS:
-        for person in DRILL_PERSONS:
+    for tense in adapter.tense_keys:
+        for person in adapter.drill_persons:
             cell = paradigm.cell(tense, person)
             if cell:
                 out.append(Slot(tense, person, cell.answer))
@@ -399,6 +399,7 @@ async def _rewrite(
 
 async def generate_examples(
     paradigm: Paradigm,
+    adapter,
     *,
     client: AsyncAnthropic | None = None,
     progress: ProgressFn | None = None,
@@ -422,7 +423,7 @@ async def generate_examples(
         )
 
     client = client or _client()
-    slots = slots_for(paradigm)
+    slots = slots_for(paradigm, adapter)
     by_key = {s.key: s for s in slots}
     note = progress or (lambda *a, **k: None)
 

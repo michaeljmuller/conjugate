@@ -8,19 +8,18 @@ the subjunctives, não for the negative imperative) — a presentation detail ke
 here, not in the database.
 
 Participles have no person, so they are stored as forms under a pseudo-person
-(``INVARIABLE_PERSON``) and rendered with an empty person label.
+(``INVARIABLE_PERSON``, shared vocabulary from ``base``) and rendered with an
+empty person label.
 """
 
-# Placeholder person for personless forms (participles). Real conjugations never
-# use this key, so it only ever matches a participle row.
-#
+from ..base import INVARIABLE_PERSON
+
 # The past participle is drilled as two rows, distinguished by the auxiliary the
 # form takes rather than by person: the regular participle goes with ter/haver
 # ("tinha aceitado") and the short one with ser/estar ("foi aceite"). Most verbs
-# have the same form in both. ``inv`` is a poor name for the first of those, but
-# it is what the existing rows are keyed on and renaming it would need a data
-# migration for no benefit.
-INVARIABLE_PERSON = "inv"
+# have the same form in both. The regular one reuses ``INVARIABLE_PERSON``; this
+# is the second row, and is pt-PT's alone — no other language here splits the
+# participle.
 SHORT_PERSON = "short"
 PAST_PARTICIPLE_TENSE = "past_participle"
 PRESENT_PARTICIPLE_TENSE = "present_participle"
@@ -76,8 +75,6 @@ _PERSON_DISPLAY: dict[str, str] = {
 }
 
 
-_TENSE_BY_KEY: dict[str, dict[str, str]] = {t["key"]: t for t in TENSES}
-
 # Reverse of _PERSON_DISPLAY. The conjugation lookup reads display spellings off
 # a web page ("nós") and needs the ascii key ("nos") the database stores.
 _PERSON_BY_DISPLAY: dict[str, str] = {v: k for k, v in _PERSON_DISPLAY.items()}
@@ -90,32 +87,6 @@ def person_key(display: str) -> str | None:
     conjugation parser tells a pronoun apart from a cue word (``que``, ``não``).
     """
     return _PERSON_BY_DISPLAY.get(display.strip().lower())
-
-
-def resolve_tense_prefs(saved: list[dict]) -> list[dict]:
-    """Reconcile a (possibly stale) saved tense-preference list against ``TENSES``.
-
-    ``saved`` is ``[{"key", "enabled"}, …]`` in the user's chosen order. Unknown
-    or duplicate keys are dropped; valid keys keep their order and ``enabled``
-    flag; any canonical tense missing from ``saved`` is appended at the end as
-    enabled — so newly-added tenses show up by default rather than vanishing for
-    users who saved settings before the tense existed. An empty ``saved`` yields
-    every tense enabled in canonical order (the default, no-settings behavior).
-
-    Returns ``[{"key", "label", "mood", "enabled"}, …]`` ready for the UI.
-    """
-    resolved: list[dict] = []
-    seen: set[str] = set()
-    for item in saved:
-        key = item.get("key")
-        if key in _TENSE_BY_KEY and key not in seen:
-            seen.add(key)
-            t = _TENSE_BY_KEY[key]
-            resolved.append({**t, "enabled": bool(item.get("enabled", True))})
-    for t in TENSES:
-        if t["key"] not in seen:
-            resolved.append({**t, "enabled": True})
-    return resolved
 
 
 # The past participle's two rows are labelled by the auxiliary they take. These

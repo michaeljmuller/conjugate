@@ -8,13 +8,13 @@ from pathlib import Path
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from .conjugation import (
-    INVARIABLE_PERSON,
+from .languages import INVARIABLE_PERSON, get_adapter
+from .languages.base import Cell, Paradigm
+from .languages.pt.catalogue import (
     PAST_PARTICIPLE_TENSE,
     PRESENT_PARTICIPLE_TENSE,
     SHORT_PERSON,
 )
-from .languages.base import Cell, Paradigm
 from .models import Base, Form, FormVariant, Verb
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -30,9 +30,10 @@ def init_db(engine) -> None:
 def paradigm_from_entry(entry: dict) -> Paradigm:
     """Convert a ``verbs_seed.json`` entry into a ``Paradigm``.
 
-    The seed file predates the language abstraction and holds one form per cell
-    with the participles as top-level fields. Lifting it into the same type the
-    adapter produces means there is a single writer below this point.
+    pt-PT only, as the seed file is: it predates the language abstraction and
+    holds one form per cell with the participles as top-level fields. Lifting it
+    into the same type the adapter produces means there is a single writer below
+    this point.
 
     The past participle becomes both drilled rows — the ter/haver one and the
     ser/estar one — with the same form, which is right for every seeded verb.
@@ -56,9 +57,13 @@ def paradigm_from_entry(entry: dict) -> Paradigm:
 
 
 def upsert_verb(
-    db: Session, paradigm: Paradigm, *, created_by: int | None = None
+    db: Session, paradigm: Paradigm, *, adapter, created_by: int | None = None
 ) -> tuple[Verb, int]:
     """Create or top up one verb from a paradigm. Returns ``(verb, inserted)``.
+
+    ``adapter`` is consulted only to name the participle cells that fill
+    ``Verb.past_participle`` / ``present_participle``; the forms themselves are
+    written straight from ``paradigm.cells`` and need no language knowledge.
 
     Incremental: a missing verb is created, and any ``(tense, person)`` cell the
     verb lacks is added along with its alternative forms. Existing forms are
@@ -70,8 +75,10 @@ def upsert_verb(
     Does not commit.
     """
     verb = db.scalar(select(Verb).where(Verb.infinitive == paradigm.infinitive))
-    past = paradigm.cell(PAST_PARTICIPLE_TENSE, INVARIABLE_PERSON)
-    present = paradigm.cell(PRESENT_PARTICIPLE_TENSE, INVARIABLE_PERSON)
+    past_tense = adapter.past_participle_tense
+    present_tense = adapter.present_participle_tense
+    past = paradigm.cell(past_tense, INVARIABLE_PERSON) if past_tense else None
+    present = paradigm.cell(present_tense, INVARIABLE_PERSON) if present_tense else None
 
     if verb is None:
         verb = Verb(
@@ -112,8 +119,11 @@ def seed_verbs(db: Session) -> int:
     Verbs added through the app are untouched by this: ``upsert_verb`` only ever
     fills gaps.
     """
+    adapter = get_adapter()
     data = json.loads(SEED_FILE.read_text(encoding="utf-8"))
-    inserted = sum(upsert_verb(db, paradigm_from_entry(entry))[1] for entry in data)
+    inserted = sum(
+        upsert_verb(db, paradigm_from_entry(entry), adapter=adapter)[1] for entry in data
+    )
     # Commit unconditionally: new verbs and participle backfills are dirty even
     # when no new forms were inserted.
     db.commit()

@@ -10,6 +10,7 @@ import asyncio
 import pytest
 
 from web import llm
+from web.languages import get_adapter
 from web.languages.base import Cell, Paradigm
 from web.llm import (
     ExampleCritique,
@@ -35,6 +36,9 @@ ENTRY = Paradigm(
     },
 )
 
+# ENTRY is a pt-PT paradigm, so the real pt adapter is what orders its slots.
+ADAPTER = get_adapter()
+
 
 # ---- contains_form -------------------------------------------------------
 
@@ -56,7 +60,7 @@ def test_contains_form(sentence, form, expected):
 # ---- slots ---------------------------------------------------------------
 
 def test_slots_skip_vos_and_include_participles():
-    slots = slots_for(ENTRY)
+    slots = slots_for(ENTRY, ADAPTER)
     keys = {(s.tense, s.person) for s in slots}
 
     assert ("present_indicative", "eu") in keys
@@ -69,7 +73,7 @@ def test_slots_skip_vos_and_include_participles():
 # ---- mechanical checks ---------------------------------------------------
 
 def test_mechanical_problems_flags_missing_form_and_gaps():
-    slots = slots_for(ENTRY)
+    slots = slots_for(ENTRY, ADAPTER)
     pairs = {
         s.key: ExamplePair(
             tense=s.tense,
@@ -143,7 +147,7 @@ class _StubClient:
                                     if (s.tense, s.person) in self.bad_slots
                                     else f"Frase com {s.form}."),
                     )
-                    for s in slots_for(ENTRY)
+                    for s in slots_for(ENTRY, ADAPTER)
                 ],
             )
         )
@@ -156,7 +160,7 @@ class _Parsed:
 
 def test_loop_rewrites_only_flagged_slots_and_then_stops():
     client = _StubClient(bad_slots=[("preterite", "eu")])
-    result = asyncio.run(generate_examples(ENTRY, client=client, max_rounds=2))
+    result = asyncio.run(generate_examples(ENTRY, ADAPTER, client=client, max_rounds=2))
 
     # Exactly the failing slot was re-requested, and only once.
     assert client.rewrite_requests == [[("preterite", "eu")]]
@@ -170,19 +174,19 @@ def test_loop_rewrites_only_flagged_slots_and_then_stops():
 def test_loop_gives_up_after_max_rounds_and_reports_what_is_left():
     """A slot the model keeps flagging is saved anyway, but surfaced."""
     client = _StubClient(bad_slots=[], critique_rounds=99)
-    result = asyncio.run(generate_examples(ENTRY, client=client, max_rounds=2))
+    result = asyncio.run(generate_examples(ENTRY, ADAPTER, client=client, max_rounds=2))
 
     assert len(client.rewrite_requests) == 2  # capped, not looping forever
     assert [(p.tense, p.person) for p in result.unresolved] == [("preterite", "eu")]
     assert result.rounds == 2
     # Nothing was dropped just because it stayed flagged.
-    assert len(result.pairs) == len(slots_for(ENTRY))
+    assert len(result.pairs) == len(slots_for(ENTRY, ADAPTER))
 
 
 def test_example_slots_flattens_for_the_seeder():
     client = _StubClient(bad_slots=[])
-    result = asyncio.run(generate_examples(ENTRY, client=client, max_rounds=1))
+    result = asyncio.run(generate_examples(ENTRY, ADAPTER, client=client, max_rounds=1))
     rows = llm.example_slots(result)
 
-    assert len(rows) == len(slots_for(ENTRY))
+    assert len(rows) == len(slots_for(ENTRY, ADAPTER))
     assert {"tense", "person", "example_en", "example_pt"} == set(rows[0])

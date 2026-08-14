@@ -15,7 +15,7 @@ from sqlalchemy.orm import sessionmaker
 from web import api as api_mod
 from web import jobs
 from web.auth import current_user
-from web.languages import NotAVerb, UnknownWord
+from web.languages import NotAVerb, UnknownWord, get_adapter
 from web.languages.base import Cell, Paradigm
 from web.languages.regular import regular_forms
 from web.db import get_db
@@ -73,7 +73,7 @@ def env(tmp_path, monkeypatch):
     monkeypatch.setattr(jobs.llm, "is_configured", lambda: True)
     monkeypatch.setattr(api_mod.llm, "is_configured", lambda: True)
 
-    async def _examples(paradigm, **kw):
+    async def _examples(paradigm, adapter, **kw):
         result = jobs.llm.ExampleResult(translation=None)
         for (tense, person) in paradigm.cells:
             result.pairs[(tense, person)] = jobs.llm.ExamplePair(
@@ -87,17 +87,33 @@ def env(tmp_path, monkeypatch):
     app.dependency_overrides.clear()
 
 
-def _stub_lookup(monkeypatch, error=None):
-    """Stand in for the adapter so no test touches cplp.org."""
+def _stub_adapter(monkeypatch, paradigm_for):
+    """Replace only the lookup, so no test touches cplp.org.
+
+    Everything else — the tense catalogue, the drilled persons, which cell is
+    the participle — delegates to the real pt-PT adapter, so the job under test
+    still runs against a real language rather than a hand-written stand-in that
+    would drift from the protocol.
+    """
+    real = get_adapter()
+
     class _Adapter:
-        code = "pt-PT"
+        def __getattr__(self, name):
+            return getattr(real, name)
 
         async def paradigm(self, infinitive):
-            if error:
-                raise error
-            return _paradigm(infinitive)
+            return paradigm_for(infinitive)
 
     monkeypatch.setattr(jobs, "get_adapter", lambda *a, **k: _Adapter())
+
+
+def _stub_lookup(monkeypatch, error=None):
+    def paradigm_for(infinitive):
+        if error:
+            raise error
+        return _paradigm(infinitive)
+
+    _stub_adapter(monkeypatch, paradigm_for)
 
 
 def _confirmed(client, infinitive):
@@ -192,7 +208,7 @@ def test_a_failure_writing_examples_saves_nothing(env, monkeypatch):
     client, TS = env
     _stub_lookup(monkeypatch)
 
-    async def boom(paradigm, **kw):
+    async def boom(paradigm, adapter, **kw):
         raise jobs.llm.ExamplesUnavailable("The Anthropic account cannot be billed: no credit.")
 
     monkeypatch.setattr(jobs.llm, "generate_examples", boom)
@@ -211,7 +227,7 @@ def test_examples_and_translation_are_applied(env, monkeypatch):
     client, TS = env
     _stub_lookup(monkeypatch)
 
-    async def fake_generate(paradigm, **kw):
+    async def fake_generate(paradigm, adapter, **kw):
         result = jobs.llm.ExampleResult(translation="to leave")
         result.pairs[("present_indicative", "eu")] = jobs.llm.ExamplePair(
             tense="present_indicative", person="eu",
@@ -314,13 +330,7 @@ def _regular_paradigm(infinitive="falar"):
 
 
 def _stub_regular_lookup(monkeypatch):
-    class _Adapter:
-        code = "pt-PT"
-
-        async def paradigm(self, infinitive):
-            return _regular_paradigm(infinitive)
-
-    monkeypatch.setattr(jobs, "get_adapter", lambda *a, **k: _Adapter())
+    _stub_adapter(monkeypatch, _regular_paradigm)
 
 
 def test_the_confirmation_comes_before_the_expensive_half(env, monkeypatch):
@@ -329,7 +339,7 @@ def test_the_confirmation_comes_before_the_expensive_half(env, monkeypatch):
 
     called = []
 
-    async def _never(paradigm, **kw):
+    async def _never(paradigm, adapter, **kw):
         called.append(paradigm.infinitive)
         raise AssertionError("examples must not be written before the user says yes")
 

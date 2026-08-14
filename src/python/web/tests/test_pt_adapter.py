@@ -11,15 +11,15 @@ from pathlib import Path
 
 import pytest
 
-from web.conjugation import (
+from web.languages.pt.catalogue import (
     INVARIABLE_PERSON,
     PAST_PARTICIPLE_TENSE,
     PRESENT_PARTICIPLE_TENSE,
     SHORT_PERSON,
     person_label,
 )
-from web.languages import cplp
-from web.languages.pt_pt import (
+from web.languages.pt import cplp
+from web.languages.pt.adapter import (
     _to_paradigm,
     derive_regular_participle,
     select_preterite_nos,

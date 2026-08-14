@@ -14,13 +14,8 @@ from sqlalchemy.orm import Session
 
 from . import jobs, llm
 from .auth import current_user
-from .conjugation import (
-    DRILL_PERSONS,
-    TENSE_KEYS,
-    person_label,
-    resolve_tense_prefs,
-)
 from .db import get_db
+from .languages import get_adapter
 from .grading import grade
 from .models import Attempt, Form, User, UserSettings, Verb
 
@@ -48,9 +43,9 @@ def _resolve_interface(settings: dict) -> dict:
     }
 
 
-def _enabled_tenses(db: Session, user: User) -> list[dict]:
+def _enabled_tenses(db: Session, user: User, adapter) -> list[dict]:
     """Tenses to drill, in the user's chosen order (enabled only)."""
-    prefs = resolve_tense_prefs(_load_settings(db, user).get("tenses", []))
+    prefs = adapter.resolve_tense_prefs(_load_settings(db, user).get("tenses", []))
     return [t for t in prefs if t["enabled"]]
 
 
@@ -82,9 +77,9 @@ class SettingsIn(BaseModel):
     interface: InterfaceIn | None = None
 
 
-def _settings_response(settings: dict) -> dict:
+def _settings_response(settings: dict, adapter) -> dict:
     return {
-        "tenses": resolve_tense_prefs(settings.get("tenses", [])),
+        "tenses": adapter.resolve_tense_prefs(settings.get("tenses", [])),
         "interface": _resolve_interface(settings),
     }
 
@@ -92,7 +87,7 @@ def _settings_response(settings: dict) -> dict:
 @router.get("/settings")
 def get_settings(db: Session = Depends(get_db), user: User = Depends(current_user)):
     """Full, reconciled settings for the UI (every catalog tense, flagged)."""
-    return _settings_response(_load_settings(db, user))
+    return _settings_response(_load_settings(db, user), get_adapter())
 
 
 @router.put("/settings")
@@ -101,9 +96,10 @@ def put_settings(
     db: Session = Depends(get_db),
     user: User = Depends(current_user),
 ):
+    adapter = get_adapter()
     updates: dict = {}
     if payload.tenses is not None:
-        unknown = [t.key for t in payload.tenses if t.key not in TENSE_KEYS]
+        unknown = [t.key for t in payload.tenses if t.key not in adapter.tense_keys]
         if unknown:
             raise HTTPException(status_code=400, detail=f"unknown tenses: {unknown}")
         if not any(t.enabled for t in payload.tenses):
@@ -128,7 +124,7 @@ def put_settings(
     # Reassign a new dict so SQLAlchemy detects the change on the JSON column.
     row.data = {**row.data, **updates}
     db.commit()
-    return _settings_response(dict(row.data))
+    return _settings_response(dict(row.data), adapter)
 
 
 @router.get("/verbs")
@@ -236,13 +232,14 @@ def verb_forms(
     if verb is None:
         raise HTTPException(status_code=404, detail="verb not found")
 
+    adapter = get_adapter()
     by_key: dict[tuple[str, str], Form] = {
         (f.tense, f.person): f for f in verb.forms
     }
     blocks = []
-    for tense in _enabled_tenses(db, user):
+    for tense in _enabled_tenses(db, user, adapter):
         rows = []
-        for person in DRILL_PERSONS:
+        for person in adapter.drill_persons:
             form = by_key.get((tense["key"], person))
             if form is None:
                 continue
@@ -250,7 +247,7 @@ def verb_forms(
                 {
                     "form_id": form.id,
                     "person": person,
-                    "label": person_label(tense["key"], person),
+                    "label": adapter.person_label(tense["key"], person),
                     # The client grades locally and synchronously so focus can
                     # move without waiting on the network, so it needs both the
                     # answer and every other form that counts as correct.
@@ -367,7 +364,7 @@ def progress(db: Session = Depends(get_db), user: User = Depends(current_user)):
         for tense, total, correct in rows
     }
     out = []
-    for tense in _enabled_tenses(db, user):
+    for tense in _enabled_tenses(db, user, get_adapter()):
         stat = by_tense.get(tense["key"], {"attempts": 0, "correct": 0})
         out.append(
             {

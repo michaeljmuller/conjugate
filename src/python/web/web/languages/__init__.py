@@ -9,15 +9,17 @@ second language is a registration rather than a change to every call site.
 from __future__ import annotations
 
 from .base import (
+    INVARIABLE_PERSON,
     Cell,
     LanguageAdapter,
     NotAVerb,
     Paradigm,
     SourceUnavailable,
     UnknownWord,
+    resolve_tense_prefs,
 )
-from .pt_pt import CODE as PT_PT
-from .pt_pt import PortugueseAdapter
+from .pt import CODE as PT_PT
+from .pt import PortugueseAdapter
 
 DEFAULT_LANGUAGE = PT_PT
 
@@ -41,6 +43,7 @@ def languages() -> list[str]:
 __all__ = [
     "Cell",
     "DEFAULT_LANGUAGE",
+    "INVARIABLE_PERSON",
     "LanguageAdapter",
     "NotAVerb",
     "Paradigm",
@@ -48,4 +51,5 @@ __all__ = [
     "UnknownWord",
     "get_adapter",
     "languages",
+    "resolve_tense_prefs",
 ]

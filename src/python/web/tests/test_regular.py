@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pytest
 
-from web.languages import cplp
+from web.languages.pt import cplp
 from web.languages.base import Cell, Paradigm
-from web.languages.pt_pt import _to_paradigm
+from web.languages.pt.adapter import _to_paradigm
 from web.languages.regular import (
     ENDINGS,
     IRREGULAR,

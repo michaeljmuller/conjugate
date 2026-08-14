@@ -5,10 +5,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from web.auth import current_user
-from web.conjugation import TENSE_KEYS, resolve_tense_prefs
+from web.languages import get_adapter
+from web.languages.pt.catalogue import TENSE_KEYS
 from web.db import get_db
 from web.main import app
 from web.models import Base, Form, User, Verb
+
+resolve_tense_prefs = get_adapter().resolve_tense_prefs
 
 
 # ---- resolve_tense_prefs (pure) -----------------------------------------

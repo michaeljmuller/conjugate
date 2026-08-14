@@ -21,17 +21,25 @@ from the infinitive, so the drill can ask for both.
 
 from __future__ import annotations
 
-from ..conjugation import (
-    DRILL_PERSONS,
+from ..base import (
+    Cell,
     INVARIABLE_PERSON,
+    NotAVerb,
+    Paradigm,
+    SourceUnavailable,
+    UnknownWord,
+    resolve_tense_prefs,
+)
+from . import cplp
+from .catalogue import (
+    DRILL_PERSONS,
     PAST_PARTICIPLE_TENSE,
     PRESENT_PARTICIPLE_TENSE,
     SHORT_PERSON,
+    TENSE_KEYS,
     TENSES,
 )
-from ..conjugation import person_label as _pt_person_label
-from . import cplp
-from .base import Cell, NotAVerb, Paradigm, SourceUnavailable, UnknownWord
+from .catalogue import person_label as _pt_person_label
 
 CODE = "pt-PT"
 
@@ -123,11 +131,26 @@ class PortugueseAdapter:
         return TENSES
 
     @property
+    def tense_keys(self) -> list[str]:
+        return TENSE_KEYS
+
+    @property
     def drill_persons(self) -> list[str]:
         return DRILL_PERSONS
 
+    @property
+    def past_participle_tense(self) -> str:
+        return PAST_PARTICIPLE_TENSE
+
+    @property
+    def present_participle_tense(self) -> str:
+        return PRESENT_PARTICIPLE_TENSE
+
     def person_label(self, tense: str, person: str) -> str:
         return _pt_person_label(tense, person)
+
+    def resolve_tense_prefs(self, saved: list[dict]) -> list[dict]:
+        return resolve_tense_prefs(saved, TENSES)
 
     async def paradigm(self, infinitive: str) -> Paradigm:
         verb = " ".join(infinitive.split()).strip().lower()

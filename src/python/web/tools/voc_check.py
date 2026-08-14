@@ -25,7 +25,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from web.conjugation import (  # noqa: E402
+from web.languages.pt.catalogue import (  # noqa: E402
     INVARIABLE_PERSON,
     PAST_PARTICIPLE_TENSE,
     PRESENT_PARTICIPLE_TENSE,

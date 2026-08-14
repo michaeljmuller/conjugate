@@ -23,7 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from web.conjugation import PERSONS, TENSE_KEYS  # noqa: E402
+from web.languages.pt.catalogue import PERSONS, TENSE_KEYS  # noqa: E402
 from web.languages import get_adapter  # noqa: E402
 from web.languages.regular import CONJUGATIONS, ENDINGS  # noqa: E402
 
