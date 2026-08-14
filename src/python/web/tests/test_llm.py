@@ -9,8 +9,10 @@ import asyncio
 
 import pytest
 
+import json
+
 from web import llm
-from web.languages import get_adapter
+from web.languages import get_adapter, languages
 from web.languages.base import Cell, Paradigm
 from web.llm import (
     ExampleCritique,
@@ -190,3 +192,60 @@ def test_example_slots_flattens_for_the_seeder():
 
     assert len(rows) == len(slots_for(ENTRY, ADAPTER))
     assert {"tense", "person", "example_en", "example_pt"} == set(rows[0])
+
+
+# ---- every language's prompt material ------------------------------------
+#
+# The loop below is the only thing that executes an adapter's prompt material
+# outside a real add-a-verb run: generate_examples is stubbed everywhere else,
+# so without this a malformed guidance file would sit green in CI and only fail
+# when someone actually added a verb -- after the lookup, and after paying for
+# it in wall-clock time.
+
+@pytest.mark.parametrize("code", languages())
+def test_every_language_can_build_its_prompts(code):
+    m = get_adapter(code).prompt_material()
+
+    assert m.name, code
+    assert m.variety_rule.strip(), code
+    assert m.guidance.strip(), code
+
+    # The guidance ships as a JSON file; a syntax error in it raises here.
+    parsed = json.loads(m.guidance)
+    assert parsed["instructions"].strip(), code
+    guidance = parsed["guidance"]
+    assert guidance.get("persons"), code
+    assert guidance.get("tense_usage"), code
+    assert guidance.get("style_examples"), code
+
+
+@pytest.mark.parametrize("code", languages())
+def test_every_language_composes_both_system_prompts(code):
+    adapter = get_adapter(code)
+    m = adapter.prompt_material()
+
+    for prompt in (llm._draft_system(m), llm._critique_system(m)):
+        assert m.name in prompt, code
+        assert m.variety_rule.strip() in prompt, code
+        assert m.guidance in prompt, code
+        # Nothing left unfilled by the f-string.
+        assert "{" not in prompt.replace(m.guidance, ""), code
+
+    # The critique's extra grounds are appended to the shared list, not lost.
+    assert m.critique_rules.strip() in llm._critique_system(m), code
+
+
+@pytest.mark.parametrize("code", languages())
+def test_a_languages_guidance_covers_every_tense_it_drills(code):
+    """A tense with no usage note is a tense the model has to guess at."""
+    adapter = get_adapter(code)
+    notes = json.loads(adapter.prompt_material().guidance)["guidance"]["tense_usage"]
+    assert set(adapter.tense_keys) == set(notes), code
+
+
+@pytest.mark.parametrize("code", languages())
+def test_a_languages_guidance_glosses_every_person_it_drills(code):
+    adapter = get_adapter(code)
+    persons = json.loads(adapter.prompt_material().guidance)["guidance"]["persons"]
+    missing = set(adapter.drill_persons) - set(persons)
+    assert not missing, f"{code}: no gloss for {sorted(missing)}"

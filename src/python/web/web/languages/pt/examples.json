@@ -24,7 +24,8 @@
       "ele": "he / she / it",
       "nos": "we",
       "eles": "they",
-      "inv": "(no subject — participle / gerund)"
+      "inv": "(no subject — the gerund, or the regular past participle, the one that goes with ter/haver: 'tinha aceitado')",
+      "short": "(no subject — the SHORT past participle, the one that goes with ser/estar: 'foi aceite'. Write the sentence with ser or estar, not with ter or haver.)"
     },
     "subjunctive_prefixes": {
       "present_subjunctive": "que (that ...)",
