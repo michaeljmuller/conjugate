@@ -248,3 +248,71 @@ def test_the_label_pref_saved_as_pt_still_means_the_native_names(tmp_path):
         assert client.get("/api/settings").json()["interface"]["labels"] == "native"
     finally:
         app.dependency_overrides.clear()
+
+
+# ---- two languages at once, which is the point of all of it --------------
+
+def test_each_language_keeps_its_own_tense_order(tmp_path):
+    """Portuguese and Italian catalogues have almost no keys in common, so one
+    flat preference list could not serve both."""
+    client, _ = _make_client(tmp_path)
+    try:
+        client.put("/api/settings", json={"tenses": [
+            {"key": "preterite", "enabled": True},
+            {"key": "present_indicative", "enabled": True},
+        ]})
+
+        got = client.put("/api/settings", json={"language": "it"}).json()
+        assert got["language"] == "it"
+        assert got["language_name"] == "Italian"
+        # Italian's own catalogue, untouched by what Portuguese saved.
+        keys = [t["key"] for t in got["tenses"]]
+        assert keys[0] == "presente"
+        assert "preterite" not in keys
+        assert all(t["enabled"] for t in got["tenses"])
+        # ...and its own accent bar.
+        assert "ç" not in got["accents"] and "è" in got["accents"]
+
+        client.put("/api/settings", json={"tenses": [{"key": "imperativo", "enabled": True}]})
+
+        # Switching back finds Portuguese exactly as it was left.
+        back = client.put("/api/settings", json={"language": "pt-PT"}).json()
+        assert [t["key"] for t in back["tenses"]][:2] == ["preterite", "present_indicative"]
+        assert "ç" in back["accents"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_a_tense_from_the_other_language_is_rejected(tmp_path):
+    client, _ = _make_client(tmp_path)
+    try:
+        # "presente" is Italian's key; it is not in the Portuguese catalogue.
+        r = client.put("/api/settings", json={"tenses": [{"key": "presente", "enabled": True}]})
+        assert r.status_code == 400
+        assert "unknown tenses" in r.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_the_verb_list_is_scoped_to_the_drilled_language(tmp_path):
+    """A pt verb must not show up while drilling Italian."""
+    client, _ = _make_client(tmp_path)
+    try:
+        assert [v["infinitive"] for v in client.get("/api/verbs").json()] == ["ser"]
+        client.put("/api/settings", json={"language": "it"})
+        assert client.get("/api/verbs").json() == []
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_a_verb_is_rendered_in_its_own_language_not_the_drilled_one(tmp_path):
+    """verb_forms goes by the verb's language, so opening a Portuguese verb
+    still labels its rows in Portuguese."""
+    client, vid = _make_client(tmp_path)
+    try:
+        client.put("/api/settings", json={"language": "it"})
+        block = client.get(f"/api/verbs/{vid}/forms").json()["blocks"][0]
+        assert block["label_native"] == "Presente"
+        assert [r["label"] for r in block["rows"]] == ["eu", "tu"]
+    finally:
+        app.dependency_overrides.clear()

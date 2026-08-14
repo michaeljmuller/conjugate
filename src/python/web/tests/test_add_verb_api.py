@@ -430,3 +430,92 @@ def test_confirming_skips_straight_to_the_work(env, monkeypatch):
 
     assert job["status"] == "done"
     assert job["question"] == ""
+
+
+# ---- the same flow, in another language ---------------------------------
+
+def _italian_paradigm(infinitive="parlare"):
+    """A small Italian paradigm: voi is drilled, the congiuntivo needs its che,
+    the imperative has a polite row, and the gerund is personless."""
+    return Paradigm(
+        infinitive=infinitive,
+        cells={
+            ("presente", "io"): Cell(("parlo",)),
+            ("presente", "voi"): Cell(("parlate",)),
+            ("congiuntivo_presente", "io"): Cell(("parli",)),
+            ("imperativo", "lui"): Cell(("parli",)),
+            ("imperativo", "tu"): Cell(("va'", "vai")),
+            ("gerundio", "inv"): Cell(("parlando",)),
+            ("participio_passato", "inv"): Cell(("parlato",)),
+        },
+    )
+
+
+def test_adding_an_italian_verb_uses_the_italian_adapter_throughout(env, monkeypatch):
+    """jobs.py, seed.py and the forms endpoint were never told there is more
+    than one language; this is what that buys."""
+    client, TS = env
+    real = get_adapter("it")
+
+    class _Adapter:
+        def __getattr__(self, name):
+            return getattr(real, name)
+
+        async def paradigm(self, infinitive):
+            return _italian_paradigm(infinitive)
+
+    monkeypatch.setattr(jobs, "get_adapter", lambda *a, **k: _Adapter())
+    client.put("/api/settings", json={"language": "it"})
+
+    job = _await_job(client, _confirmed(client, "parlare").json()["job_id"])
+    assert job["status"] == "done", job
+
+    with TS() as db:
+        verb = db.scalar(select(Verb).where(Verb.infinitive == "parlare"))
+        assert verb.language == "it"
+
+    blocks = client.get(f"/api/verbs/{job['verb_id']}/forms").json()["blocks"]
+    by_tense = {b["tense"]: b for b in blocks}
+
+    # Italian's own catalogue and labels, not Portuguese's.
+    assert by_tense["presente"]["label_native"] == "Presente"
+    assert [r["label"] for r in by_tense["presente"]["rows"]] == ["io", "voi"]
+    assert by_tense["congiuntivo_presente"]["rows"][0]["label"] == "che io"
+    # The imperative's 3rd-person row is the polite one.
+    assert by_tense["imperativo"]["rows"][0]["label"] == "tu"
+    assert by_tense["imperativo"]["rows"][1]["label"] == "Lei"
+    # Alternatives survive the round trip.
+    assert by_tense["imperativo"]["rows"][0]["variants"] == ["vai"]
+    # Personless rows carry no label.
+    assert by_tense["gerundio"]["rows"][0]["label"] == ""
+
+
+def test_the_same_infinitive_can_exist_in_two_languages(env, monkeypatch):
+    """Nothing guarantees pt and it infinitives never collide, so the
+    uniqueness constraint is per language."""
+    client, TS = env
+    _stub_lookup(monkeypatch)
+    _await_job(client, _confirmed(client, "partire").json()["job_id"])
+
+    real = get_adapter("it")
+
+    class _Adapter:
+        def __getattr__(self, name):
+            return getattr(real, name)
+
+        async def paradigm(self, infinitive):
+            return _italian_paradigm(infinitive)
+
+    monkeypatch.setattr(jobs, "get_adapter", lambda *a, **k: _Adapter())
+    client.put("/api/settings", json={"language": "it"})
+
+    # "partire" is a verb in both languages; adding the Italian one is not a
+    # duplicate of the Portuguese one.
+    job = _await_job(client, _confirmed(client, "partire").json()["job_id"])
+    assert job["status"] == "done", job
+
+    with TS() as db:
+        languages = sorted(
+            v.language for v in db.scalars(select(Verb).where(Verb.infinitive == "partire"))
+        )
+    assert languages == ["it", "pt-PT"]

@@ -1,0 +1,74 @@
+{
+  "_instructions": "For every slot you are given, write TWO things: \"example_en\", ONE natural everyday English sentence that illustrates that specific verb form — it MUST reflect the SUBJECT (person) and the TENSE/ASPECT — and \"example_native\", a faithful Italian translation of that same sentence which MUST naturally contain the exact given form. Keep both short and concrete. Echo each slot's tense and person unchanged.",
+  "_guidance": {
+    "register": {
+      "required": "Standard modern Italian, as written and spoken in Italy. Neutral register: everyday, not literary and not slang.",
+      "grammar": [
+        "Address one person informally as 'tu' with real 2nd-person endings ('tu parli', 'tu vai'). The drill teaches 'tu' — do not switch to the polite 'Lei' except in the imperative rows, where the 3rd-person form IS the polite one.",
+        "Subject pronouns are usually dropped in Italian ('Parlo italiano', not 'Io parlo italiano'). Include one only for contrast or emphasis, or where the sentence would be ambiguous — which is common in the imperfetto and the congiuntivo, where several persons share a form.",
+        "Avoid regionalisms and dialect. Standard Italian only.",
+        "Use the definite article where Italian requires one and English does not: 'Mi piace il caffè', 'Vado in Italia' but 'Vado negli Stati Uniti'."
+      ],
+      "vocabulary": "Everyday concrete nouns. Prefer words a learner will meet early: casa, lavoro, treno, amico, cena, giornale, macchina, città."
+    },
+    "persons": {
+      "io": "I",
+      "tu": "you (one person, informal)",
+      "lui": "he / she",
+      "noi": "we",
+      "voi": "you (more than one)",
+      "loro": "they",
+      "inv": "(no subject — gerund / participle)"
+    },
+    "subjunctive_prefixes": {
+      "congiuntivo_presente": "che (that ...) — show the trigger that licenses it",
+      "congiuntivo_imperfetto": "che (that ...) — after a past-tense or conditional main clause, or after 'se'"
+    },
+    "tense_usage": {
+      "presente": "Habitual action, general truth, or something happening now. Italian uses the present where English often uses the continuous: 'Parlo con lui adesso' = 'I am talking to him now'.",
+      "imperfetto": "Ongoing, repeated, or background past action: 'was ...-ing' or 'used to ...'. Also for description and for age/weather/time in the past.",
+      "passato_remoto": "A single completed action in the remote past, felt as finished and disconnected from now. Literary and narrative in the north, everyday in the south. Write it as narration — a story or a historical statement — NOT as recent news, which would take the passato prossimo.",
+      "futuro_semplice": "Simple future ('will ...'). Also common for present probability: 'Saranno le tre' = 'It must be three o'clock'.",
+      "congiuntivo_presente": "Subjunctive after wish, doubt, emotion, opinion or necessity — usually a 'che ...' clause. ALWAYS show the main clause that triggers it ('Penso che ...', 'Voglio che ...', 'Bisogna che ...').",
+      "congiuntivo_imperfetto": "Hypothetical or counterfactual, usually after 'se' ('Se avessi ...'), or in a 'che' clause whose main verb is past or conditional. Show the trigger.",
+      "condizionale_presente": "The 'would' form — the result of a hypothetical, or a polite request ('Vorrei un caffè').",
+      "imperativo": "A command. The tu/noi/voi rows are the familiar imperative ('Parla!', 'Parliamo!', 'Parlate!'); the Lei and Loro rows are the POLITE imperative, addressing someone formally — write those sentences as polite requests to a stranger, a customer, an official.",
+      "gerundio": "The gerund, most often with 'stare' for an action in progress ('Sto parlando') or on its own meaning 'by/while ...-ing' ('Parlando con lei, ho capito').",
+      "participio_passato": "The past participle. Use it in a compound tense with avere or essere ('Ho parlato', 'È arrivato'), or adjectivally ('una lettera scritta a mano'). Remember it agrees with the subject when the auxiliary is essere."
+    },
+    "style_examples": [
+      {
+        "verb": "parlare",
+        "tense": "presente",
+        "person": "io",
+        "form": "parlo",
+        "example_en": "I speak Italian with my grandmother.",
+        "example_native": "Parlo italiano con mia nonna."
+      },
+      {
+        "verb": "parlare",
+        "tense": "passato_remoto",
+        "person": "lui",
+        "form": "parlò",
+        "example_en": "The king spoke to the crowd for an hour.",
+        "example_native": "Il re parlò alla folla per un'ora."
+      },
+      {
+        "verb": "parlare",
+        "tense": "congiuntivo_presente",
+        "person": "tu",
+        "form": "parli",
+        "example_en": "I hope you speak with the manager tomorrow.",
+        "example_native": "Spero che tu parli con il direttore domani."
+      },
+      {
+        "verb": "parlare",
+        "tense": "imperativo",
+        "person": "lui",
+        "form": "parli",
+        "example_en": "Please speak more slowly, sir.",
+        "example_native": "Per favore, parli più lentamente, signore."
+      }
+    ]
+  }
+}

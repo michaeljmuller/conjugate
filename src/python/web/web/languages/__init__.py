@@ -18,6 +18,8 @@ from .base import (
     UnknownWord,
     resolve_tense_prefs,
 )
+from .it import CODE as IT
+from .it import ItalianAdapter
 from .pt import CODE as PT_PT
 from .pt import PortugueseAdapter
 
@@ -25,6 +27,7 @@ DEFAULT_LANGUAGE = PT_PT
 
 _ADAPTERS: dict[str, LanguageAdapter] = {
     PT_PT: PortugueseAdapter(),
+    IT: ItalianAdapter(),
 }
 
 
