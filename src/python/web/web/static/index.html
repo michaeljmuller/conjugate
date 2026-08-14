@@ -68,6 +68,12 @@
     <div class="settings-card">
       <h2>Interface</h2>
       <fieldset class="iface-group">
+        <legend>Language</legend>
+        <!-- Options are filled in from /api/settings; each language has its own
+             verb list, tense order and accent bar. -->
+        <select id="iface-language"></select>
+      </fieldset>
+      <fieldset class="iface-group">
         <legend>Tense labels</legend>
         <label class="iface-radio"><input type="radio" name="iface-labels" value="en" /> English</label>
         <!-- Labelled at runtime with whichever language is being drilled. -->

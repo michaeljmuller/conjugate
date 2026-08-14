@@ -494,3 +494,10 @@ select {
 .fm-answer { color: var(--green); }
 .fm-typed { color: var(--muted); }
 .fm-typed s { color: var(--red); text-decoration-color: var(--red); }
+
+/* A language with no verbs yet. */
+.empty-language {
+  color: var(--muted, #667);
+  text-align: center;
+  padding: 2rem 1rem;
+}

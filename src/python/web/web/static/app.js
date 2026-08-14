@@ -257,6 +257,10 @@ function applySettings(data) {
 
 function openInterface() {
   el("iface-accents").checked = ui.show_accents;
+  el("iface-language").innerHTML = lang.available
+    .map((l) => `<option value="${l.code}">${l.name}</option>`)
+    .join("");
+  el("iface-language").value = lang.code;
   // The "native names" option is labelled with the language it means.
   el("iface-native-label").textContent = lang.name;
   for (const r of document.getElementsByName("iface-labels"))
@@ -272,14 +276,43 @@ async function saveInterface() {
   const labels =
     [...document.getElementsByName("iface-labels")].find((r) => r.checked)?.value || "en";
   const show_accents = el("iface-accents").checked;
+  const language = el("iface-language").value;
+  const switched = language !== lang.code;
   const data = await api("/api/settings", {
     method: "PUT",
-    body: JSON.stringify({ interface: { labels, show_accents } }),
+    body: JSON.stringify({ language, interface: { labels, show_accents } }),
   });
   applySettings(data);
+  // A different language means a different accent bar.
+  buildAccentBar();
   applyInterface();
   closeInterface();
-  if (currentVerbId) await loadVerb(currentVerbId); // relabel the drill in the new language
+
+  if (switched) {
+    // The verb list is per language, so the old selection is gone. Start on the
+    // new language's first verb, or clear the drill if it has none yet.
+    currentVerbId = null;
+    const verbs = await loadVerbs();
+    if (verbs.length) await loadVerb(verbs[0].id);
+    else showEmptyLanguage();
+  } else if (currentVerbId) {
+    await loadVerb(currentVerbId); // relabel the drill in the new label language
+  }
+}
+
+// A language with no verbs yet: clear the drill rather than leave the previous
+// language's rows on screen.
+function showEmptyLanguage() {
+  rows = [];
+  el("drill").innerHTML = "";
+  // The banner names the verb being drilled, and there is no longer one.
+  el("verb-indicator").classList.add("hidden");
+  // textContent, not innerHTML: lang.name is server data, never markup.
+  const note = document.createElement("p");
+  note.className = "empty-language";
+  note.textContent = `No ${lang.name} verbs yet — add one from the avatar menu.`;
+  el("drill").appendChild(note);
+  for (const id of ["verb-select", "verb-select-bottom"]) el(id).innerHTML = "";
 }
 
 // ---- Adding a verb ------------------------------------------------------
