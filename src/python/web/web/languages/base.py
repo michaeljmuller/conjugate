@@ -166,6 +166,15 @@ class LanguageAdapter(Protocol):
     def resolve_tense_prefs(self, saved: list[dict]) -> list[dict]:
         """``resolve_tense_prefs(saved, self.tenses)``."""
 
+    def describe(self, paradigm: Paradigm) -> str:
+        """One clause on what the lookup found, to follow the infinitive in the
+        add-a-verb confirmation — e.g. ``is a regular verb.``
+
+        How predictable a verb is depends entirely on the language's own
+        ending patterns, so only the adapter can say. Return ``""`` when there
+        is nothing to report; the confirmation then just names the verb.
+        """
+
     async def paradigm(self, infinitive: str) -> Paradigm:
         """Look the verb up.
 

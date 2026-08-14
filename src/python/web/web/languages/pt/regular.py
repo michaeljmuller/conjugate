@@ -23,13 +23,18 @@ Errors here are one-sided by construction. A missing spelling rule makes a
 regular verb look irregular, understating how predictable it is; the reverse —
 calling an irregular verb regular — would need the table to reproduce an
 irregular paradigm exactly, which it cannot.
+
+Portuguese only, which is why it lives here rather than beside ``base``: the
+three conjugations, the tense keys the table is indexed by, and the ç/qu/gu
+respellings are all pt-PT's. Another language wanting this needs its own table
+and its own rules, reached through ``LanguageAdapter.describe``.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .base import Paradigm
+from ..base import Paradigm
 
 # What the check can conclude about a verb.
 REGULAR = "regular"

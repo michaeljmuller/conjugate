@@ -31,6 +31,7 @@ from ..base import (
     resolve_tense_prefs,
 )
 from . import cplp
+from .regular import classify
 from .catalogue import (
     DRILL_PERSONS,
     PAST_PARTICIPLE_TENSE,
@@ -151,6 +152,9 @@ class PortugueseAdapter:
 
     def resolve_tense_prefs(self, saved: list[dict]) -> list[dict]:
         return resolve_tense_prefs(saved, TENSES)
+
+    def describe(self, paradigm: Paradigm) -> str:
+        return classify(paradigm).describe()
 
     async def paradigm(self, infinitive: str) -> Paradigm:
         verb = " ".join(infinitive.split()).strip().lower()

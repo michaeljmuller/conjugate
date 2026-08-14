@@ -17,7 +17,7 @@ from web import jobs
 from web.auth import current_user
 from web.languages import NotAVerb, UnknownWord, get_adapter
 from web.languages.base import Cell, Paradigm
-from web.languages.regular import regular_forms
+from web.languages.pt.regular import regular_forms
 from web.db import get_db
 from web.main import app
 from web.models import Base, Form, User, Verb

@@ -28,11 +28,13 @@ web/
   models.py        # users, verbs, forms, form_variants, attempts
   grading.py       # normalize + verdict; accepts any of a cell's valid forms
   seed.py          # create tables; upsert_verb / apply_examples, shared with adding a verb
-  conjugation.py   # pt tense/person catalogue, row labels, subjunctive prefixes
   languages/       # the language abstraction
-    base.py        #   Cell / Paradigm / LanguageAdapter
-    pt_pt.py       #   European Portuguese: the -ámos rule, the participle split
-    cplp.py        #   reads paradigms from cplp.org
+    base.py        #   Cell / Paradigm / LanguageAdapter; tense-pref reconciliation
+    pt/            #   European Portuguese — nothing outside this package is pt-specific
+      adapter.py   #     the -ámos rule, the participle split
+      catalogue.py #     tense/person catalogue, row labels, subjunctive prefixes
+      cplp.py      #     reads paradigms from cplp.org
+      regular.py   #     is this verb predictable? (the add-a-verb confirmation)
   llm.py           # Claude: write + refine the example sentences
   jobs.py          # background add-a-verb jobs, with progress for the UI
   data/verbs_seed.json   # the 10 bootstrap verbs, 6 persons × 12 tenses (+ participles)

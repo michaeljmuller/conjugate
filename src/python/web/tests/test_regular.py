@@ -11,7 +11,7 @@ import pytest
 from web.languages.pt import cplp
 from web.languages.base import Cell, Paradigm
 from web.languages.pt.adapter import _to_paradigm
-from web.languages.regular import (
+from web.languages.pt.regular import (
     ENDINGS,
     IRREGULAR,
     REGULAR,

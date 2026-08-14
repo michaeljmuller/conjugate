@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate the ending table in `web/languages/regular.py` from the source.
+"""Regenerate the ending table in `web/languages/pt/regular.py` from the source.
 
 The table says what a fully regular -ar/-er/-ir verb looks like, and is used to
 decide whether a verb is predictable enough to warn about before adding it.
@@ -25,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from web.languages.pt.catalogue import PERSONS, TENSE_KEYS  # noqa: E402
 from web.languages import get_adapter  # noqa: E402
-from web.languages.regular import CONJUGATIONS, ENDINGS  # noqa: E402
+from web.languages.pt.regular import CONJUGATIONS, ENDINGS  # noqa: E402
 
 # One entirely predictable verb per conjugation.
 MODELS = dict(zip(CONJUGATIONS, ("falar", "comer", "partir")))
@@ -77,7 +77,7 @@ async def main() -> int:
         return 0
 
     if table == ENDINGS:
-        print(f"ok — {len(table)} endings match web/languages/regular.py")
+        print(f"ok — {len(table)} endings match web/languages/pt/regular.py")
         return 0
     for key in sorted(set(table) | set(ENDINGS), key=_order):
         if table.get(key) != ENDINGS.get(key):

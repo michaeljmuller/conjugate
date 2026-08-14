@@ -23,7 +23,6 @@ from sqlalchemy import select
 from . import llm
 from .db import SessionLocal
 from .languages import NotAVerb, Paradigm, SourceUnavailable, UnknownWord, get_adapter
-from .languages.regular import classify
 from .models import Verb
 from .seed import apply_examples, upsert_verb
 
@@ -201,7 +200,8 @@ async def _run(job: Job, user_id: int | None, force: bool) -> None:
         # verb hasn't — and writing ~60 example sentences is the wasteful part
         # to undo.
         if not force:
-            job.ask(f"{job.infinitive} {classify(paradigm).describe()} Add it?")
+            found = adapter.describe(paradigm)
+            job.ask(f"{job.infinitive} {found} Add it?" if found else f"Add {job.infinitive}?")
             return
         slots = await _write_examples(job, paradigm, adapter)
         job.finish(_save(job, paradigm, slots, user_id, adapter))
