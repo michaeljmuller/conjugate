@@ -30,5 +30,50 @@
   - VERIFY the participle rule the UI now asserts: regular form with ter/haver,
     short form with ser/estar. standard grammar, but never confirmed against a
     primary source, and the row labels state it as fact.
+
+- NEXT UP (2026-08-14): should the short-participle row appear at all when it
+  is the same form as the regular one?  DECISION NOT MADE.
+
+  measured 2026-08-13 against the dev db (15 pt verbs):
+    - 1 verb of 15 has a distinct short form -- aceitar (aceitado / aceite).
+      the other 14 show the identical form in both rows.
+    - the short row scores 8 attempts at 100% correct, vs 93% for the regular
+      row above it.  it is a free copy of the previous answer, not a test.
+    - 10 of the 15 short rows have NO example sentence at all: the 10 seeded
+      verbs.  examples.json holds 60 slots per verb and zero "short" rows --
+      the file predates the participle split.  those rows drill blank.
+    - 2 of the 5 that do have sentences are wrong, using ter where the row is
+      the ser/estar one: ouvir ("Tenho ouvido...") and por ("tinha posto...").
+      cause was a missing "short" gloss in examples.json _guidance.persons,
+      fixed 2026-08-13, but that only affects verbs added AFTER the fix.
+
+  three options considered:
+    (a) status quo -- always show both rows.  no information leaked, but
+        asserts a ter/haver vs ser/estar distinction that is vacuous for 14
+        verbs, and needs ~12 example sentences written for rows that teach
+        nothing.
+    (b) show the short row only when the forms differ.  leaks the EXISTENCE of
+        a second form (not its content) before the learner answers.  makes the
+        row informative every time it appears, drops the backfill to 1 sentence
+        (aceitar), and narrows the unverified auxiliary claim above to exactly
+        the verbs where it is actually the documented rule.  implementable as a
+        display rule in api.verb_forms -- skip short when form_text == the inv
+        row's -- so no migration and reversible.
+    (c) collapse to ONE participle row accepting either form, revealing the
+        other after answering (the existing FormVariant mechanism, as for
+        oico/ouco).  no leak at all, but gives up drilling which auxiliary
+        takes which, which is the interesting part.
+
+  (b) was recommended; mike wanted to sit with it.  whichever way it goes, the
+  backfill mechanism is the same and needs no new code: add "short" slots to
+  web/languages/pt/examples.json and restart.  seed_examples() runs every
+  startup, looks verbs up by infinitive (seeded or app-added alike), and
+  apply_examples() overwrites existing text when the new text differs.
+
+  open linguistic question that may decide it: for ser/ir/ter/poder there may
+  be no natural ser/estar sentence at all ("foi sido" is not Portuguese).  if
+  the row cannot take a natural sentence, that is evidence it should not exist
+  for those verbs -- and it may be why the model reached for ter on ouvir and
+  por.
   - run tools/voc_check.py now and then -- it expects 700/700 and is the canary
     for cplp.org changing shape under us
