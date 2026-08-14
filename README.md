@@ -35,6 +35,8 @@ web/
       catalogue.py #     tense/person catalogue, row labels, subjunctive prefixes
       cplp.py      #     reads paradigms from cplp.org
       regular.py   #     is this verb predictable? (the add-a-verb confirmation)
+      prompts.py   #     what Claude is told about pt-PT when writing examples
+      examples.json#     by-hand example sentences; doubles as the style guide
   llm.py           # Claude: write + refine the example sentences
   jobs.py          # background add-a-verb jobs, with progress for the UI
   data/verbs_seed.json   # the 10 bootstrap verbs, 6 persons × 12 tenses (+ participles)
@@ -113,12 +115,18 @@ always-visible prompt — faint under the field, bold when focused) and its **Eu
 Portuguese** translation (`example_pt`, revealed under it only *after* the form is
 answered, since it contains the answer word).
 
-Adding a verb writes these automatically (above). `web/data/examples.json` is the
-older, by-hand route, still used for the seeded verbs: it holds the `_instructions`
-and `_guidance` style guide — which `llm.py` also reads, so both routes produce
-sentences in one voice — and `seed_examples()` syncs every non-empty sentence into
+Adding a verb writes these automatically (above).
+`web/languages/pt/examples.json` is the older, by-hand route, still used for the
+seeded verbs: it holds the `_instructions` and `_guidance` style guide — which
+the pt adapter also hands to `llm.py`, so both routes produce sentences in one
+voice — and `seed_examples()` syncs every non-empty sentence into
 `forms.example_en` / `forms.example_pt` on startup. Blanks never overwrite existing
 text, so it can be filled incrementally.
+
+`llm.py` itself knows no Portuguese: it owns the draft → check → rewrite loop,
+and each adapter supplies its own `PromptMaterial` (what to call the language,
+the one rule that matters most, extra grounds for rejecting a sentence, and the
+style guide).
 
 ## Future add-ons (schema already supports)
 

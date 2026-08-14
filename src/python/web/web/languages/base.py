@@ -88,6 +88,31 @@ class Paradigm:
         return {tense for tense, _ in self.cells}
 
 
+@dataclass(frozen=True)
+class PromptMaterial:
+    """Everything language-specific in the example-sentence prompts.
+
+    ``llm.py`` owns the shape of the request and the draft/critique/rewrite
+    loop; this is the part only the language can supply. Splitting it this way
+    keeps one copy of the loop rather than one prompt stack per language.
+    """
+
+    name: str
+    """How to name the language to the model, e.g. ``European Portuguese``."""
+
+    variety_rule: str
+    """Stated up front in both prompts — the thing most worth getting right,
+    which for pt-PT is not drifting into Brazilian."""
+
+    critique_rules: str
+    """Extra grounds for rejecting a sentence, appended to the critique
+    prompt's shared list. May be empty."""
+
+    guidance: str
+    """The style guide appended to both prompts: person glosses, per-tense
+    usage notes, worked examples. A JSON string."""
+
+
 def resolve_tense_prefs(saved: list[dict], tenses: list[dict]) -> list[dict]:
     """Reconcile a (possibly stale) saved tense-preference list against ``tenses``.
 
@@ -174,6 +199,9 @@ class LanguageAdapter(Protocol):
         ending patterns, so only the adapter can say. Return ``""`` when there
         is nothing to report; the confirmation then just names the verb.
         """
+
+    def prompt_material(self) -> PromptMaterial:
+        """The language-specific half of the example-sentence prompts."""
 
     async def paradigm(self, infinitive: str) -> Paradigm:
         """Look the verb up.

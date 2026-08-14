@@ -26,11 +26,12 @@ from ..base import (
     INVARIABLE_PERSON,
     NotAVerb,
     Paradigm,
+    PromptMaterial,
     SourceUnavailable,
     UnknownWord,
     resolve_tense_prefs,
 )
-from . import cplp
+from . import cplp, prompts
 from .regular import classify
 from .catalogue import (
     DRILL_PERSONS,
@@ -155,6 +156,9 @@ class PortugueseAdapter:
 
     def describe(self, paradigm: Paradigm) -> str:
         return classify(paradigm).describe()
+
+    def prompt_material(self) -> PromptMaterial:
+        return prompts.prompt_material()
 
     async def paradigm(self, infinitive: str) -> Paradigm:
         verb = " ".join(infinitive.split()).strip().lower()

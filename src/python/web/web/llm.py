@@ -11,9 +11,11 @@ and which matched this project's hand-curated seed on 700 cells out of 700.
 Against a normative source a model pass could only ever introduce errors, so the
 verb's forms are taken as given.
 
-The prompt guidance is not duplicated here — it is read from ``data/examples.json``,
-the same tuned ``_instructions``/``_guidance`` block that produced the existing
-catalogue, so verbs added through the app sound like the ones already there.
+Nothing here is language-specific. The shape of the request — one English
+sentence per slot, a translation containing the exact form, then check and
+rewrite what was flagged — is the same whichever language is being drilled;
+what to tell the model *about* that language comes from
+``adapter.prompt_material()``.
 """
 
 from __future__ import annotations
@@ -28,8 +30,7 @@ import anthropic
 from anthropic import AsyncAnthropic
 from pydantic import BaseModel, Field
 
-from .languages.base import Paradigm
-from .seed import EXAMPLES_FILE
+from .languages.base import Paradigm, PromptMaterial
 
 MODEL = "claude-opus-5"
 MAX_TOKENS = 16000
@@ -85,28 +86,6 @@ async def _parse(client: AsyncAnthropic, **kwargs):
         raise ExamplesUnavailable(f"Could not reach the API: {exc}") from None
 
 
-# --- prompt material -----------------------------------------------------
-
-_guidance_cache: str | None = None
-
-
-def prompt_guidance() -> str:
-    """The pt-PT style guide from ``examples.json``, as a JSON string.
-
-    Carries the variety rules, the person glosses, the subjunctive prefixes, a
-    usage note for each tense, and worked style examples.
-    """
-    global _guidance_cache
-    if _guidance_cache is None:
-        data = json.loads(EXAMPLES_FILE.read_text(encoding="utf-8"))
-        _guidance_cache = json.dumps(
-            {"instructions": data.get("_instructions", ""), "guidance": data.get("_guidance", {})},
-            ensure_ascii=False,
-            indent=2,
-        )
-    return _guidance_cache
-
-
 # --- slots ----------------------------------------------------------------
 
 
@@ -148,8 +127,11 @@ class ExamplePair(BaseModel):
     tense: str
     person: str
     example_en: str = Field(description="One natural everyday English sentence.")
-    example_pt: str = Field(
-        description="Faithful European-Portuguese translation, containing the exact form."
+    # The field name reaches the model as part of the output schema, so it says
+    # "native" rather than naming one language. Which language is meant is
+    # stated in the system prompt, and the DB column is still example_pt.
+    example_native: str = Field(
+        description="Faithful translation into the target language, containing the exact form."
     )
 
 
@@ -170,70 +152,44 @@ class ExampleCritique(BaseModel):
     )
 
 
-# Stated up front in both prompts rather than left to the appended style guide:
-# the drill is specifically for the European variety, and pt-BR phrasing is the
-# failure mode a model drifts into by default. The full contrast lists live in
-# examples.json's _guidance.variety, which is appended after this.
-_PT_PT_RULE = """LANGUAGE VARIETY — the one rule that matters most:
-
-Write EUROPEAN Portuguese (Portugal). Not Brazilian. This is not a stylistic
-preference: the learner is studying pt-PT, and a pt-BR sentence teaches them the
-wrong thing even though it is perfectly good Portuguese elsewhere.
-
-That covers grammar, vocabulary AND spelling:
-- Grammar: "estou a correr", never "estou correndo". Object pronouns after the
-  verb with a hyphen — "chamo-me", "dá-me o livro" — not "me chamo", "me dá"
-  (they move before the verb after a negative, a question word or a
-  subordinating conjunction: "não me dês"). Address one person as "tu" with real
-  2nd-person endings, never "você" with a 3rd-person verb. Use "nós", not
-  "a gente".
-- Vocabulary: the Portuguese word wherever the varieties differ — comboio not
-  trem, autocarro not ônibus, telemóvel not celular, casa de banho not banheiro,
-  pequeno-almoço not café da manhã, sumo not suco, gelado not sorvete.
-- Spelling: acute before a nasal — académico, género, António, not acadêmico,
-  gênero, Antônio. And "falámos", not "falamos".
-"""
-
-_DRAFT_SYSTEM = f"""You write example sentences for a European-Portuguese conjugation drill.
+def _draft_system(m: PromptMaterial) -> str:
+    return f"""You write example sentences for a {m.name} conjugation drill.
 
 For every slot you are given, write ONE natural everyday English sentence that
 illustrates that exact verb form — it must reflect both the subject (person) and
-the tense/aspect — plus a faithful European-Portuguese translation of that same
+the tense/aspect — plus a faithful {m.name} translation of that same
 sentence which naturally contains the exact given form, spelled exactly as
 given, accents and all.
 
 Keep both sentences short and concrete. Return one entry per slot, echoing the
 slot's tense and person unchanged. Also give a short English gloss of the verb.
 
-{_PT_PT_RULE}
+{m.variety_rule}
 Style guide:
-"""
+{m.guidance}"""
 
-_CRITIQUE_SYSTEM = f"""You are reviewing example sentences for a European-Portuguese conjugation drill.
 
-Each entry pairs a verb form with an English sentence and its Portuguese
+def _critique_system(m: PromptMaterial) -> str:
+    return f"""You are reviewing example sentences for a {m.name} conjugation drill.
+
+Each entry pairs a verb form with an English sentence and its {m.name}
 translation. Report ONLY entries that need rewriting, and say briefly why.
 
 Report an entry when:
-- the Portuguese does not contain the exact given form, or alters its spelling
+- the translation does not contain the exact given form, or alters its spelling
   or accents;
-- ANY part of the Portuguese is Brazilian rather than European — a pt-BR
-  construction ("estou correndo", "me chamo", "você fala", "a gente vai"), a
-  pt-BR word (trem, ônibus, celular, banheiro, suco, sorvete, café da manhã), or
-  a pt-BR spelling (acadêmico, gênero, falamos for falámos);
-- the Portuguese is unnatural or not how it would actually be said in Portugal;
+- it is unnatural, or not how the sentence would actually be said;
 - the sentence does not actually illustrate the given tense or aspect;
 - the subject does not match the given person;
-- the English and the Portuguese do not mean the same thing;
-- a subjunctive lacks the trigger that licenses it.
+- the English and the translation do not mean the same thing;
+{m.critique_rules}
 
-Do NOT report a correct pt-PT form for looking unlike its Brazilian equivalent —
-that is the point. Be selective otherwise: an entry that is merely plain is
-fine, and an empty list is a good answer.
+Be selective: an entry that is merely plain is fine, and an empty list is a
+good answer.
 
-{_PT_PT_RULE}
+{m.variety_rule}
 Style guide:
-"""
+{m.guidance}"""
 
 
 def _slot_payload(slots: list[Slot]) -> list[dict]:
@@ -267,9 +223,9 @@ def mechanical_problems(pairs: dict[tuple[str, str], ExamplePair], slots: list[S
         if pair is None:
             problems.append(SlotProblem(tense=slot.tense, person=slot.person, reason="missing"))
             continue
-        if not pair.example_en.strip() or not pair.example_pt.strip():
+        if not pair.example_en.strip() or not pair.example_native.strip():
             problems.append(SlotProblem(tense=slot.tense, person=slot.person, reason="empty sentence"))
-        elif not contains_form(pair.example_pt, slot.form):
+        elif not contains_form(pair.example_native, slot.form):
             problems.append(
                 SlotProblem(
                     tense=slot.tense,
@@ -291,14 +247,14 @@ class ExampleResult:
 
 
 async def _draft(
-    paradigm: Paradigm, slots: list[Slot], client: AsyncAnthropic
+    paradigm: Paradigm, slots: list[Slot], client: AsyncAnthropic, m: PromptMaterial
 ) -> ExampleDraft:
     response = await _parse(
         client,
         model=MODEL,
         max_tokens=MAX_TOKENS,
         thinking={"type": "adaptive"},
-        system=_DRAFT_SYSTEM + prompt_guidance(),
+        system=_draft_system(m),
         messages=[
             {
                 "role": "user",
@@ -318,6 +274,7 @@ async def _critique(
     slots: list[Slot],
     pairs: dict[tuple[str, str], ExamplePair],
     client: AsyncAnthropic,
+    m: PromptMaterial,
 ) -> list[SlotProblem]:
     payload = [
         {
@@ -325,7 +282,7 @@ async def _critique(
             "person": s.person,
             "form": s.form,
             "example_en": pairs[s.key].example_en,
-            "example_pt": pairs[s.key].example_pt,
+            "example_native": pairs[s.key].example_native,
         }
         for s in slots
         if s.key in pairs
@@ -337,7 +294,7 @@ async def _critique(
         model=MODEL,
         max_tokens=MAX_TOKENS,
         thinking={"type": "adaptive"},
-        system=_CRITIQUE_SYSTEM + prompt_guidance(),
+        system=_critique_system(m),
         messages=[
             {
                 "role": "user",
@@ -357,6 +314,7 @@ async def _rewrite(
     by_key: dict[tuple[str, str], Slot],
     pairs: dict[tuple[str, str], ExamplePair],
     client: AsyncAnthropic,
+    m: PromptMaterial,
 ) -> ExampleDraft:
     """Re-draft only the flagged slots, with the criticism attached."""
     payload = []
@@ -372,7 +330,7 @@ async def _rewrite(
                 "form": slot.form,
                 "problem": p.reason,
                 "previous_en": previous.example_en if previous else "",
-                "previous_pt": previous.example_pt if previous else "",
+                "previous_native": previous.example_native if previous else "",
             }
         )
     response = await _parse(
@@ -380,7 +338,7 @@ async def _rewrite(
         model=MODEL,
         max_tokens=MAX_TOKENS,
         thinking={"type": "adaptive"},
-        system=_DRAFT_SYSTEM + prompt_guidance(),
+        system=_draft_system(m),
         messages=[
             {
                 "role": "user",
@@ -423,19 +381,20 @@ async def generate_examples(
         )
 
     client = client or _client()
+    material = adapter.prompt_material()
     slots = slots_for(paradigm, adapter)
     by_key = {s.key: s for s in slots}
     note = progress or (lambda *a, **k: None)
 
     note("drafting", done=0, total=len(slots))
-    draft = await _draft(paradigm, slots, client)
+    draft = await _draft(paradigm, slots, client, material)
     pairs = {(p.tense, p.person): p for p in draft.examples if (p.tense, p.person) in by_key}
     result = ExampleResult(translation=draft.translation.strip(), pairs=pairs)
 
     for round_no in range(max_rounds + 1):
         problems = mechanical_problems(pairs, slots)
         seen = {(p.tense, p.person) for p in problems}
-        for p in await _critique(paradigm, slots, pairs, client):
+        for p in await _critique(paradigm, slots, pairs, client, material):
             if (p.tense, p.person) in by_key and (p.tense, p.person) not in seen:
                 problems.append(p)
                 seen.add((p.tense, p.person))
@@ -453,7 +412,7 @@ async def generate_examples(
             break
 
         note("revising", done=0, total=len(problems))
-        redraft = await _rewrite(paradigm, problems, by_key, pairs, client)
+        redraft = await _rewrite(paradigm, problems, by_key, pairs, client, material)
         for p in redraft.examples:
             if (p.tense, p.person) in seen:
                 pairs[(p.tense, p.person)] = p
@@ -463,7 +422,7 @@ async def generate_examples(
         for s in slots
         if s.key not in pairs
         or not pairs[s.key].example_en.strip()
-        or not pairs[s.key].example_pt.strip()
+        or not pairs[s.key].example_native.strip()
     ]
     if empty:
         raise ExamplesUnavailable(
@@ -483,7 +442,7 @@ def example_slots(result: ExampleResult) -> list[dict]:
             "tense": tense,
             "person": person,
             "example_en": pair.example_en.strip(),
-            "example_pt": pair.example_pt.strip(),
+            "example_pt": pair.example_native.strip(),
         }
         for (tense, person), pair in result.pairs.items()
     ]

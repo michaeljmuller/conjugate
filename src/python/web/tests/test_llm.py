@@ -80,7 +80,7 @@ def test_mechanical_problems_flags_missing_form_and_gaps():
             person=s.person,
             example_en="I run.",
             # Deliberately wrong for the preterite: the sentence omits "corri".
-            example_pt="Corro pela saúde." if s.tense != "preterite" else "Fui ao parque.",
+            example_native="Corro pela saúde." if s.tense != "preterite" else "Fui ao parque.",
         )
         for s in slots
         if s.tense != "past_participle"  # leave one slot missing entirely
@@ -128,7 +128,7 @@ class _StubClient:
                     examples=[
                         ExamplePair(
                             tense=p["tense"], person=p["person"],
-                            example_en="Fixed.", example_pt=f"Frase com {p['form']}.",
+                            example_en="Fixed.", example_native=f"Frase com {p['form']}.",
                         )
                         for p in payload
                     ],
@@ -143,7 +143,7 @@ class _StubClient:
                     ExamplePair(
                         tense=s.tense, person=s.person, example_en="I run.",
                         # Bad slots get a sentence that omits the form.
-                        example_pt=("Nada aqui."
+                        example_native=("Nada aqui."
                                     if (s.tense, s.person) in self.bad_slots
                                     else f"Frase com {s.form}."),
                     )
@@ -167,7 +167,7 @@ def test_loop_rewrites_only_flagged_slots_and_then_stops():
     assert result.unresolved == []
     assert result.translation == "to run"
     # The rewrite replaced the bad pair; the good ones were left alone.
-    assert "corri" in result.pairs[("preterite", "eu")].example_pt
+    assert "corri" in result.pairs[("preterite", "eu")].example_native
     assert result.pairs[("present_indicative", "eu")].example_en == "I run."
 
 

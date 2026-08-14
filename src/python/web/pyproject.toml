@@ -29,3 +29,5 @@ include = ["web*"]
 
 [tool.setuptools.package-data]
 web = ["data/*.json", "static/*"]
+# Each language ships its own prompt material next to its adapter.
+"web.languages.pt" = ["*.json"]

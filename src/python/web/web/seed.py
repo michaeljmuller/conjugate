@@ -15,11 +15,13 @@ from .languages.pt.catalogue import (
     PRESENT_PARTICIPLE_TENSE,
     SHORT_PERSON,
 )
+# The by-hand example sentences live with the language they are written in;
+# they double as that language's style guide for the add-a-verb prompts.
+from .languages.pt.prompts import EXAMPLES_FILE
 from .models import Base, Form, FormVariant, Verb
 
 DATA_DIR = Path(__file__).parent / "data"
 SEED_FILE = DATA_DIR / "verbs_seed.json"
-EXAMPLES_FILE = DATA_DIR / "examples.json"
 
 
 def init_db(engine) -> None:

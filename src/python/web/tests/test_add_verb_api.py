@@ -77,7 +77,7 @@ def env(tmp_path, monkeypatch):
         result = jobs.llm.ExampleResult(translation=None)
         for (tense, person) in paradigm.cells:
             result.pairs[(tense, person)] = jobs.llm.ExamplePair(
-                tense=tense, person=person, example_en="An example.", example_pt="Um exemplo.",
+                tense=tense, person=person, example_en="An example.", example_native="Um exemplo.",
             )
         return result
 
@@ -247,7 +247,7 @@ def test_examples_and_translation_are_applied(env, monkeypatch):
         result = jobs.llm.ExampleResult(translation="to leave")
         result.pairs[("present_indicative", "eu")] = jobs.llm.ExamplePair(
             tense="present_indicative", person="eu",
-            example_en="I leave at eight.", example_pt="Parto às oito.",
+            example_en="I leave at eight.", example_native="Parto às oito.",
         )
         return result
 
