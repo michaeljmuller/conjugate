@@ -153,11 +153,29 @@ class LanguageAdapter(Protocol):
     code: str  # e.g. "pt-PT"
 
     @property
+    def name(self) -> str:
+        """How the language is named to the user, e.g. ``European Portuguese``."""
+
+    @property
+    def source_name(self) -> str:
+        """Where paradigms come from, e.g. ``cplp.org`` — shown while looking a
+        verb up and named in the errors when it cannot be reached."""
+
+    @property
+    def not_found_hint(self) -> str:
+        """What to suggest when a lookup comes back empty. May be empty."""
+
+    @property
+    def accents(self) -> list[str]:
+        """Letters the accent bar offers, for typing answers without the
+        language's keyboard layout."""
+
+    @property
     def tenses(self) -> list[dict]:
         """Ordered tense catalogue.
 
-        Each entry is ``{"key", "label", "mood", "label_pt", "mood_pt"}`` —
-        English and native names for the same tense, which the UI's Interface
+        Each entry is ``{"key", "label", "mood", "label_native", "mood_native"}``
+        — English and native names for the same tense, which the UI's Interface
         setting picks between.
         """
 

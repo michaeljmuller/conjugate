@@ -1,7 +1,5 @@
 "use strict";
 
-const ACCENTS = ["á", "â", "ã", "à", "é", "ê", "í", "ó", "ô", "õ", "ú", "ç"];
-
 const el = (id) => document.getElementById(id);
 const normalize = (s) => s.trim().toLowerCase().split(/\s+/).join(" ");
 
@@ -10,10 +8,11 @@ let currentVerbId = null;
 let rows = [];          // MODEL: one entry per form, the single source of truth.
                         // The DOM is a projection of this — never read back for state.
 let ui = { labels: "en", show_accents: false }; // interface prefs, loaded at init
+let lang = { code: "", name: "", accents: [], available: [] }; // drilled language, loaded at init
 
 // Tense/mood names come in both languages from the server; pick per interface pref.
-const labelOf = (o) => (ui.labels === "pt" && o.label_pt) || o.label;
-const moodOf = (o) => (ui.labels === "pt" && o.mood_pt) || o.mood;
+const labelOf = (o) => (ui.labels === "native" && o.label_native) || o.label;
+const moodOf = (o) => (ui.labels === "native" && o.mood_native) || o.mood;
 
 // The mood tag, as an HTML fragment — but suppressed when the label already
 // contains it (e.g. "Conditional" / conditional, "Past participle" / participle),
@@ -43,10 +42,10 @@ async function init() {
   el("app").classList.remove("hidden");
   buildUserMenu(me.name || me.email, me.email);
 
-  buildAccentBar();
   wireControls();
 
-  ui = (await api("/api/settings")).interface;
+  applySettings(await api("/api/settings"));
+  buildAccentBar();
   applyInterface();
 
   const selTop = el("verb-select");
@@ -79,7 +78,7 @@ async function loadVerbs() {
 }
 
 function buildAccentBar() {
-  el("accent-bar").innerHTML = ACCENTS.map(
+  el("accent-bar").innerHTML = lang.accents.map(
     (c) => `<button type="button" data-ch="${c}">${c}</button>`
   ).join("");
   el("accent-bar").addEventListener("click", (e) => {
@@ -243,8 +242,23 @@ async function saveSettings() {
 
 // ---- Interface settings: label language + accent-button visibility ------
 
+// Take what the server says about the drilled language and the interface prefs.
+// Everything language-specific — the name to show, which accented letters the
+// bar offers — comes from here rather than being baked into the client.
+function applySettings(data) {
+  ui = data.interface;
+  lang = {
+    code: data.language,
+    name: data.language_name,
+    accents: data.accents || [],
+    available: data.languages || [],
+  };
+}
+
 function openInterface() {
   el("iface-accents").checked = ui.show_accents;
+  // The "native names" option is labelled with the language it means.
+  el("iface-native-label").textContent = lang.name;
   for (const r of document.getElementsByName("iface-labels"))
     r.checked = r.value === ui.labels;
   el("interface-panel").classList.remove("hidden");
@@ -262,7 +276,7 @@ async function saveInterface() {
     method: "PUT",
     body: JSON.stringify({ interface: { labels, show_accents } }),
   });
-  ui = data.interface;
+  applySettings(data);
   applyInterface();
   closeInterface();
   if (currentVerbId) await loadVerb(currentVerbId); // relabel the drill in the new language
@@ -561,7 +575,7 @@ function makeRow(data, tenseLabel) {
     // server grades against the same list; this copy is what lets grading stay
     // local and synchronous.
     variants: data.variants || [],
-    examplePt: data.example_pt || "",
+    exampleNative: data.example_native || "",
     el: div,
     input,
     note: null, // the "missed it" note element, when present
@@ -681,7 +695,7 @@ function renderRow(row) {
 
   // pt-PT example holds the answer word, so it's shown only once answered.
   div.querySelector(".row-example-pt").textContent =
-    row.graded && row.examplePt ? row.examplePt : "";
+    row.graded && row.exampleNative ? row.exampleNative : "";
 
   renderAlternatives(row);
   renderNote(row);

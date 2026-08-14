@@ -14,6 +14,19 @@ empty person label.
 
 from ..base import INVARIABLE_PERSON
 
+# How the language is named to the user, and to the model when it writes
+# example sentences.
+NAME = "European Portuguese"
+
+# Where paradigms come from, named in the add-a-verb progress and errors, and
+# what to suggest when a lookup comes back empty.
+SOURCE_NAME = "cplp.org"
+NOT_FOUND_HINT = "Check the spelling — a Brazilian form will not be listed."
+
+# Letters the accent bar offers, for typing answers without a Portuguese
+# keyboard. Only those the drill actually needs: no ü, which the Acordo dropped.
+ACCENTS = ["á", "â", "ã", "à", "é", "ê", "í", "ó", "ô", "õ", "ú", "ç"]
+
 # The past participle is drilled as two rows, distinguished by the auxiliary the
 # form takes rather than by person: the regular participle goes with ter/haver
 # ("tinha aceitado") and the short one with ser/estar ("foi aceite"). Most verbs
@@ -25,23 +38,24 @@ PAST_PARTICIPLE_TENSE = "past_participle"
 PRESENT_PARTICIPLE_TENSE = "present_participle"
 
 # Ordered tenses. The original Excel block comes first; the added slots follow.
-# Each carries both English (``label``/``mood``) and European-Portuguese
-# (``label_pt``/``mood_pt``) names; the UI's Interface setting picks which to show.
+# Each carries both English (``label``/``mood``) and Portuguese
+# (``label_native``/``mood_native``) names; the UI's Interface setting picks
+# which to show.
 TENSES: list[dict[str, str]] = [
-    {"key": "present_indicative", "label": "Present", "mood": "indicative", "label_pt": "Presente", "mood_pt": "indicativo"},
-    {"key": "preterite", "label": "Preterite (simple past)", "mood": "indicative", "label_pt": "Pretérito perfeito", "mood_pt": "indicativo"},
-    {"key": "past_imperfect_indicative", "label": "Past imperfect", "mood": "indicative", "label_pt": "Pretérito imperfeito", "mood_pt": "indicativo"},
-    {"key": "past_pluperfect", "label": "Pluperfect (perfect past)", "mood": "indicative", "label_pt": "Pretérito mais-que-perfeito", "mood_pt": "indicativo"},
-    {"key": "future_indicative", "label": "Future", "mood": "indicative", "label_pt": "Futuro", "mood_pt": "indicativo"},
-    {"key": "conditional", "label": "Conditional", "mood": "conditional", "label_pt": "Condicional", "mood_pt": "condicional"},
-    {"key": "present_subjunctive", "label": "Present", "mood": "subjunctive", "label_pt": "Presente", "mood_pt": "conjuntivo"},
-    {"key": "past_imperfect_subjunctive", "label": "Past imperfect", "mood": "subjunctive", "label_pt": "Pretérito imperfeito", "mood_pt": "conjuntivo"},
-    {"key": "future_subjunctive", "label": "Future", "mood": "subjunctive", "label_pt": "Futuro", "mood_pt": "conjuntivo"},
-    {"key": "imperative_affirmative", "label": "Imperative (affirmative)", "mood": "imperative", "label_pt": "Imperativo (afirmativo)", "mood_pt": "imperativo"},
-    {"key": "imperative_negative", "label": "Imperative (negative)", "mood": "imperative", "label_pt": "Imperativo (negativo)", "mood_pt": "imperativo"},
-    {"key": "personal_infinitive", "label": "Personal infinitive", "mood": "infinitive", "label_pt": "Infinitivo pessoal", "mood_pt": "infinitivo"},
-    {"key": PAST_PARTICIPLE_TENSE, "label": "Past participle", "mood": "participle", "label_pt": "Particípio passado", "mood_pt": "particípio"},
-    {"key": PRESENT_PARTICIPLE_TENSE, "label": "Present participle", "mood": "participle", "label_pt": "Gerúndio", "mood_pt": "gerúndio"},
+    {"key": "present_indicative", "label": "Present", "mood": "indicative", "label_native": "Presente", "mood_native": "indicativo"},
+    {"key": "preterite", "label": "Preterite (simple past)", "mood": "indicative", "label_native": "Pretérito perfeito", "mood_native": "indicativo"},
+    {"key": "past_imperfect_indicative", "label": "Past imperfect", "mood": "indicative", "label_native": "Pretérito imperfeito", "mood_native": "indicativo"},
+    {"key": "past_pluperfect", "label": "Pluperfect (perfect past)", "mood": "indicative", "label_native": "Pretérito mais-que-perfeito", "mood_native": "indicativo"},
+    {"key": "future_indicative", "label": "Future", "mood": "indicative", "label_native": "Futuro", "mood_native": "indicativo"},
+    {"key": "conditional", "label": "Conditional", "mood": "conditional", "label_native": "Condicional", "mood_native": "condicional"},
+    {"key": "present_subjunctive", "label": "Present", "mood": "subjunctive", "label_native": "Presente", "mood_native": "conjuntivo"},
+    {"key": "past_imperfect_subjunctive", "label": "Past imperfect", "mood": "subjunctive", "label_native": "Pretérito imperfeito", "mood_native": "conjuntivo"},
+    {"key": "future_subjunctive", "label": "Future", "mood": "subjunctive", "label_native": "Futuro", "mood_native": "conjuntivo"},
+    {"key": "imperative_affirmative", "label": "Imperative (affirmative)", "mood": "imperative", "label_native": "Imperativo (afirmativo)", "mood_native": "imperativo"},
+    {"key": "imperative_negative", "label": "Imperative (negative)", "mood": "imperative", "label_native": "Imperativo (negativo)", "mood_native": "imperativo"},
+    {"key": "personal_infinitive", "label": "Personal infinitive", "mood": "infinitive", "label_native": "Infinitivo pessoal", "mood_native": "infinitivo"},
+    {"key": PAST_PARTICIPLE_TENSE, "label": "Past participle", "mood": "participle", "label_native": "Particípio passado", "mood_native": "particípio"},
+    {"key": PRESENT_PARTICIPLE_TENSE, "label": "Present participle", "mood": "participle", "label_native": "Gerúndio", "mood_native": "gerúndio"},
 ]
 
 TENSE_KEYS: list[str] = [t["key"] for t in TENSES]

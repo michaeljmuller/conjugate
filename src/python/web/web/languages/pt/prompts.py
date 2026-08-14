@@ -17,10 +17,9 @@ import json
 from pathlib import Path
 
 from ..base import PromptMaterial
+from .catalogue import NAME
 
 EXAMPLES_FILE = Path(__file__).parent / "examples.json"
-
-NAME = "European Portuguese"
 
 # Stated up front in both prompts rather than left to the appended style guide:
 # the drill is specifically for the European variety, and pt-BR phrasing is the

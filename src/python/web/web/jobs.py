@@ -220,7 +220,9 @@ class _StepFailed(Exception):
 
 
 async def _look_up(job: Job, adapter) -> Paradigm:
-    job.update(STEP_LOOKUP, status=RUNNING, detail=f"cplp.org · {job.infinitive}")
+    job.update(
+        STEP_LOOKUP, status=RUNNING, detail=f"{adapter.source_name} · {job.infinitive}"
+    )
     try:
         paradigm = await adapter.paradigm(job.infinitive)
     except NotAVerb:
@@ -229,12 +231,11 @@ async def _look_up(job: Job, adapter) -> Paradigm:
     except UnknownWord:
         job.fail(
             STEP_LOOKUP,
-            f'No European-Portuguese verb "{job.infinitive}" found. '
-            "Check the spelling — a Brazilian form will not be listed.",
+            f'No {adapter.name} verb "{job.infinitive}" found. {adapter.not_found_hint}'.strip(),
         )
         raise _StepFailed from None
     except SourceUnavailable as exc:
-        job.fail(STEP_LOOKUP, f"Could not reach cplp.org: {exc}")
+        job.fail(STEP_LOOKUP, f"Could not reach {adapter.source_name}: {exc}")
         raise _StepFailed from None
 
     alternatives = sum(1 for c in paradigm.cells.values() if c.alternatives)

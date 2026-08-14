@@ -14,7 +14,7 @@
 
   <!-- Signed-out view -->
   <section id="signed-out" class="signed-out hidden">
-    <p>Practice European-Portuguese verb conjugations.</p>
+    <p>Practice verb conjugations.</p>
     <a class="btn primary" href="/auth/login">Sign in with Google</a>
   </section>
 
@@ -70,7 +70,8 @@
       <fieldset class="iface-group">
         <legend>Tense labels</legend>
         <label class="iface-radio"><input type="radio" name="iface-labels" value="en" /> English</label>
-        <label class="iface-radio"><input type="radio" name="iface-labels" value="pt" /> Portuguese</label>
+        <!-- Labelled at runtime with whichever language is being drilled. -->
+        <label class="iface-radio"><input type="radio" name="iface-labels" value="native" /> <span id="iface-native-label"></span></label>
       </fieldset>
       <label class="iface-check"><input type="checkbox" id="iface-accents" /> Show accent buttons</label>
       <div class="settings-actions">

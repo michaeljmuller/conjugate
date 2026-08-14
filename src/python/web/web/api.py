@@ -47,17 +47,21 @@ def _saved_tenses(settings: dict, language: str) -> list[dict]:
     return saved.get(language, [])
 
 
-# Interface prefs and their defaults. ``labels`` chooses English vs European
-# Portuguese for tense/mood names; ``show_accents`` reveals the accent-button bar.
+# Interface prefs and their defaults. ``labels`` chooses English vs the drilled
+# language's own tense/mood names; ``show_accents`` reveals the accent-button bar.
 _DEFAULT_INTERFACE = {"labels": "en", "show_accents": False}
-_LABEL_LANGS = ("en", "pt")
+_LABEL_LANGS = ("en", "native")
+
+# What "native" was called when Portuguese was the only language it could mean.
+_LEGACY_LABEL_LANGS = {"pt": "native"}
 
 
 def _resolve_interface(settings: dict) -> dict:
     """Merge the saved interface blob over defaults, ignoring unknown keys."""
     saved = settings.get("interface", {})
+    labels = _LEGACY_LABEL_LANGS.get(saved.get("labels"), saved.get("labels"))
     return {
-        "labels": saved.get("labels") if saved.get("labels") in _LABEL_LANGS else _DEFAULT_INTERFACE["labels"],
+        "labels": labels if labels in _LABEL_LANGS else _DEFAULT_INTERFACE["labels"],
         "show_accents": bool(saved.get("show_accents", _DEFAULT_INTERFACE["show_accents"])),
     }
 
@@ -108,7 +112,14 @@ def _settings_response(settings: dict, adapter) -> dict:
     already reconciled, so the client never sees the per-language blob."""
     return {
         "language": adapter.code,
-        "languages": languages(),
+        "language_name": adapter.name,
+        # Every registered language, so the picker needs no second request.
+        "languages": [
+            {"code": c, "name": get_adapter(c).name} for c in languages()
+        ],
+        # The accent bar's buttons: which letters are hard to type depends on
+        # the language, so the client is told rather than knowing.
+        "accents": adapter.accents,
         "tenses": adapter.resolve_tense_prefs(_saved_tenses(settings, adapter.code)),
         "interface": _resolve_interface(settings),
     }
@@ -154,7 +165,7 @@ def put_settings(
 
     if payload.interface is not None:
         if payload.interface.labels is not None and payload.interface.labels not in _LABEL_LANGS:
-            raise HTTPException(status_code=400, detail="labels must be 'en' or 'pt'")
+            raise HTTPException(status_code=400, detail="labels must be 'en' or 'native'")
         iface = {**settings.get("interface", {})}
         if payload.interface.labels is not None:
             iface["labels"] = payload.interface.labels
@@ -309,9 +320,9 @@ def verb_forms(
                     "answer": form.form_text,
                     "variants": [v.text for v in form.variants],
                     "example_en": form.example_en,
-                    # pt-PT sentence contains the answer, so the client reveals it
-                    # only after the form has been answered.
-                    "example_pt": form.example_pt,
+                    # The native-language sentence contains the answer, so the
+                    # client reveals it only after the form has been answered.
+                    "example_native": form.example_pt,
                 }
             )
         if not rows:
@@ -323,8 +334,8 @@ def verb_forms(
                 "tense": tense["key"],
                 "label": tense["label"],
                 "mood": tense["mood"],
-                "label_pt": tense["label_pt"],
-                "mood_pt": tense["mood_pt"],
+                "label_native": tense["label_native"],
+                "mood_native": tense["mood_native"],
                 "rows": rows,
             }
         )
@@ -431,8 +442,8 @@ def progress(db: Session = Depends(get_db), user: User = Depends(current_user)):
                 "tense": tense["key"],
                 "label": tense["label"],
                 "mood": tense["mood"],
-                "label_pt": tense["label_pt"],
-                "mood_pt": tense["mood_pt"],
+                "label_native": tense["label_native"],
+                "mood_native": tense["mood_native"],
                 "attempts": stat["attempts"],
                 "correct": stat["correct"],
             }

@@ -34,10 +34,14 @@ from ..base import (
 from . import cplp, prompts
 from .regular import classify
 from .catalogue import (
+    ACCENTS,
     DRILL_PERSONS,
+    NAME,
+    NOT_FOUND_HINT,
     PAST_PARTICIPLE_TENSE,
     PRESENT_PARTICIPLE_TENSE,
     SHORT_PERSON,
+    SOURCE_NAME,
     TENSE_KEYS,
     TENSES,
 )
@@ -127,6 +131,22 @@ class PortugueseAdapter:
     """The ``pt-PT`` implementation of ``LanguageAdapter``."""
 
     code = CODE
+
+    @property
+    def name(self) -> str:
+        return NAME
+
+    @property
+    def source_name(self) -> str:
+        return SOURCE_NAME
+
+    @property
+    def not_found_hint(self) -> str:
+        return NOT_FOUND_HINT
+
+    @property
+    def accents(self) -> list[str]:
+        return ACCENTS
 
     @property
     def tenses(self) -> list[dict]:

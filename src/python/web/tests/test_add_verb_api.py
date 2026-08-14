@@ -310,7 +310,7 @@ def test_unknown_verb_fails_the_step_and_writes_nothing(env, monkeypatch):
 
     assert job["status"] == "failed"
     assert steps["look_up"]["status"] == "failed"
-    assert "No European-Portuguese verb" in job["error"]
+    assert f"No {get_adapter().name} verb" in job["error"]
     assert steps["save"]["status"] == "pending"
 
     with TS() as db:

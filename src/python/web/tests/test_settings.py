@@ -126,18 +126,18 @@ def test_interface_defaults_and_partial_updates(tmp_path):
         assert iface == {"labels": "en", "show_accents": False}
 
         # Saving interface alone must not require or wipe tenses.
-        r = client.put("/api/settings", json={"interface": {"labels": "pt", "show_accents": True}})
+        r = client.put("/api/settings", json={"interface": {"labels": "native", "show_accents": True}})
         assert r.status_code == 200
-        assert r.json()["interface"] == {"labels": "pt", "show_accents": True}
+        assert r.json()["interface"] == {"labels": "native", "show_accents": True}
         assert len(r.json()["tenses"]) == len(TENSE_KEYS)  # tenses untouched → full default list
 
         # A partial interface update leaves the unspecified field intact.
         r = client.put("/api/settings", json={"interface": {"show_accents": False}})
-        assert r.json()["interface"] == {"labels": "pt", "show_accents": False}
+        assert r.json()["interface"] == {"labels": "native", "show_accents": False}
 
         # Saving tenses alone must not clobber the stored interface prefs.
         client.put("/api/settings", json={"tenses": [{"key": "preterite", "enabled": True}]})
-        assert client.get("/api/settings").json()["interface"]["labels"] == "pt"
+        assert client.get("/api/settings").json()["interface"]["labels"] == "native"
     finally:
         app.dependency_overrides.clear()
 
@@ -156,8 +156,8 @@ def test_forms_carry_both_label_languages(tmp_path):
     client, vid = _make_client(tmp_path)
     try:
         block = client.get(f"/api/verbs/{vid}/forms").json()["blocks"][0]
-        assert {"label", "mood", "label_pt", "mood_pt"} <= block.keys()
-        assert block["label"] == "Present" and block["label_pt"] == "Presente"
+        assert {"label", "mood", "label_native", "mood_native"} <= block.keys()
+        assert block["label"] == "Present" and block["label_native"] == "Presente"
     finally:
         app.dependency_overrides.clear()
 
@@ -169,7 +169,10 @@ def test_settings_name_the_drilled_language_and_what_else_is_available(tmp_path)
     try:
         got = client.get("/api/settings").json()
         assert got["language"] == DEFAULT_LANGUAGE
-        assert DEFAULT_LANGUAGE in got["languages"]
+        assert got["language_name"] == get_adapter().name
+        assert DEFAULT_LANGUAGE in [l["code"] for l in got["languages"]]
+        # The accent bar's letters come from the language, not the client.
+        assert "ç" in got["accents"]
     finally:
         app.dependency_overrides.clear()
 
@@ -229,5 +232,19 @@ def test_put_rejects_unknown_key_and_all_disabled(tmp_path):
         assert client.put(
             "/api/settings", json={"tenses": [{"key": "preterite", "enabled": False}]}
         ).status_code == 400
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_the_label_pref_saved_as_pt_still_means_the_native_names(tmp_path):
+    """The setting used to be called "pt" back when Portuguese was the only
+    thing it could mean. A user who saved it keeps native labels rather than
+    silently reverting to English."""
+    client, _ = _make_client(tmp_path)
+    try:
+        with next(app.dependency_overrides[get_db]()) as db:
+            db.add(UserSettings(user_id=1, data={"interface": {"labels": "pt"}}))
+            db.commit()
+        assert client.get("/api/settings").json()["interface"]["labels"] == "native"
     finally:
         app.dependency_overrides.clear()
