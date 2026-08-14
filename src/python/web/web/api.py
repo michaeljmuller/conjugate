@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session
 from . import jobs, llm
 from .auth import current_user
 from .db import get_db
-from .languages import get_adapter
+from .languages import DEFAULT_LANGUAGE, get_adapter, languages
 from .grading import grade
 from .models import Attempt, Form, User, UserSettings, Verb
 
@@ -26,6 +26,25 @@ def _load_settings(db: Session, user: User) -> dict:
     """The user's raw settings blob, or ``{}`` if they've never saved any."""
     row = db.get(UserSettings, user.id)
     return dict(row.data) if row else {}
+
+
+def _language(settings: dict) -> str:
+    """Which language the user is drilling. Unknown codes fall back to the
+    default rather than 404-ing a drill that used to work."""
+    code = settings.get("language")
+    return code if code in languages() else DEFAULT_LANGUAGE
+
+
+def _saved_tenses(settings: dict, language: str) -> list[dict]:
+    """The user's saved tense order for one language.
+
+    ``tenses`` was a bare list before there was more than one language; such a
+    list is that language's, and belongs to the default one.
+    """
+    saved = settings.get("tenses", {})
+    if isinstance(saved, list):
+        return saved if language == DEFAULT_LANGUAGE else []
+    return saved.get(language, [])
 
 
 # Interface prefs and their defaults. ``labels`` chooses English vs European
@@ -43,9 +62,15 @@ def _resolve_interface(settings: dict) -> dict:
     }
 
 
-def _enabled_tenses(db: Session, user: User, adapter) -> list[dict]:
+def _drilling(db: Session, user: User):
+    """``(settings, adapter)`` for the language this user is drilling."""
+    settings = _load_settings(db, user)
+    return settings, get_adapter(_language(settings))
+
+
+def _enabled_tenses(settings: dict, adapter) -> list[dict]:
     """Tenses to drill, in the user's chosen order (enabled only)."""
-    prefs = adapter.resolve_tense_prefs(_load_settings(db, user).get("tenses", []))
+    prefs = adapter.resolve_tense_prefs(_saved_tenses(settings, adapter.code))
     return [t for t in prefs if t["enabled"]]
 
 
@@ -71,15 +96,20 @@ class InterfaceIn(BaseModel):
 
 
 class SettingsIn(BaseModel):
-    # Both optional so the tense panel and the interface panel can each save
-    # their own slice without clobbering the other.
+    # All optional so the tense panel, the interface panel and the language
+    # picker can each save their own slice without clobbering the others.
+    language: str | None = None
     tenses: list[TensePref] | None = None
     interface: InterfaceIn | None = None
 
 
 def _settings_response(settings: dict, adapter) -> dict:
+    """Settings for the UI. ``tenses`` is the drilled language's catalogue,
+    already reconciled, so the client never sees the per-language blob."""
     return {
-        "tenses": adapter.resolve_tense_prefs(settings.get("tenses", [])),
+        "language": adapter.code,
+        "languages": languages(),
+        "tenses": adapter.resolve_tense_prefs(_saved_tenses(settings, adapter.code)),
         "interface": _resolve_interface(settings),
     }
 
@@ -87,7 +117,8 @@ def _settings_response(settings: dict, adapter) -> dict:
 @router.get("/settings")
 def get_settings(db: Session = Depends(get_db), user: User = Depends(current_user)):
     """Full, reconciled settings for the UI (every catalog tense, flagged)."""
-    return _settings_response(_load_settings(db, user), get_adapter())
+    settings, adapter = _drilling(db, user)
+    return _settings_response(settings, adapter)
 
 
 @router.put("/settings")
@@ -96,21 +127,35 @@ def put_settings(
     db: Session = Depends(get_db),
     user: User = Depends(current_user),
 ):
-    adapter = get_adapter()
+    settings = _load_settings(db, user)
     updates: dict = {}
+
+    # Applied first, so tenses in the same request are validated against the
+    # catalogue they are being saved for.
+    if payload.language is not None:
+        if payload.language not in languages():
+            raise HTTPException(status_code=400, detail=f"unknown language: {payload.language}")
+        updates["language"] = payload.language
+    adapter = get_adapter(_language({**settings, **updates}))
+
     if payload.tenses is not None:
         unknown = [t.key for t in payload.tenses if t.key not in adapter.tense_keys]
         if unknown:
             raise HTTPException(status_code=400, detail=f"unknown tenses: {unknown}")
         if not any(t.enabled for t in payload.tenses):
             raise HTTPException(status_code=400, detail="enable at least one tense")
-        updates["tenses"] = [{"key": t.key, "enabled": t.enabled} for t in payload.tenses]
+        # Per language: saving Portuguese's order must not disturb Italian's.
+        saved = settings.get("tenses", {})
+        by_language = {DEFAULT_LANGUAGE: saved} if isinstance(saved, list) else dict(saved)
+        by_language[adapter.code] = [
+            {"key": t.key, "enabled": t.enabled} for t in payload.tenses
+        ]
+        updates["tenses"] = by_language
 
     if payload.interface is not None:
         if payload.interface.labels is not None and payload.interface.labels not in _LABEL_LANGS:
             raise HTTPException(status_code=400, detail="labels must be 'en' or 'pt'")
-        row_iface = _load_settings(db, user).get("interface", {})
-        iface = {**row_iface}
+        iface = {**settings.get("interface", {})}
         if payload.interface.labels is not None:
             iface["labels"] = payload.interface.labels
         if payload.interface.show_accents is not None:
@@ -129,7 +174,11 @@ def put_settings(
 
 @router.get("/verbs")
 def list_verbs(db: Session = Depends(get_db), user: User = Depends(current_user)):
-    verbs = db.scalars(select(Verb).order_by(Verb.infinitive)).all()
+    """The drilled language's verbs. Another language's are a different list."""
+    _, adapter = _drilling(db, user)
+    verbs = db.scalars(
+        select(Verb).where(Verb.language == adapter.code).order_by(Verb.infinitive)
+    ).all()
     return [
         {"id": v.id, "infinitive": v.infinitive, "translation": v.translation}
         for v in verbs
@@ -163,10 +212,11 @@ async def add_verb(
     Async because it schedules an asyncio task — a sync endpoint would run in a
     worker thread with no running loop to schedule onto.
     """
+    _, adapter = _drilling(db, user)
     infinitive = jobs.normalize_infinitive(payload.infinitive)
     if not _INFINITIVE_RE.match(infinitive):
         raise HTTPException(status_code=400, detail="enter a single verb, letters only")
-    if jobs.verb_exists(db, infinitive):
+    if jobs.verb_exists(db, infinitive, adapter.code):
         raise HTTPException(status_code=409, detail=f'"{infinitive}" is already in the list')
     if not llm.is_configured():
         # A verb without example sentences isn't worth adding, so say so now
@@ -176,7 +226,7 @@ async def add_verb(
             status_code=503,
             detail="Adding a verb needs ANTHROPIC_API_KEY, which is not set on the server.",
         )
-    return jobs.start(infinitive, user.id, force=payload.force).as_dict()
+    return jobs.start(infinitive, user.id, adapter.code, force=payload.force).as_dict()
 
 
 @router.get("/verbs/jobs/{job_id}")
@@ -232,12 +282,15 @@ def verb_forms(
     if verb is None:
         raise HTTPException(status_code=404, detail="verb not found")
 
-    adapter = get_adapter()
+    # The verb's own language, not the one being drilled: a verb is rendered
+    # with the person rows and labels of the language it belongs to.
+    settings = _load_settings(db, user)
+    adapter = get_adapter(verb.language)
     by_key: dict[tuple[str, str], Form] = {
         (f.tense, f.person): f for f in verb.forms
     }
     blocks = []
-    for tense in _enabled_tenses(db, user, adapter):
+    for tense in _enabled_tenses(settings, adapter):
         rows = []
         for person in adapter.drill_persons:
             form = by_key.get((tense["key"], person))
@@ -347,7 +400,13 @@ def reclassify_attempt(
 
 @router.get("/progress")
 def progress(db: Session = Depends(get_db), user: User = Depends(current_user)):
-    """Per-user accuracy rolled up by tense."""
+    """Per-user accuracy rolled up by tense, for the drilled language.
+
+    Scoped by language because tense keys are not globally unique — two
+    languages can both have a ``present_indicative`` meaning different things,
+    and rolling them into one row would be meaningless.
+    """
+    settings, adapter = _drilling(db, user)
     rows = db.execute(
         select(
             Form.tense,
@@ -355,7 +414,8 @@ def progress(db: Session = Depends(get_db), user: User = Depends(current_user)):
             func.sum(func.cast(Attempt.is_correct, Integer)),
         )
         .join(Form, Form.id == Attempt.form_id)
-        .where(Attempt.user_id == user.id)
+        .join(Verb, Verb.id == Form.verb_id)
+        .where(Attempt.user_id == user.id, Verb.language == adapter.code)
         .group_by(Form.tense)
     ).all()
 
@@ -364,7 +424,7 @@ def progress(db: Session = Depends(get_db), user: User = Depends(current_user)):
         for tense, total, correct in rows
     }
     out = []
-    for tense in _enabled_tenses(db, user, get_adapter()):
+    for tense in _enabled_tenses(settings, adapter):
         stat = by_tense.get(tense["key"], {"attempts": 0, "correct": 0})
         out.append(
             {

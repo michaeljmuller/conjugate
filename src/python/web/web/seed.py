@@ -74,7 +74,11 @@ def upsert_verb(
     looked-up verb and a seeded one land in the database by the same path.
     Does not commit.
     """
-    verb = db.scalar(select(Verb).where(Verb.infinitive == paradigm.infinitive))
+    verb = db.scalar(
+        select(Verb).where(
+            Verb.language == adapter.code, Verb.infinitive == paradigm.infinitive
+        )
+    )
     past_tense = adapter.past_participle_tense
     present_tense = adapter.present_participle_tense
     past = paradigm.cell(past_tense, INVARIABLE_PERSON) if past_tense else None
@@ -82,6 +86,7 @@ def upsert_verb(
 
     if verb is None:
         verb = Verb(
+            language=adapter.code,
             infinitive=paradigm.infinitive,
             past_participle=past.answer if past else None,
             present_participle=present.answer if present else None,
@@ -155,14 +160,19 @@ def seed_examples(db: Session) -> int:
     """Sync example sentences (English + pt-PT) from examples.json into forms.
 
     Runs every startup so re-deploying with a more-filled form updates the DB.
-    Returns the number of fields updated.
+    pt-PT only, like the file itself. Returns the number of fields updated.
     """
     if not EXAMPLES_FILE.exists():
         return 0
+    language = get_adapter().code
     data = json.loads(EXAMPLES_FILE.read_text(encoding="utf-8"))
     updated = 0
     for entry in data.get("verbs", []):
-        verb = db.scalar(select(Verb).where(Verb.infinitive == entry["infinitive"]))
+        verb = db.scalar(
+            select(Verb).where(
+                Verb.language == language, Verb.infinitive == entry["infinitive"]
+            )
+        )
         if verb is None:
             continue
         updated += apply_examples(verb, entry.get("forms", []))

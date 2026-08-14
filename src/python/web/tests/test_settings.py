@@ -5,11 +5,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from web.auth import current_user
-from web.languages import get_adapter
+from web.languages import DEFAULT_LANGUAGE, get_adapter
 from web.languages.pt.catalogue import TENSE_KEYS
 from web.db import get_db
 from web.main import app
-from web.models import Base, Form, User, Verb
+from web.models import Base, Form, User, UserSettings, Verb
 
 resolve_tense_prefs = get_adapter().resolve_tense_prefs
 
@@ -158,6 +158,64 @@ def test_forms_carry_both_label_languages(tmp_path):
         block = client.get(f"/api/verbs/{vid}/forms").json()["blocks"][0]
         assert {"label", "mood", "label_pt", "mood_pt"} <= block.keys()
         assert block["label"] == "Present" and block["label_pt"] == "Presente"
+    finally:
+        app.dependency_overrides.clear()
+
+
+# ---- the language dimension ---------------------------------------------
+
+def test_settings_name_the_drilled_language_and_what_else_is_available(tmp_path):
+    client, _ = _make_client(tmp_path)
+    try:
+        got = client.get("/api/settings").json()
+        assert got["language"] == DEFAULT_LANGUAGE
+        assert DEFAULT_LANGUAGE in got["languages"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_an_unknown_language_is_rejected(tmp_path):
+    client, _ = _make_client(tmp_path)
+    try:
+        r = client.put("/api/settings", json={"language": "xx"})
+        assert r.status_code == 400
+        assert "unknown language" in r.json()["detail"]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_tense_order_saved_before_there_were_languages_is_still_honoured(tmp_path):
+    """The settings blob used to hold a bare list, when there was only one
+    language to hold it for. Such a list is the default language's, and a user
+    who saved one keeps their order rather than silently reverting."""
+    client, vid = _make_client(tmp_path)
+    try:
+        with next(app.dependency_overrides[get_db]()) as db:
+            db.add(UserSettings(
+                user_id=1,
+                data={"tenses": [
+                    {"key": "conditional", "enabled": True},
+                    {"key": "present_subjunctive", "enabled": False},
+                ]},
+            ))
+            db.commit()
+
+        assert _block_keys(client, vid)[0] == "conditional"
+        flags = {t["key"]: t["enabled"] for t in client.get("/api/settings").json()["tenses"]}
+        assert flags["present_subjunctive"] is False
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_saving_tenses_migrates_the_flat_list_under_its_language(tmp_path):
+    client, _ = _make_client(tmp_path)
+    try:
+        client.put("/api/settings", json={"tenses": [{"key": "preterite", "enabled": True}]})
+        with next(app.dependency_overrides[get_db]()) as db:
+            saved = db.get(UserSettings, 1).data["tenses"]
+        # Keyed by language now, so a second language's order has somewhere to go.
+        assert isinstance(saved, dict)
+        assert [t["key"] for t in saved[DEFAULT_LANGUAGE]] == ["preterite"]
     finally:
         app.dependency_overrides.clear()
 

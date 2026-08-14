@@ -178,21 +178,23 @@ def _evict() -> None:
 # --- the work ------------------------------------------------------------
 
 
-def start(infinitive: str, user_id: int | None, force: bool = False) -> Job:
+def start(
+    infinitive: str, user_id: int | None, language: str, force: bool = False
+) -> Job:
     """Register a job and kick it off in the background.
 
     Every add stops after the lookup to confirm; ``force`` skips that, and is
     how the client answers yes.
     """
     job = create(normalize_infinitive(infinitive))
-    task = asyncio.create_task(_run(job, user_id, force))
+    task = asyncio.create_task(_run(job, user_id, language, force))
     # Hold a reference so the task isn't garbage-collected mid-flight.
     job._task = task  # type: ignore[attr-defined]
     return job
 
 
-async def _run(job: Job, user_id: int | None, force: bool) -> None:
-    adapter = get_adapter()
+async def _run(job: Job, user_id: int | None, language: str, force: bool) -> None:
+    adapter = get_adapter(language)
     try:
         paradigm = await _look_up(job, adapter)
         # Confirm before the expensive half. What the lookup found is worth
@@ -324,5 +326,15 @@ def normalize_infinitive(infinitive: str) -> str:
     return " ".join(infinitive.split()).strip().lower()
 
 
-def verb_exists(db, infinitive: str) -> bool:
-    return db.scalar(select(Verb.id).where(Verb.infinitive == normalize_infinitive(infinitive))) is not None
+def verb_exists(db, infinitive: str, language: str) -> bool:
+    """Is this verb already in the catalogue for that language?
+
+    Scoped by language: the same spelling can be a verb in two of them, and
+    having one is no reason to refuse the other.
+    """
+    return db.scalar(
+        select(Verb.id).where(
+            Verb.language == language,
+            Verb.infinitive == normalize_infinitive(infinitive),
+        )
+    ) is not None

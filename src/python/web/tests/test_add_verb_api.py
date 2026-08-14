@@ -187,6 +187,22 @@ def test_job_saves_verb_with_forms_and_ownership(env, monkeypatch):
     assert forms[("present_participle", "inv")] == "partindo"
 
 
+def test_the_saved_verb_records_which_language_it_is(env, monkeypatch):
+    """Tense keys are not unique across languages, so a verb has to say which
+    one it belongs to or its forms cannot be read back correctly."""
+    client, TS = env
+    _stub_lookup(monkeypatch)
+
+    _await_job(client, _confirmed(client, "partir").json()["job_id"])
+
+    with TS() as db:
+        verb = db.scalar(select(Verb).where(Verb.infinitive == "partir"))
+        assert verb.language == get_adapter().code
+
+    # And the listing is scoped to it.
+    assert [v["infinitive"] for v in client.get("/api/verbs").json()] == ["partir"]
+
+
 def test_without_an_api_key_the_request_is_refused_outright(env, monkeypatch):
     """No key means no example sentences, and a verb whose rows have no prompt
     is not worth adding — so it is refused before the lookup, not after."""

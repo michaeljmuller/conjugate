@@ -24,6 +24,8 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
+from .languages import DEFAULT_LANGUAGE
+
 
 class Base(DeclarativeBase):
     pass
@@ -43,8 +45,17 @@ class UserSettings(Base):
     """Per-user preferences as one JSON blob, so new settings add keys, not
     columns (and thus need no migration under the create_all-only schema).
 
-    Current keys: ``tenses`` — ``[{"key": <tense_key>, "enabled": bool}, …]`` in
-    display order. Absent ⇒ all tenses enabled in canonical order.
+    Current keys:
+
+    ``language``
+        Which language is being drilled, e.g. ``"pt-PT"``. Absent ⇒ the default.
+    ``tenses``
+        ``{<language>: [{"key": <tense_key>, "enabled": bool}, …]}`` in display
+        order, per language — the catalogues differ, so one flat list cannot
+        serve both. A bare list (the pre-Italian shape) is read as the default
+        language's. Absent ⇒ all tenses enabled in canonical order.
+    ``interface``
+        ``labels`` (English vs native tense names) and ``show_accents``.
     """
 
     __tablename__ = "user_settings"
@@ -55,9 +66,20 @@ class UserSettings(Base):
 
 class Verb(Base):
     __tablename__ = "verbs"
+    # Infinitives are unique per language, not globally: Portuguese and Italian
+    # never collide in practice, but nothing guarantees that and the drill has
+    # to be able to tell a pt "partir" from an it one.
+    __table_args__ = (
+        UniqueConstraint("language", "infinitive", name="uq_verb_language_infinitive"),
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    infinitive: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    # The adapter that produced this verb, e.g. "pt-PT". server_default fills
+    # existing rows when the column is added to a database that predates it.
+    language: Mapped[str] = mapped_column(
+        String(8), index=True, default=DEFAULT_LANGUAGE, server_default=DEFAULT_LANGUAGE
+    )
+    infinitive: Mapped[str] = mapped_column(String(64), index=True)
     past_participle: Mapped[str | None] = mapped_column(String(64), nullable=True)
     present_participle: Mapped[str | None] = mapped_column(String(64), nullable=True)
     # Filled in later (English gloss); nullable so seeding stays simple.
