@@ -115,6 +115,10 @@ class ItalianAdapter:
         return TENSE_KEYS
 
     @property
+    def contrastive_rows(self) -> list[tuple[str, str, str]]:
+        return []  # Italian drills one participle row.
+
+    @property
     def drill_persons(self) -> list[str]:
         return DRILL_PERSONS
 

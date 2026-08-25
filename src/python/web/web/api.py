@@ -284,6 +284,27 @@ async def stream_verb_job(job_id: str, user: User = Depends(current_user)):
     )
 
 
+def _redundant_rows(adapter, by_key: dict[tuple[str, str], Form]) -> set[tuple[str, str]]:
+    """Contrastive rows this verb should not render, because nothing contrasts.
+
+    ``adapter.contrastive_rows`` names rows that only earn a place when they
+    differ from another row — pt-PT's ser/estar participle against the ter/haver
+    one. When the two hold the same form the second row is the answer above it
+    typed again, so it is dropped from the drill.
+
+    Compares ``form_text`` only: a row whose alternatives differ still shows,
+    since the displayed answer is what the learner is asked to produce.
+    """
+    hidden = set()
+    for tense, person, mirrors in adapter.contrastive_rows:
+        row = by_key.get((tense, person))
+        against = by_key.get((tense, mirrors))
+        if row is not None and against is not None:
+            if row.form_text == against.form_text:
+                hidden.add((tense, person))
+    return hidden
+
+
 @router.get("/verbs/{verb_id}/forms")
 def verb_forms(
     verb_id: int, db: Session = Depends(get_db), user: User = Depends(current_user)
@@ -300,12 +321,13 @@ def verb_forms(
     by_key: dict[tuple[str, str], Form] = {
         (f.tense, f.person): f for f in verb.forms
     }
+    hidden = _redundant_rows(adapter, by_key)
     blocks = []
     for tense in _enabled_tenses(settings, adapter):
         rows = []
         for person in adapter.drill_persons:
             form = by_key.get((tense["key"], person))
-            if form is None:
+            if form is None or (tense["key"], person) in hidden:
                 continue
             rows.append(
                 {

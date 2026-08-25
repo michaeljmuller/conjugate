@@ -192,6 +192,22 @@ class LanguageAdapter(Protocol):
         """
 
     @property
+    def contrastive_rows(self) -> list[tuple[str, str, str]]:
+        """Rows worth drilling only when they differ from the row they contrast with.
+
+        Each entry is ``(tense, person, mirrors)``: the ``person`` row is
+        rendered only when its form differs from the ``mirrors`` row's in the
+        same tense. pt-PT's ser/estar participle is the only one today — for
+        all but ``aceitar`` it repeats the ter/haver form directly above it, so
+        it scores by copying the previous answer rather than by testing whether
+        the learner knows which auxiliary takes which form.
+
+        A display rule, not a data one: both rows are still stored and seeded,
+        so this hides nothing that could not be shown again by returning ``[]``.
+        Empty for a language with no such pair.
+        """
+
+    @property
     def past_participle_tense(self) -> str | None:
         """Tense key of the past participle, or ``None`` if the language has none.
 

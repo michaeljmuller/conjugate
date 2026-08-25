@@ -286,16 +286,26 @@ def test_alternative_forms_are_stored_and_served(env, monkeypatch):
     assert row["variants"] == ["ouça"]
 
 
-def test_both_participle_rows_are_drilled(env, monkeypatch):
+def test_both_participle_rows_are_stored_but_only_one_is_drilled(env, monkeypatch):
+    """``partir`` takes ``partido`` with either auxiliary.
+
+    Both rows are stored — the lookup found both and the drill can show both —
+    but a ser/estar row identical to the ter/haver row above it tests nothing,
+    so only the one is rendered. See ``api._redundant_rows``.
+    """
     client, TS = env
     _stub_lookup(monkeypatch)
     job = _await_job(client, _confirmed(client, "partir").json()["job_id"])
+
+    with TS() as db:
+        verb = db.scalar(select(Verb).where(Verb.infinitive == "partir"))
+        stored = {(f.tense, f.person) for f in verb.forms}
+        assert ("past_participle", "short") in stored
 
     blocks = client.get(f"/api/verbs/{job['verb_id']}/forms").json()["blocks"]
     participle = next(b for b in blocks if b["tense"] == "past_participle")
     assert [(r["person"], r["label"]) for r in participle["rows"]] == [
         ("inv", "ter / haver"),
-        ("short", "ser / estar"),
     ]
 
 

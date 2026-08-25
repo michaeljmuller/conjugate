@@ -161,6 +161,13 @@ class PortugueseAdapter:
         return DRILL_PERSONS
 
     @property
+    def contrastive_rows(self) -> list[tuple[str, str, str]]:
+        # The ser/estar participle only teaches something when it differs from
+        # the ter/haver one — aceitado vs aceite. Otherwise it is the same word
+        # asked twice in a row.
+        return [(PAST_PARTICIPLE_TENSE, SHORT_PERSON, INVARIABLE_PERSON)]
+
+    @property
     def past_participle_tense(self) -> str:
         return PAST_PARTICIPLE_TENSE
 
