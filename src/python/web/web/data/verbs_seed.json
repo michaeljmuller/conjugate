@@ -988,5 +988,564 @@
         "eles": "dormirem"
       }
     }
+  },
+  {
+    "infinitive": "abrir",
+    "translation": "to open",
+    "past_participle": "aberto",
+    "present_participle": "abrindo",
+    "forms": {
+      "present_indicative": {
+        "eu": "abro",
+        "tu": "abres",
+        "ele": "abre",
+        "nos": "abrimos",
+        "vos": "abris",
+        "eles": "abrem"
+      },
+      "preterite": {
+        "eu": "abri",
+        "tu": "abriste",
+        "ele": "abriu",
+        "nos": "abrimos",
+        "vos": "abristes",
+        "eles": "abriram"
+      },
+      "past_imperfect_indicative": {
+        "eu": "abria",
+        "tu": "abrias",
+        "ele": "abria",
+        "nos": "abríamos",
+        "vos": "abríeis",
+        "eles": "abriam"
+      },
+      "past_pluperfect": {
+        "eu": "abrira",
+        "tu": "abriras",
+        "ele": "abrira",
+        "nos": "abríramos",
+        "vos": "abríreis",
+        "eles": "abriram"
+      },
+      "future_indicative": {
+        "eu": "abrirei",
+        "tu": "abrirás",
+        "ele": "abrirá",
+        "nos": "abriremos",
+        "vos": "abrireis",
+        "eles": "abrirão"
+      },
+      "conditional": {
+        "eu": "abriria",
+        "tu": "abririas",
+        "ele": "abriria",
+        "nos": "abriríamos",
+        "vos": "abriríeis",
+        "eles": "abririam"
+      },
+      "present_subjunctive": {
+        "eu": "abra",
+        "tu": "abras",
+        "ele": "abra",
+        "nos": "abramos",
+        "vos": "abrais",
+        "eles": "abram"
+      },
+      "past_imperfect_subjunctive": {
+        "eu": "abrisse",
+        "tu": "abrisses",
+        "ele": "abrisse",
+        "nos": "abríssemos",
+        "vos": "abrísseis",
+        "eles": "abrissem"
+      },
+      "future_subjunctive": {
+        "eu": "abrir",
+        "tu": "abrires",
+        "ele": "abrir",
+        "nos": "abrirmos",
+        "vos": "abrirdes",
+        "eles": "abrirem"
+      },
+      "imperative_affirmative": {
+        "tu": "abre",
+        "ele": "abra",
+        "nos": "abramos",
+        "vos": "abri",
+        "eles": "abram"
+      },
+      "imperative_negative": {
+        "tu": "abras",
+        "ele": "abra",
+        "nos": "abramos",
+        "vos": "abrais",
+        "eles": "abram"
+      },
+      "personal_infinitive": {
+        "eu": "abrir",
+        "tu": "abrires",
+        "ele": "abrir",
+        "nos": "abrirmos",
+        "vos": "abrirdes",
+        "eles": "abrirem"
+      }
+    }
+  },
+  {
+    "infinitive": "aceitar",
+    "translation": "to accept",
+    "past_participle": "aceitado",
+    "past_participle_short": [
+      "aceite",
+      "aceito"
+    ],
+    "present_participle": "aceitando",
+    "forms": {
+      "present_indicative": {
+        "eu": "aceito",
+        "tu": "aceitas",
+        "ele": "aceita",
+        "nos": "aceitamos",
+        "vos": "aceitais",
+        "eles": "aceitam"
+      },
+      "preterite": {
+        "eu": "aceitei",
+        "tu": "aceitaste",
+        "ele": "aceitou",
+        "nos": "aceitámos",
+        "vos": "aceitastes",
+        "eles": "aceitaram"
+      },
+      "past_imperfect_indicative": {
+        "eu": "aceitava",
+        "tu": "aceitavas",
+        "ele": "aceitava",
+        "nos": "aceitávamos",
+        "vos": "aceitáveis",
+        "eles": "aceitavam"
+      },
+      "past_pluperfect": {
+        "eu": "aceitara",
+        "tu": "aceitaras",
+        "ele": "aceitara",
+        "nos": "aceitáramos",
+        "vos": "aceitáreis",
+        "eles": "aceitaram"
+      },
+      "future_indicative": {
+        "eu": "aceitarei",
+        "tu": "aceitarás",
+        "ele": "aceitará",
+        "nos": "aceitaremos",
+        "vos": "aceitareis",
+        "eles": "aceitarão"
+      },
+      "conditional": {
+        "eu": "aceitaria",
+        "tu": "aceitarias",
+        "ele": "aceitaria",
+        "nos": "aceitaríamos",
+        "vos": "aceitaríeis",
+        "eles": "aceitariam"
+      },
+      "present_subjunctive": {
+        "eu": "aceite",
+        "tu": "aceites",
+        "ele": "aceite",
+        "nos": "aceitemos",
+        "vos": "aceiteis",
+        "eles": "aceitem"
+      },
+      "past_imperfect_subjunctive": {
+        "eu": "aceitasse",
+        "tu": "aceitasses",
+        "ele": "aceitasse",
+        "nos": "aceitássemos",
+        "vos": "aceitásseis",
+        "eles": "aceitassem"
+      },
+      "future_subjunctive": {
+        "eu": "aceitar",
+        "tu": "aceitares",
+        "ele": "aceitar",
+        "nos": "aceitarmos",
+        "vos": "aceitardes",
+        "eles": "aceitarem"
+      },
+      "imperative_affirmative": {
+        "tu": "aceita",
+        "ele": "aceite",
+        "nos": "aceitemos",
+        "vos": "aceitai",
+        "eles": "aceitem"
+      },
+      "imperative_negative": {
+        "tu": "aceites",
+        "ele": "aceite",
+        "nos": "aceitemos",
+        "vos": "aceiteis",
+        "eles": "aceitem"
+      },
+      "personal_infinitive": {
+        "eu": "aceitar",
+        "tu": "aceitares",
+        "ele": "aceitar",
+        "nos": "aceitarmos",
+        "vos": "aceitardes",
+        "eles": "aceitarem"
+      }
+    }
+  },
+  {
+    "infinitive": "ouvir",
+    "translation": "to hear / to listen",
+    "past_participle": "ouvido",
+    "present_participle": "ouvindo",
+    "forms": {
+      "present_indicative": {
+        "eu": [
+          "oiço",
+          "ouço"
+        ],
+        "tu": "ouves",
+        "ele": "ouve",
+        "nos": "ouvimos",
+        "vos": "ouvis",
+        "eles": "ouvem"
+      },
+      "preterite": {
+        "eu": "ouvi",
+        "tu": "ouviste",
+        "ele": "ouviu",
+        "nos": "ouvimos",
+        "vos": "ouvistes",
+        "eles": "ouviram"
+      },
+      "past_imperfect_indicative": {
+        "eu": "ouvia",
+        "tu": "ouvias",
+        "ele": "ouvia",
+        "nos": "ouvíamos",
+        "vos": "ouvíeis",
+        "eles": "ouviam"
+      },
+      "past_pluperfect": {
+        "eu": "ouvira",
+        "tu": "ouviras",
+        "ele": "ouvira",
+        "nos": "ouvíramos",
+        "vos": "ouvíreis",
+        "eles": "ouviram"
+      },
+      "future_indicative": {
+        "eu": "ouvirei",
+        "tu": "ouvirás",
+        "ele": "ouvirá",
+        "nos": "ouviremos",
+        "vos": "ouvireis",
+        "eles": "ouvirão"
+      },
+      "conditional": {
+        "eu": "ouviria",
+        "tu": "ouvirias",
+        "ele": "ouviria",
+        "nos": "ouviríamos",
+        "vos": "ouviríeis",
+        "eles": "ouviriam"
+      },
+      "present_subjunctive": {
+        "eu": [
+          "oiça",
+          "ouça"
+        ],
+        "tu": [
+          "oiças",
+          "ouças"
+        ],
+        "ele": [
+          "oiça",
+          "ouça"
+        ],
+        "nos": [
+          "oiçamos",
+          "ouçamos"
+        ],
+        "vos": [
+          "oiçais",
+          "ouçais"
+        ],
+        "eles": [
+          "oiçam",
+          "ouçam"
+        ]
+      },
+      "past_imperfect_subjunctive": {
+        "eu": "ouvisse",
+        "tu": "ouvisses",
+        "ele": "ouvisse",
+        "nos": "ouvíssemos",
+        "vos": "ouvísseis",
+        "eles": "ouvissem"
+      },
+      "future_subjunctive": {
+        "eu": "ouvir",
+        "tu": "ouvires",
+        "ele": "ouvir",
+        "nos": "ouvirmos",
+        "vos": "ouvirdes",
+        "eles": "ouvirem"
+      },
+      "imperative_affirmative": {
+        "tu": "ouve",
+        "ele": [
+          "oiça",
+          "ouça"
+        ],
+        "nos": [
+          "oiçamos",
+          "ouçamos"
+        ],
+        "vos": "ouvi",
+        "eles": [
+          "oiçam",
+          "ouçam"
+        ]
+      },
+      "imperative_negative": {
+        "tu": [
+          "oiças",
+          "ouças"
+        ],
+        "ele": [
+          "oiça",
+          "ouça"
+        ],
+        "nos": [
+          "oiçamos",
+          "ouçamos"
+        ],
+        "vos": [
+          "oiçais",
+          "ouçais"
+        ],
+        "eles": [
+          "oiçam",
+          "ouçam"
+        ]
+      },
+      "personal_infinitive": {
+        "eu": "ouvir",
+        "tu": "ouvires",
+        "ele": "ouvir",
+        "nos": "ouvirmos",
+        "vos": "ouvirdes",
+        "eles": "ouvirem"
+      }
+    }
+  },
+  {
+    "infinitive": "partir",
+    "translation": "to leave / to depart (also: to break)",
+    "past_participle": "partido",
+    "present_participle": "partindo",
+    "forms": {
+      "present_indicative": {
+        "eu": "parto",
+        "tu": "partes",
+        "ele": "parte",
+        "nos": "partimos",
+        "vos": "partis",
+        "eles": "partem"
+      },
+      "preterite": {
+        "eu": "parti",
+        "tu": "partiste",
+        "ele": "partiu",
+        "nos": "partimos",
+        "vos": "partistes",
+        "eles": "partiram"
+      },
+      "past_imperfect_indicative": {
+        "eu": "partia",
+        "tu": "partias",
+        "ele": "partia",
+        "nos": "partíamos",
+        "vos": "partíeis",
+        "eles": "partiam"
+      },
+      "past_pluperfect": {
+        "eu": "partira",
+        "tu": "partiras",
+        "ele": "partira",
+        "nos": "partíramos",
+        "vos": "partíreis",
+        "eles": "partiram"
+      },
+      "future_indicative": {
+        "eu": "partirei",
+        "tu": "partirás",
+        "ele": "partirá",
+        "nos": "partiremos",
+        "vos": "partireis",
+        "eles": "partirão"
+      },
+      "conditional": {
+        "eu": "partiria",
+        "tu": "partirias",
+        "ele": "partiria",
+        "nos": "partiríamos",
+        "vos": "partiríeis",
+        "eles": "partiriam"
+      },
+      "present_subjunctive": {
+        "eu": "parta",
+        "tu": "partas",
+        "ele": "parta",
+        "nos": "partamos",
+        "vos": "partais",
+        "eles": "partam"
+      },
+      "past_imperfect_subjunctive": {
+        "eu": "partisse",
+        "tu": "partisses",
+        "ele": "partisse",
+        "nos": "partíssemos",
+        "vos": "partísseis",
+        "eles": "partissem"
+      },
+      "future_subjunctive": {
+        "eu": "partir",
+        "tu": "partires",
+        "ele": "partir",
+        "nos": "partirmos",
+        "vos": "partirdes",
+        "eles": "partirem"
+      },
+      "imperative_affirmative": {
+        "tu": "parte",
+        "ele": "parta",
+        "nos": "partamos",
+        "vos": "parti",
+        "eles": "partam"
+      },
+      "imperative_negative": {
+        "tu": "partas",
+        "ele": "parta",
+        "nos": "partamos",
+        "vos": "partais",
+        "eles": "partam"
+      },
+      "personal_infinitive": {
+        "eu": "partir",
+        "tu": "partires",
+        "ele": "partir",
+        "nos": "partirmos",
+        "vos": "partirdes",
+        "eles": "partirem"
+      }
+    }
+  },
+  {
+    "infinitive": "pôr",
+    "translation": "to put",
+    "past_participle": "posto",
+    "present_participle": "pondo",
+    "forms": {
+      "present_indicative": {
+        "eu": "ponho",
+        "tu": "pões",
+        "ele": "põe",
+        "nos": "pomos",
+        "vos": "pondes",
+        "eles": "põem"
+      },
+      "preterite": {
+        "eu": "pus",
+        "tu": "puseste",
+        "ele": "pôs",
+        "nos": "pusemos",
+        "vos": "pusestes",
+        "eles": "puseram"
+      },
+      "past_imperfect_indicative": {
+        "eu": "punha",
+        "tu": "punhas",
+        "ele": "punha",
+        "nos": "púnhamos",
+        "vos": "púnheis",
+        "eles": "punham"
+      },
+      "past_pluperfect": {
+        "eu": "pusera",
+        "tu": "puseras",
+        "ele": "pusera",
+        "nos": "puséramos",
+        "vos": "puséreis",
+        "eles": "puseram"
+      },
+      "future_indicative": {
+        "eu": "porei",
+        "tu": "porás",
+        "ele": "porá",
+        "nos": "poremos",
+        "vos": "poreis",
+        "eles": "porão"
+      },
+      "conditional": {
+        "eu": "poria",
+        "tu": "porias",
+        "ele": "poria",
+        "nos": "poríamos",
+        "vos": "poríeis",
+        "eles": "poriam"
+      },
+      "present_subjunctive": {
+        "eu": "ponha",
+        "tu": "ponhas",
+        "ele": "ponha",
+        "nos": "ponhamos",
+        "vos": "ponhais",
+        "eles": "ponham"
+      },
+      "past_imperfect_subjunctive": {
+        "eu": "pusesse",
+        "tu": "pusesses",
+        "ele": "pusesse",
+        "nos": "puséssemos",
+        "vos": "pusésseis",
+        "eles": "pusessem"
+      },
+      "future_subjunctive": {
+        "eu": "puser",
+        "tu": "puseres",
+        "ele": "puser",
+        "nos": "pusermos",
+        "vos": "puserdes",
+        "eles": "puserem"
+      },
+      "imperative_affirmative": {
+        "tu": "põe",
+        "ele": "ponha",
+        "nos": "ponhamos",
+        "vos": "ponde",
+        "eles": "ponham"
+      },
+      "imperative_negative": {
+        "tu": "ponhas",
+        "ele": "ponha",
+        "nos": "ponhamos",
+        "vos": "ponhais",
+        "eles": "ponham"
+      },
+      "personal_infinitive": {
+        "eu": "pôr",
+        "tu": "pores",
+        "ele": "pôr",
+        "nos": "pormos",
+        "vos": "pordes",
+        "eles": "porem"
+      }
+    }
   }
 ]

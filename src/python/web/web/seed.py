@@ -29,32 +29,48 @@ def init_db(engine) -> None:
     Base.metadata.create_all(engine)
 
 
+def _cell(value: str | list[str] | None) -> Cell | None:
+    """A seed value as a ``Cell``, or ``None`` when it is blank.
+
+    A plain string is the common case. A list is a cell with alternatives, its
+    first entry the answer — ``oiço``/``ouço`` are both current, and dropping
+    either would make the drill mark a correct answer wrong.
+    """
+    texts = [value] if isinstance(value, str) else list(value or ())
+    forms = tuple(t for t in (s.strip() for s in texts) if t)
+    return Cell(forms) if forms else None
+
+
 def paradigm_from_entry(entry: dict) -> Paradigm:
     """Convert a ``verbs_seed.json`` entry into a ``Paradigm``.
 
     pt-PT only, as the seed file is: it predates the language abstraction and
-    holds one form per cell with the participles as top-level fields. Lifting it
-    into the same type the adapter produces means there is a single writer below
-    this point.
+    keeps the participles as top-level fields. Lifting it into the same type the
+    adapter produces means there is a single writer below this point.
 
-    The past participle becomes both drilled rows — the ter/haver one and the
-    ser/estar one — with the same form, which is right for every seeded verb.
+    A cell is a string, or a list when the form has alternatives that all grade
+    as correct. The past participle fills both drilled rows — the ter/haver one
+    and the ser/estar one — from the same form unless the entry gives a distinct
+    ``past_participle_short`` (``aceitado`` vs ``aceite``).
     """
     paradigm = Paradigm(
         infinitive=entry["infinitive"], translation=entry.get("translation")
     )
     for tense, persons in entry.get("forms", {}).items():
-        for person, text in persons.items():
-            if (text or "").strip():
-                paradigm.cells[(tense, person)] = Cell((text,))
+        for person, value in persons.items():
+            cell = _cell(value)
+            if cell:
+                paradigm.cells[(tense, person)] = cell
 
-    past = (entry.get("past_participle") or "").strip()
+    past = _cell(entry.get("past_participle"))
     if past:
-        paradigm.cells[(PAST_PARTICIPLE_TENSE, INVARIABLE_PERSON)] = Cell((past,))
-        paradigm.cells[(PAST_PARTICIPLE_TENSE, SHORT_PERSON)] = Cell((past,))
-    present = (entry.get("present_participle") or "").strip()
+        paradigm.cells[(PAST_PARTICIPLE_TENSE, INVARIABLE_PERSON)] = past
+        # Most verbs use one participle for both rows; the few that don't say so.
+        short = _cell(entry.get("past_participle_short")) or past
+        paradigm.cells[(PAST_PARTICIPLE_TENSE, SHORT_PERSON)] = short
+    present = _cell(entry.get("present_participle"))
     if present:
-        paradigm.cells[(PRESENT_PARTICIPLE_TENSE, INVARIABLE_PERSON)] = Cell((present,))
+        paradigm.cells[(PRESENT_PARTICIPLE_TENSE, INVARIABLE_PERSON)] = present
     return paradigm
 
 

@@ -4335,6 +4335,2171 @@
           "example_pt": "Dormindo bem, tudo parece mais fácil."
         }
       ]
+    },
+    {
+      "infinitive": "abrir",
+      "english": "to open",
+      "forms": [
+        {
+          "tense": "present_indicative",
+          "person": "eu",
+          "form": "abro",
+          "example_en": "I open the windows every morning.",
+          "example_pt": "Abro as janelas todas as manhãs."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "tu",
+          "form": "abres",
+          "example_en": "You always open the mail before dinner.",
+          "example_pt": "Abres sempre o correio antes do jantar."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "ele",
+          "form": "abre",
+          "example_en": "He opens the shop at nine.",
+          "example_pt": "Ele abre a loja às nove."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "nos",
+          "form": "abrimos",
+          "example_en": "We open the gate with this key.",
+          "example_pt": "Abrimos o portão com esta chave."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "eles",
+          "form": "abrem",
+          "example_en": "They open the museum on Sundays.",
+          "example_pt": "Eles abrem o museu aos domingos."
+        },
+        {
+          "tense": "preterite",
+          "person": "eu",
+          "form": "abri",
+          "example_en": "I opened the fridge and found nothing.",
+          "example_pt": "Abri o frigorífico e não encontrei nada."
+        },
+        {
+          "tense": "preterite",
+          "person": "tu",
+          "form": "abriste",
+          "example_en": "You opened my letter by mistake.",
+          "example_pt": "Abriste a minha carta por engano."
+        },
+        {
+          "tense": "preterite",
+          "person": "ele",
+          "form": "abriu",
+          "example_en": "He opened the door very slowly.",
+          "example_pt": "Ele abriu a porta muito devagar."
+        },
+        {
+          "tense": "preterite",
+          "person": "nos",
+          "form": "abrimos",
+          "example_en": "We opened the presents after lunch.",
+          "example_pt": "Abrimos os presentes depois do almoço."
+        },
+        {
+          "tense": "preterite",
+          "person": "eles",
+          "form": "abriram",
+          "example_en": "They opened a café near the station.",
+          "example_pt": "Eles abriram um café perto da estação."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "eu",
+          "form": "abria",
+          "example_en": "I used to open the bakery at six.",
+          "example_pt": "Abria a padaria às seis."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "tu",
+          "form": "abrias",
+          "example_en": "You used to open the curtains as soon as you woke up.",
+          "example_pt": "Abrias as cortinas logo que acordavas."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "ele",
+          "form": "abria",
+          "example_en": "He was opening the box when the phone rang.",
+          "example_pt": "Ele abria a caixa quando o telefone tocou."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "nos",
+          "form": "abríamos",
+          "example_en": "We used to open the pool in June.",
+          "example_pt": "Abríamos a piscina em junho."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "eles",
+          "form": "abriam",
+          "example_en": "They used to open the church only on feast days.",
+          "example_pt": "Eles abriam a igreja só nos dias de festa."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "abrira",
+          "example_en": "I had already opened the bottle when she arrived.",
+          "example_pt": "Já abrira a garrafa quando ela chegou."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "abriras",
+          "example_en": "You had opened the window before the storm.",
+          "example_pt": "Abriras a janela antes da tempestade."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "abrira",
+          "example_en": "He had opened the shop before dawn.",
+          "example_pt": "Ele abrira a loja antes de amanhecer."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "abríramos",
+          "example_en": "We had opened the account years earlier.",
+          "example_pt": "Abríramos a conta anos antes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "abriram",
+          "example_en": "They had opened all the boxes before we got there.",
+          "example_pt": "Eles abriram todas as caixas antes de chegarmos."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "abrirei",
+          "example_en": "I will open the gift tomorrow.",
+          "example_pt": "Abrirei o presente amanhã."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "abrirás",
+          "example_en": "You will open the door when I knock.",
+          "example_pt": "Abrirás a porta quando eu bater."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "abrirá",
+          "example_en": "He will open the meeting at ten.",
+          "example_pt": "Ele abrirá a reunião às dez."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "abriremos",
+          "example_en": "We will open a new shop in Braga.",
+          "example_pt": "Abriremos uma loja nova em Braga."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "abrirão",
+          "example_en": "They will open the doors at eight.",
+          "example_pt": "Eles abrirão as portas às oito."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "abriria",
+          "example_en": "I would open the window, but it is cold.",
+          "example_pt": "Abriria a janela, mas está frio."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "abririas",
+          "example_en": "Would you open the door to a stranger?",
+          "example_pt": "Abririas a porta a um desconhecido?"
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "abriria",
+          "example_en": "He would open the shop earlier if he could.",
+          "example_pt": "Ele abriria a loja mais cedo se pudesse."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "abriríamos",
+          "example_en": "We would open the wine now, but the guests are late.",
+          "example_pt": "Abriríamos o vinho agora, mas os convidados estão atrasados."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "abririam",
+          "example_en": "They would open a bakery if they had money.",
+          "example_pt": "Eles abririam uma padaria se tivessem dinheiro."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "eu",
+          "form": "abra",
+          "example_en": "She wants me to open the letter now.",
+          "example_pt": "Ela quer que eu abra a carta agora."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "tu",
+          "form": "abras",
+          "example_en": "I prefer that you open the package.",
+          "example_pt": "Prefiro que tu abras a encomenda."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "ele",
+          "form": "abra",
+          "example_en": "It is important that he opens the shop on time.",
+          "example_pt": "É importante que ele abra a loja a horas."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "nos",
+          "form": "abramos",
+          "example_en": "He suggests that we open another bottle.",
+          "example_pt": "Ele sugere que abramos outra garrafa."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "eles",
+          "form": "abram",
+          "example_en": "I hope they open the road today.",
+          "example_pt": "Espero que eles abram a estrada hoje."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "eu",
+          "form": "abrisse",
+          "example_en": "If I opened the window, the noise would come in.",
+          "example_pt": "Se abrisse a janela, o barulho entrava."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "tu",
+          "form": "abrisses",
+          "example_en": "If you opened the door, we could see the garden.",
+          "example_pt": "Se abrisses a porta, podíamos ver o jardim."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "ele",
+          "form": "abrisse",
+          "example_en": "If he opened the shop earlier, he would sell more.",
+          "example_pt": "Se ele abrisse a loja mais cedo, venderia mais."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "nos",
+          "form": "abríssemos",
+          "example_en": "If we opened the box, we would spoil the surprise.",
+          "example_pt": "Se abríssemos a caixa, estragávamos a surpresa."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "eles",
+          "form": "abrissem",
+          "example_en": "If they opened the gates, everyone would come in.",
+          "example_pt": "Se eles abrissem os portões, entravam todos."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "eu",
+          "form": "abrir",
+          "example_en": "When I open the shop, I will call you.",
+          "example_pt": "Quando abrir a loja, telefono-te."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "tu",
+          "form": "abrires",
+          "example_en": "When you open the letter, read it out loud.",
+          "example_pt": "Quando abrires a carta, lê-a em voz alta."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "ele",
+          "form": "abrir",
+          "example_en": "If he opens the window, close it again.",
+          "example_pt": "Se ele abrir a janela, fecha-a outra vez."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "nos",
+          "form": "abrirmos",
+          "example_en": "When we open the wine, we will make a toast.",
+          "example_pt": "Quando abrirmos o vinho, fazemos um brinde."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "eles",
+          "form": "abrirem",
+          "example_en": "When they open the doors, we go in.",
+          "example_pt": "Quando eles abrirem as portas, entramos."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "abre",
+          "example_en": "Open the window, please!",
+          "example_pt": "Abre a janela, por favor!"
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "abra",
+          "example_en": "Let him open the box himself.",
+          "example_pt": "Que ele abra a caixa sozinho."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "abramos",
+          "example_en": "Let's open another bottle!",
+          "example_pt": "Abramos outra garrafa!"
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "abram",
+          "example_en": "Let them open the gates now.",
+          "example_pt": "Que eles abram os portões agora."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "abras",
+          "example_en": "Don't open that door!",
+          "example_pt": "Não abras essa porta!"
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "abra",
+          "example_en": "Don't let him open the letter.",
+          "example_pt": "Que ele não abra a carta."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "abramos",
+          "example_en": "Let's not open the presents yet.",
+          "example_pt": "Não abramos os presentes ainda."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "abram",
+          "example_en": "Don't let them open the windows.",
+          "example_pt": "Que eles não abram as janelas."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "abrir",
+          "example_en": "It's too dark for me to open the shutters.",
+          "example_pt": "Está demasiado escuro para eu abrir as persianas."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "abrires",
+          "example_en": "Wash your hands before you open the bread.",
+          "example_pt": "Lava as mãos antes de abrires o pão."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "abrir",
+          "example_en": "It's early for him to open the shop.",
+          "example_pt": "É cedo para ele abrir a loja."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "abrirmos",
+          "example_en": "It's better for us to open the windows.",
+          "example_pt": "É melhor abrirmos as janelas."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "abrirem",
+          "example_en": "It's time for them to open the doors.",
+          "example_pt": "É hora de eles abrirem as portas."
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "aberto",
+          "example_en": "He had opened the letters before lunch.",
+          "example_pt": "Ele tinha aberto as cartas antes do almoço."
+        },
+        {
+          "tense": "past_participle",
+          "person": "short",
+          "form": "aberto",
+          "example_en": "The museum is open on Sundays.",
+          "example_pt": "O museu está aberto aos domingos."
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "abrindo",
+          "example_en": "Opening the window, she felt the cold air.",
+          "example_pt": "Abrindo a janela, sentiu o ar frio."
+        }
+      ]
+    },
+    {
+      "infinitive": "aceitar",
+      "english": "to accept",
+      "forms": [
+        {
+          "tense": "present_indicative",
+          "person": "eu",
+          "form": "aceito",
+          "example_en": "I accept your invitation with pleasure.",
+          "example_pt": "Aceito o teu convite com prazer."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "tu",
+          "form": "aceitas",
+          "example_en": "You always accept the first offer.",
+          "example_pt": "Aceitas sempre a primeira oferta."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "ele",
+          "form": "aceita",
+          "example_en": "He accepts help when he needs it.",
+          "example_pt": "Ele aceita ajuda quando precisa."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "nos",
+          "form": "aceitamos",
+          "example_en": "We accept payment by card.",
+          "example_pt": "Aceitamos pagamento com cartão."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "eles",
+          "form": "aceitam",
+          "example_en": "They accept new members every month.",
+          "example_pt": "Eles aceitam novos membros todos os meses."
+        },
+        {
+          "tense": "preterite",
+          "person": "eu",
+          "form": "aceitei",
+          "example_en": "I accepted the job yesterday.",
+          "example_pt": "Aceitei o emprego ontem."
+        },
+        {
+          "tense": "preterite",
+          "person": "tu",
+          "form": "aceitaste",
+          "example_en": "You accepted the money without asking anything.",
+          "example_pt": "Aceitaste o dinheiro sem perguntar nada."
+        },
+        {
+          "tense": "preterite",
+          "person": "ele",
+          "form": "aceitou",
+          "example_en": "He accepted the apology right away.",
+          "example_pt": "Ele aceitou o pedido de desculpas logo."
+        },
+        {
+          "tense": "preterite",
+          "person": "nos",
+          "form": "aceitámos",
+          "example_en": "We accepted the ride to the station.",
+          "example_pt": "Aceitámos a boleia até à estação."
+        },
+        {
+          "tense": "preterite",
+          "person": "eles",
+          "form": "aceitaram",
+          "example_en": "They accepted our proposal on Friday.",
+          "example_pt": "Eles aceitaram a nossa proposta na sexta-feira."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "eu",
+          "form": "aceitava",
+          "example_en": "I used to accept every extra shift.",
+          "example_pt": "Aceitava todos os turnos extra."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "tu",
+          "form": "aceitavas",
+          "example_en": "You used to accept any excuse.",
+          "example_pt": "Aceitavas qualquer desculpa."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "ele",
+          "form": "aceitava",
+          "example_en": "He used to accept coffee at any hour.",
+          "example_pt": "Ele aceitava café a qualquer hora."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "nos",
+          "form": "aceitávamos",
+          "example_en": "We used to accept cash only.",
+          "example_pt": "Aceitávamos apenas dinheiro."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "eles",
+          "form": "aceitavam",
+          "example_en": "They used to accept dogs in the café.",
+          "example_pt": "Eles aceitavam cães no café."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "aceitara",
+          "example_en": "I had already accepted the invitation when she called.",
+          "example_pt": "Já aceitara o convite quando ela ligou."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "aceitaras",
+          "example_en": "You had accepted the deal before reading it.",
+          "example_pt": "Aceitaras o acordo antes de o ler."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "aceitara",
+          "example_en": "He had accepted the offer without telling anyone.",
+          "example_pt": "Ele aceitara a oferta sem dizer a ninguém."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "aceitáramos",
+          "example_en": "We had accepted the new rules months earlier.",
+          "example_pt": "Aceitáramos as novas regras meses antes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "aceitaram",
+          "example_en": "They had accepted the change long before us.",
+          "example_pt": "Eles aceitaram a mudança muito antes de nós."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "aceitarei",
+          "example_en": "I will accept whatever they decide.",
+          "example_pt": "Aceitarei o que eles decidirem."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "aceitarás",
+          "example_en": "You will accept the truth one day.",
+          "example_pt": "Aceitarás a verdade um dia."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "aceitará",
+          "example_en": "He will accept the invitation, I'm sure.",
+          "example_pt": "Ele aceitará o convite, tenho a certeza."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "aceitaremos",
+          "example_en": "We will accept the result, whatever it is.",
+          "example_pt": "Aceitaremos o resultado, seja ele qual for."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "aceitarão",
+          "example_en": "They will accept the new schedule.",
+          "example_pt": "Eles aceitarão o novo horário."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "aceitaria",
+          "example_en": "I would accept the job if it paid more.",
+          "example_pt": "Aceitaria o emprego se pagasse mais."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "aceitarias",
+          "example_en": "Would you accept a smaller house?",
+          "example_pt": "Aceitarias uma casa mais pequena?"
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "aceitaria",
+          "example_en": "He would accept the help, but he's proud.",
+          "example_pt": "Ele aceitaria a ajuda, mas é orgulhoso."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "aceitaríamos",
+          "example_en": "We would accept the offer with one condition.",
+          "example_pt": "Aceitaríamos a oferta com uma condição."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "aceitariam",
+          "example_en": "They would accept cards if they had a machine.",
+          "example_pt": "Eles aceitariam cartões se tivessem uma máquina."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "eu",
+          "form": "aceite",
+          "example_en": "She wants me to accept the invitation.",
+          "example_pt": "Ela quer que eu aceite o convite."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "tu",
+          "form": "aceites",
+          "example_en": "I hope you accept my apology.",
+          "example_pt": "Espero que aceites o meu pedido de desculpas."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "ele",
+          "form": "aceite",
+          "example_en": "It's important that he accepts the truth.",
+          "example_pt": "É importante que ele aceite a verdade."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "nos",
+          "form": "aceitemos",
+          "example_en": "They prefer that we accept the deal today.",
+          "example_pt": "Eles preferem que aceitemos o acordo hoje."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "eles",
+          "form": "aceitem",
+          "example_en": "I doubt that they accept cash.",
+          "example_pt": "Duvido que eles aceitem dinheiro."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "eu",
+          "form": "aceitasse",
+          "example_en": "If I accepted the offer, I would move to Porto.",
+          "example_pt": "Se aceitasse a oferta, mudava-me para o Porto."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "tu",
+          "form": "aceitasses",
+          "example_en": "If you accepted the ride, you'd get there sooner.",
+          "example_pt": "Se aceitasses a boleia, chegavas mais cedo."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "ele",
+          "form": "aceitasse",
+          "example_en": "If he accepted the money, everything would be easier.",
+          "example_pt": "Se ele aceitasse o dinheiro, tudo seria mais fácil."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "nos",
+          "form": "aceitássemos",
+          "example_en": "If we accepted the invitation, we would have to travel.",
+          "example_pt": "Se aceitássemos o convite, teríamos de viajar."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "eles",
+          "form": "aceitassem",
+          "example_en": "If they accepted cards, I would buy more.",
+          "example_pt": "Se eles aceitassem cartões, eu comprava mais."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "eu",
+          "form": "aceitar",
+          "example_en": "When I accept the job, I'll tell you.",
+          "example_pt": "Quando aceitar o emprego, digo-te."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "tu",
+          "form": "aceitares",
+          "example_en": "If you accept the offer, call me.",
+          "example_pt": "Se aceitares a oferta, liga-me."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "ele",
+          "form": "aceitar",
+          "example_en": "When he accepts the invitation, we'll book the table.",
+          "example_pt": "Quando ele aceitar o convite, reservamos a mesa."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "nos",
+          "form": "aceitarmos",
+          "example_en": "If we accept the plan, we start on Monday.",
+          "example_pt": "Se aceitarmos o plano, começamos na segunda-feira."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "eles",
+          "form": "aceitarem",
+          "example_en": "When they accept the terms, we sign.",
+          "example_pt": "Quando eles aceitarem as condições, assinamos."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "aceita",
+          "example_en": "Accept the help, please.",
+          "example_pt": "Aceita a ajuda, por favor."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "aceite",
+          "example_en": "Let him accept the invitation.",
+          "example_pt": "Que ele aceite o convite."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "aceitemos",
+          "example_en": "Let's accept the offer and move on.",
+          "example_pt": "Aceitemos a oferta e sigamos em frente."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "aceitem",
+          "example_en": "Let them accept the result.",
+          "example_pt": "Que eles aceitem o resultado."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "aceites",
+          "example_en": "Don't accept sweets from strangers.",
+          "example_pt": "Não aceites doces de estranhos."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "aceite",
+          "example_en": "Don't let him accept that condition.",
+          "example_pt": "Que ele não aceite essa condição."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "aceitemos",
+          "example_en": "Let's not accept the first price.",
+          "example_pt": "Não aceitemos o primeiro preço."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "aceitem",
+          "example_en": "Don't let them accept the package.",
+          "example_pt": "Que eles não aceitem a encomenda."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "aceitar",
+          "example_en": "It's too soon for me to accept the offer.",
+          "example_pt": "É cedo para eu aceitar a oferta."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "aceitares",
+          "example_en": "Before you accept, read the contract.",
+          "example_pt": "Antes de aceitares, lê o contrato."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "aceitar",
+          "example_en": "It's better for him to accept the help.",
+          "example_pt": "É melhor ele aceitar a ajuda."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "aceitarmos",
+          "example_en": "They are waiting for us to accept the proposal.",
+          "example_pt": "Estão à espera de aceitarmos a proposta."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "aceitarem",
+          "example_en": "It's hard for them to accept the change.",
+          "example_pt": "É difícil eles aceitarem a mudança."
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "aceitado",
+          "example_en": "We have accepted the new rules.",
+          "example_pt": "Temos aceitado as novas regras."
+        },
+        {
+          "tense": "past_participle",
+          "person": "short",
+          "form": "aceite",
+          "example_en": "The proposal was accepted by everyone.",
+          "example_pt": "A proposta foi aceite por todos."
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "aceitando",
+          "example_en": "Accepting the invitation, she smiled.",
+          "example_pt": "Aceitando o convite, ela sorriu."
+        }
+      ]
+    },
+    {
+      "infinitive": "ouvir",
+      "english": "to hear / to listen",
+      "forms": [
+        {
+          "tense": "present_indicative",
+          "person": "eu",
+          "form": "oiço",
+          "example_en": "I hear the neighbours' dog every night.",
+          "example_pt": "Oiço o cão dos vizinhos todas as noites."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "tu",
+          "form": "ouves",
+          "example_en": "You listen to the radio in the car.",
+          "example_pt": "Tu ouves a rádio no carro."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "ele",
+          "form": "ouve",
+          "example_en": "He hears the rain on the window.",
+          "example_pt": "Ele ouve a chuva na janela."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "nos",
+          "form": "ouvimos",
+          "example_en": "We listen to music while we cook.",
+          "example_pt": "Nós ouvimos música enquanto cozinhamos."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "eles",
+          "form": "ouvem",
+          "example_en": "They hear the train from the garden.",
+          "example_pt": "Eles ouvem o comboio do jardim."
+        },
+        {
+          "tense": "preterite",
+          "person": "eu",
+          "form": "ouvi",
+          "example_en": "I heard a strange noise last night.",
+          "example_pt": "Ouvi um ruído estranho ontem à noite."
+        },
+        {
+          "tense": "preterite",
+          "person": "tu",
+          "form": "ouviste",
+          "example_en": "You heard the whole story from Ana.",
+          "example_pt": "Tu ouviste a história toda da Ana."
+        },
+        {
+          "tense": "preterite",
+          "person": "ele",
+          "form": "ouviu",
+          "example_en": "He heard the doorbell and got up.",
+          "example_pt": "Ele ouviu a campainha e levantou-se."
+        },
+        {
+          "tense": "preterite",
+          "person": "nos",
+          "form": "ouvimos",
+          "example_en": "We heard that song at the party.",
+          "example_pt": "Nós ouvimos aquela canção na festa."
+        },
+        {
+          "tense": "preterite",
+          "person": "eles",
+          "form": "ouviram",
+          "example_en": "They heard the news on the radio.",
+          "example_pt": "Eles ouviram a notícia na rádio."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "eu",
+          "form": "ouvia",
+          "example_en": "I used to listen to this album every day.",
+          "example_pt": "Ouvia este álbum todos os dias."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "tu",
+          "form": "ouvias",
+          "example_en": "You used to listen to your grandfather's stories.",
+          "example_pt": "Tu ouvias as histórias do teu avô."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "ele",
+          "form": "ouvia",
+          "example_en": "He could hear the sea from his room.",
+          "example_pt": "Ele ouvia o mar do seu quarto."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "nos",
+          "form": "ouvíamos",
+          "example_en": "We used to listen to the football on the radio.",
+          "example_pt": "Nós ouvíamos o futebol na rádio."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "eles",
+          "form": "ouviam",
+          "example_en": "They used to hear the church bells at noon.",
+          "example_pt": "Eles ouviam os sinos da igreja ao meio-dia."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "ouvira",
+          "example_en": "I had heard that name before.",
+          "example_pt": "Já ouvira aquele nome antes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "ouviras",
+          "example_en": "You had heard the warning and said nothing.",
+          "example_pt": "Tu ouviras o aviso e não disseste nada."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "ouvira",
+          "example_en": "He had heard the news that morning.",
+          "example_pt": "Ele ouvira a notícia naquela manhã."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "ouvíramos",
+          "example_en": "We had heard that promise many times.",
+          "example_pt": "Nós ouvíramos aquela promessa muitas vezes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "ouviram",
+          "example_en": "They had already heard the news before I called.",
+          "example_pt": "Já ouviram a notícia antes de eu telefonar."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "ouvirei",
+          "example_en": "I will hear the recording tomorrow.",
+          "example_pt": "Ouvirei a gravação amanhã."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "ouvirás",
+          "example_en": "You will hear the answer soon.",
+          "example_pt": "Tu ouvirás a resposta em breve."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "ouvirá",
+          "example_en": "He will hear the results on the radio.",
+          "example_pt": "Ele ouvirá os resultados na rádio."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "ouviremos",
+          "example_en": "We will hear the concert from here.",
+          "example_pt": "Nós ouviremos o concerto daqui."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "ouvirão",
+          "example_en": "They will hear the bells at midnight.",
+          "example_pt": "Eles ouvirão os sinos à meia-noite."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "ouviria",
+          "example_en": "I would hear better with the window closed.",
+          "example_pt": "Ouviria melhor com a janela fechada."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "ouvirias",
+          "example_en": "You would hear the alarm if you slept less deeply.",
+          "example_pt": "Tu ouvirias o despertador se dormisses menos profundamente."
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "ouviria",
+          "example_en": "He would hear better if you turned off the television.",
+          "example_pt": "Ele ouviria melhor se desligasses a televisão."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "ouviríamos",
+          "example_en": "We would hear the sea from that house.",
+          "example_pt": "Nós ouviríamos o mar daquela casa."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "ouviriam",
+          "example_en": "They would hear the music from the street.",
+          "example_pt": "Eles ouviriam a música da rua."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "eu",
+          "form": "oiça",
+          "example_en": "She speaks louder so that I can hear her.",
+          "example_pt": "Ela fala mais alto para que eu a oiça."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "tu",
+          "form": "oiças",
+          "example_en": "I want you to listen to this song.",
+          "example_pt": "Quero que tu oiças esta canção."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "ele",
+          "form": "oiça",
+          "example_en": "It's important that he hears the truth.",
+          "example_pt": "É importante que ele oiça a verdade."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "nos",
+          "form": "oiçamos",
+          "example_en": "He hopes that we listen to his advice.",
+          "example_pt": "Ele espera que nós oiçamos os seus conselhos."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "eles",
+          "form": "oiçam",
+          "example_en": "I doubt that they hear us from there.",
+          "example_pt": "Duvido que eles nos oiçam de lá."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "eu",
+          "form": "ouvisse",
+          "example_en": "If I heard the alarm, I would get up.",
+          "example_pt": "Se eu ouvisse o despertador, levantava-me."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "tu",
+          "form": "ouvisses",
+          "example_en": "If you listened to me, everything would be easier.",
+          "example_pt": "Se tu me ouvisses, tudo seria mais fácil."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "ele",
+          "form": "ouvisse",
+          "example_en": "If he heard the noise, he would call the police.",
+          "example_pt": "Se ele ouvisse o barulho, chamava a polícia."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "nos",
+          "form": "ouvíssemos",
+          "example_en": "If we heard the whole song, we would recognise it.",
+          "example_pt": "Se nós ouvíssemos a canção toda, reconhecê-la-íamos."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "eles",
+          "form": "ouvissem",
+          "example_en": "If they heard the shouting, they would come running.",
+          "example_pt": "Se eles ouvissem os gritos, vinham a correr."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "eu",
+          "form": "ouvir",
+          "example_en": "When I hear the bell, I'll open the door.",
+          "example_pt": "Quando eu ouvir a campainha, abro a porta."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "tu",
+          "form": "ouvires",
+          "example_en": "When you hear my voice, come in.",
+          "example_pt": "Quando ouvires a minha voz, entra."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "ele",
+          "form": "ouvir",
+          "example_en": "If he hears the news, he'll call us.",
+          "example_pt": "Se ele ouvir a notícia, liga-nos."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "nos",
+          "form": "ouvirmos",
+          "example_en": "When we hear the whistle, we start.",
+          "example_pt": "Quando ouvirmos o apito, começamos."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "eles",
+          "form": "ouvirem",
+          "example_en": "When they hear the music, they'll dance.",
+          "example_pt": "Quando eles ouvirem a música, vão dançar."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "ouve",
+          "example_en": "Listen to me for a moment!",
+          "example_pt": "Ouve-me por um momento!"
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "oiça",
+          "example_en": "Listen carefully, Mr. Silva.",
+          "example_pt": "Oiça com atenção, senhor Silva."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "oiçamos",
+          "example_en": "Let's listen to the end of the song.",
+          "example_pt": "Oiçamos o fim da canção."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "oiçam",
+          "example_en": "Listen to the instructions, please.",
+          "example_pt": "Oiçam as instruções, por favor."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "oiças",
+          "example_en": "Don't listen to those rumours!",
+          "example_pt": "Não oiças esses rumores!"
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "oiça",
+          "example_en": "Don't listen to him, sir.",
+          "example_pt": "Não o oiça, senhor."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "oiçamos",
+          "example_en": "Let's not listen to rumours.",
+          "example_pt": "Não oiçamos rumores."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "oiçam",
+          "example_en": "Don't listen to the neighbours' gossip.",
+          "example_pt": "Não oiçam a conversa dos vizinhos."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "ouvir",
+          "example_en": "She spoke louder for me to hear.",
+          "example_pt": "Ela falou mais alto para eu ouvir."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "ouvires",
+          "example_en": "Before you hear the answer, think a little.",
+          "example_pt": "Antes de ouvires a resposta, pensa um pouco."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "ouvir",
+          "example_en": "It's better for him to hear it from you.",
+          "example_pt": "É melhor ele ouvir isso de ti."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "ouvirmos",
+          "example_en": "They turned up the volume for us to hear.",
+          "example_pt": "Aumentaram o volume para nós ouvirmos."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "ouvirem",
+          "example_en": "It's important for them to hear both sides.",
+          "example_pt": "É importante eles ouvirem as duas partes."
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "ouvido",
+          "example_en": "We had heard that song on the radio.",
+          "example_pt": "Tínhamos ouvido essa canção na rádio."
+        },
+        {
+          "tense": "past_participle",
+          "person": "short",
+          "form": "ouvido",
+          "example_en": "I've been hearing that song all week.",
+          "example_pt": "Tenho ouvido essa canção toda a semana."
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "ouvindo",
+          "example_en": "Hearing the alarm, he left the house at once.",
+          "example_pt": "Ouvindo o alarme, saiu logo de casa."
+        }
+      ]
+    },
+    {
+      "infinitive": "partir",
+      "english": "to leave / to depart (also: to break)",
+      "forms": [
+        {
+          "tense": "present_indicative",
+          "person": "eu",
+          "form": "parto",
+          "example_en": "I leave tomorrow at dawn.",
+          "example_pt": "Parto amanhã de madrugada."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "tu",
+          "form": "partes",
+          "example_en": "You leave early every Monday.",
+          "example_pt": "Partes cedo todas as segundas."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "ele",
+          "form": "parte",
+          "example_en": "The train leaves at eight.",
+          "example_pt": "O comboio parte às oito."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "nos",
+          "form": "partimos",
+          "example_en": "We leave right after lunch.",
+          "example_pt": "Partimos logo depois do almoço."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "eles",
+          "form": "partem",
+          "example_en": "They leave for Lisbon on Friday.",
+          "example_pt": "Eles partem para Lisboa na sexta."
+        },
+        {
+          "tense": "preterite",
+          "person": "eu",
+          "form": "parti",
+          "example_en": "I left without saying goodbye.",
+          "example_pt": "Parti sem dizer adeus."
+        },
+        {
+          "tense": "preterite",
+          "person": "tu",
+          "form": "partiste",
+          "example_en": "You left before the film ended.",
+          "example_pt": "Partiste antes de o filme acabar."
+        },
+        {
+          "tense": "preterite",
+          "person": "ele",
+          "form": "partiu",
+          "example_en": "He left yesterday morning.",
+          "example_pt": "Ele partiu ontem de manhã."
+        },
+        {
+          "tense": "preterite",
+          "person": "nos",
+          "form": "partimos",
+          "example_en": "We left at six in the morning.",
+          "example_pt": "Partimos às seis da manhã."
+        },
+        {
+          "tense": "preterite",
+          "person": "eles",
+          "form": "partiram",
+          "example_en": "They left on the first bus.",
+          "example_pt": "Partiram no primeiro autocarro."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "eu",
+          "form": "partia",
+          "example_en": "I used to leave home before sunrise.",
+          "example_pt": "Partia de casa antes de amanhecer."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "tu",
+          "form": "partias",
+          "example_en": "You always used to leave without warning.",
+          "example_pt": "Partias sempre sem avisar."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "ele",
+          "form": "partia",
+          "example_en": "He was leaving when the phone rang.",
+          "example_pt": "Ele partia quando o telefone tocou."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "nos",
+          "form": "partíamos",
+          "example_en": "We used to leave for the beach every summer.",
+          "example_pt": "Partíamos para a praia todos os verões."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "eles",
+          "form": "partiam",
+          "example_en": "They used to leave at dawn to go fishing.",
+          "example_pt": "Partiam de madrugada para ir pescar."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "partira",
+          "example_en": "I had already left before the letter arrived.",
+          "example_pt": "Já partira antes de a carta chegar."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "partiras",
+          "example_en": "You had left long before we found out.",
+          "example_pt": "Tu já partiras muito antes de sabermos."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "partira",
+          "example_en": "He had left without leaving an address.",
+          "example_pt": "Ele partira sem deixar endereço."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "partíramos",
+          "example_en": "We had already left before the storm.",
+          "example_pt": "Já partíramos antes da tempestade."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "partiram",
+          "example_en": "They had already left when we arrived.",
+          "example_pt": "Já partiram quando nós chegámos."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "partirei",
+          "example_en": "I will leave tomorrow morning.",
+          "example_pt": "Partirei amanhã de manhã."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "partirás",
+          "example_en": "You will leave with the others.",
+          "example_pt": "Partirás com os outros."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "partirá",
+          "example_en": "She will leave in September.",
+          "example_pt": "Ela partirá em setembro."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "partiremos",
+          "example_en": "We will leave as soon as it stops raining.",
+          "example_pt": "Partiremos assim que parar de chover."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "partirão",
+          "example_en": "They will leave before dawn.",
+          "example_pt": "Partirão antes de amanhecer."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "partiria",
+          "example_en": "I would leave today if I had the money.",
+          "example_pt": "Partiria hoje se tivesse dinheiro."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "partirias",
+          "example_en": "You would leave sooner if you could.",
+          "example_pt": "Partirias mais cedo se pudesses."
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "partiria",
+          "example_en": "He would leave, but he has no car.",
+          "example_pt": "Ele partiria, mas não tem carro."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "partiríamos",
+          "example_en": "We would leave right now if the weather improved.",
+          "example_pt": "Partiríamos agora mesmo se o tempo melhorasse."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "partiriam",
+          "example_en": "They would leave earlier if there were tickets.",
+          "example_pt": "Partiriam mais cedo se houvesse bilhetes."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "eu",
+          "form": "parta",
+          "example_en": "My mother wants me to leave early.",
+          "example_pt": "A minha mãe quer que eu parta cedo."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "tu",
+          "form": "partas",
+          "example_en": "I hope you leave before the rain.",
+          "example_pt": "Espero que partas antes da chuva."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "ele",
+          "form": "parta",
+          "example_en": "It's better that he leaves now.",
+          "example_pt": "É melhor que ele parta agora."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "nos",
+          "form": "partamos",
+          "example_en": "The guide wants us to leave together.",
+          "example_pt": "O guia quer que partamos juntos."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "eles",
+          "form": "partam",
+          "example_en": "It's important that they leave on time.",
+          "example_pt": "É importante que partam a horas."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "eu",
+          "form": "partisse",
+          "example_en": "If I left now, I would catch the train.",
+          "example_pt": "Se partisse agora, apanhava o comboio."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "tu",
+          "form": "partisses",
+          "example_en": "If you left tomorrow, I would go with you.",
+          "example_pt": "Se partisses amanhã, eu ia contigo."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "ele",
+          "form": "partisse",
+          "example_en": "If he left earlier, he would avoid the traffic.",
+          "example_pt": "Se ele partisse mais cedo, evitava o trânsito."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "nos",
+          "form": "partíssemos",
+          "example_en": "If we left at five, we would arrive by lunchtime.",
+          "example_pt": "Se partíssemos às cinco, chegávamos à hora do almoço."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "eles",
+          "form": "partissem",
+          "example_en": "If they left now, they would still make it in time.",
+          "example_pt": "Se partissem agora, ainda chegavam a tempo."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "eu",
+          "form": "partir",
+          "example_en": "When I leave, I'll leave you the keys.",
+          "example_pt": "Quando partir, deixo-te as chaves."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "tu",
+          "form": "partires",
+          "example_en": "When you leave, close the door.",
+          "example_pt": "Quando partires, fecha a porta."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "ele",
+          "form": "partir",
+          "example_en": "If he leaves early, call me.",
+          "example_pt": "Se ele partir cedo, liga-me."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "nos",
+          "form": "partirmos",
+          "example_en": "When we leave, we'll take the dog.",
+          "example_pt": "Quando partirmos, levamos o cão."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "eles",
+          "form": "partirem",
+          "example_en": "When they leave, the house will be quiet.",
+          "example_pt": "Quando partirem, a casa fica silenciosa."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "parte",
+          "example_en": "Leave now, it's getting late!",
+          "example_pt": "Parte agora, está a ficar tarde!"
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "parta",
+          "example_en": "Leave right away, Mr Silva, the train won't wait.",
+          "example_pt": "Parta já, senhor Silva, o comboio não espera."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "partamos",
+          "example_en": "Let's leave before it gets dark.",
+          "example_pt": "Partamos antes de escurecer."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "partam",
+          "example_en": "Leave before night falls.",
+          "example_pt": "Partam antes que anoiteça."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "partas",
+          "example_en": "Don't leave without me!",
+          "example_pt": "Não partas sem mim!"
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "parta",
+          "example_en": "Don't leave yet, Mr Silva.",
+          "example_pt": "Não parta ainda, senhor Silva."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "partamos",
+          "example_en": "Let's not leave without paying.",
+          "example_pt": "Não partamos sem pagar."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "partam",
+          "example_en": "Don't leave without your coats.",
+          "example_pt": "Não partam sem os casacos."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "partir",
+          "example_en": "It's too early for me to leave.",
+          "example_pt": "É demasiado cedo para eu partir."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "partires",
+          "example_en": "Before you leave, drink your coffee.",
+          "example_pt": "Antes de partires, bebe o café."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "partir",
+          "example_en": "It's better for him to leave now.",
+          "example_pt": "É melhor ele partir agora."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "partirmos",
+          "example_en": "Before we left, we closed the windows.",
+          "example_pt": "Antes de partirmos, fechámos as janelas."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "partirem",
+          "example_en": "After they leave, I'll tidy everything up.",
+          "example_pt": "Depois de eles partirem, arrumo tudo."
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "partido",
+          "example_en": "She had already left when I arrived.",
+          "example_pt": "Ela já tinha partido quando cheguei."
+        },
+        {
+          "tense": "past_participle",
+          "person": "short",
+          "form": "partido",
+          "example_en": "The vase is broken.",
+          "example_pt": "O vaso está partido."
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "partindo",
+          "example_en": "Leaving now, we'll arrive on time.",
+          "example_pt": "Partindo agora, chegamos a horas."
+        }
+      ]
+    },
+    {
+      "infinitive": "pôr",
+      "english": "to put",
+      "forms": [
+        {
+          "tense": "present_indicative",
+          "person": "eu",
+          "form": "ponho",
+          "example_en": "I put the keys on the table.",
+          "example_pt": "Ponho as chaves na mesa."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "tu",
+          "form": "pões",
+          "example_en": "You always put too much salt in the soup.",
+          "example_pt": "Pões sempre demasiado sal na sopa."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "ele",
+          "form": "põe",
+          "example_en": "He puts the milk in the fridge.",
+          "example_pt": "Ele põe o leite no frigorífico."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "nos",
+          "form": "pomos",
+          "example_en": "We put the bags in the car.",
+          "example_pt": "Pomos os sacos no carro."
+        },
+        {
+          "tense": "present_indicative",
+          "person": "eles",
+          "form": "põem",
+          "example_en": "They put the chairs in the garden.",
+          "example_pt": "Eles põem as cadeiras no jardim."
+        },
+        {
+          "tense": "preterite",
+          "person": "eu",
+          "form": "pus",
+          "example_en": "I put the letter in the post box.",
+          "example_pt": "Pus a carta no marco do correio."
+        },
+        {
+          "tense": "preterite",
+          "person": "tu",
+          "form": "puseste",
+          "example_en": "You put your phone on the sofa.",
+          "example_pt": "Puseste o telemóvel no sofá."
+        },
+        {
+          "tense": "preterite",
+          "person": "ele",
+          "form": "pôs",
+          "example_en": "He put the bread on the plate.",
+          "example_pt": "Ele pôs o pão no prato."
+        },
+        {
+          "tense": "preterite",
+          "person": "nos",
+          "form": "pusemos",
+          "example_en": "We put the tent next to the river.",
+          "example_pt": "Pusemos a tenda ao lado do rio."
+        },
+        {
+          "tense": "preterite",
+          "person": "eles",
+          "form": "puseram",
+          "example_en": "They put the books on the shelf.",
+          "example_pt": "Eles puseram os livros na estante."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "eu",
+          "form": "punha",
+          "example_en": "I used to put sugar in my coffee.",
+          "example_pt": "Punha açúcar no café."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "tu",
+          "form": "punhas",
+          "example_en": "You used to put your boots by the door.",
+          "example_pt": "Punhas as botas junto à porta."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "ele",
+          "form": "punha",
+          "example_en": "He used to put the newspaper on the counter.",
+          "example_pt": "Ele punha o jornal no balcão."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "nos",
+          "form": "púnhamos",
+          "example_en": "We used to put the bikes in the garage.",
+          "example_pt": "Púnhamos as bicicletas na garagem."
+        },
+        {
+          "tense": "past_imperfect_indicative",
+          "person": "eles",
+          "form": "punham",
+          "example_en": "They used to put flowers on the table every Sunday.",
+          "example_pt": "Punham flores na mesa todos os domingos."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "pusera",
+          "example_en": "I had put the money in the drawer before leaving.",
+          "example_pt": "Pusera o dinheiro na gaveta antes de sair."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "puseras",
+          "example_en": "You had put the coat on the chair.",
+          "example_pt": "Puseras o casaco na cadeira."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "pusera",
+          "example_en": "He had put the fish in the freezer.",
+          "example_pt": "Ele pusera o peixe no congelador."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "puséramos",
+          "example_en": "We had put the boxes in the cellar.",
+          "example_pt": "Puséramos as caixas na cave."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "puseram",
+          "example_en": "They had already set the table before we arrived.",
+          "example_pt": "Eles já puseram a mesa antes de nós chegarmos."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "porei",
+          "example_en": "I will put the towels in the bathroom.",
+          "example_pt": "Porei as toalhas na casa de banho."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "porás",
+          "example_en": "You will put the tickets in your wallet.",
+          "example_pt": "Porás os bilhetes na carteira."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "porá",
+          "example_en": "He will put the cake in the oven.",
+          "example_pt": "Ele porá o bolo no forno."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "poremos",
+          "example_en": "We will put a table on the terrace.",
+          "example_pt": "Poremos uma mesa na esplanada."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "porão",
+          "example_en": "They will put the luggage on the train.",
+          "example_pt": "Eles porão as malas no comboio."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "poria",
+          "example_en": "I would put a plant by the window.",
+          "example_pt": "Poria uma planta junto à janela."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "porias",
+          "example_en": "You would put more butter in the dough.",
+          "example_pt": "Porias mais manteiga na massa."
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "poria",
+          "example_en": "He would put the sofa next to the window.",
+          "example_pt": "Ele poria o sofá junto à janela."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "poríamos",
+          "example_en": "We would put the children to bed earlier.",
+          "example_pt": "Poríamos as crianças na cama mais cedo."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "poriam",
+          "example_en": "They would put a bench in the square.",
+          "example_pt": "Eles poriam um banco na praça."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "eu",
+          "form": "ponha",
+          "example_en": "She wants me to put the plates on the table.",
+          "example_pt": "Ela quer que eu ponha os pratos na mesa."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "tu",
+          "form": "ponhas",
+          "example_en": "I hope you put on a coat.",
+          "example_pt": "Espero que ponhas um casaco."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "ele",
+          "form": "ponha",
+          "example_en": "It's better that he puts the car in the garage.",
+          "example_pt": "É melhor que ele ponha o carro na garagem."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "nos",
+          "form": "ponhamos",
+          "example_en": "The teacher wants us to put our names on the sheet.",
+          "example_pt": "O professor quer que ponhamos os nomes na folha."
+        },
+        {
+          "tense": "present_subjunctive",
+          "person": "eles",
+          "form": "ponham",
+          "example_en": "I doubt they put the rubbish outside.",
+          "example_pt": "Duvido que ponham o lixo na rua."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "eu",
+          "form": "pusesse",
+          "example_en": "If I put more water, the soup would be better.",
+          "example_pt": "Se pusesse mais água, a sopa ficava melhor."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "tu",
+          "form": "pusesses",
+          "example_en": "If you put on your glasses, you would see better.",
+          "example_pt": "Se pusesses os óculos, verias melhor."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "ele",
+          "form": "pusesse",
+          "example_en": "If he put the phone away, he would listen to us.",
+          "example_pt": "Se ele pusesse o telemóvel de lado, ouvia-nos."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "nos",
+          "form": "puséssemos",
+          "example_en": "If we put a rug here, the room would be warmer.",
+          "example_pt": "Se puséssemos um tapete aqui, a sala ficava mais quente."
+        },
+        {
+          "tense": "past_imperfect_subjunctive",
+          "person": "eles",
+          "form": "pusessem",
+          "example_en": "If they put a sign there, nobody would get lost.",
+          "example_pt": "Se pusessem uma placa ali, ninguém se perdia."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "eu",
+          "form": "puser",
+          "example_en": "When I set the table, we can eat.",
+          "example_pt": "Quando eu puser a mesa, podemos comer."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "tu",
+          "form": "puseres",
+          "example_en": "When you put the keys there, tell me.",
+          "example_pt": "Quando puseres as chaves ali, diz-me."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "ele",
+          "form": "puser",
+          "example_en": "If he puts sugar in the tea, I won't drink it.",
+          "example_pt": "Se ele puser açúcar no chá, não o bebo."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "nos",
+          "form": "pusermos",
+          "example_en": "When we put the table outside, we'll have dinner.",
+          "example_pt": "Quando pusermos a mesa fora, jantamos."
+        },
+        {
+          "tense": "future_subjunctive",
+          "person": "eles",
+          "form": "puserem",
+          "example_en": "When they put the bins out, the truck will come.",
+          "example_pt": "Quando puserem os contentores na rua, o camião vem."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "tu",
+          "form": "põe",
+          "example_en": "Put the bag on the floor.",
+          "example_pt": "Põe o saco no chão."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "ele",
+          "form": "ponha",
+          "example_en": "Put your coat here, sir.",
+          "example_pt": "Ponha o casaco aqui, senhor."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "nos",
+          "form": "ponhamos",
+          "example_en": "Let's put the table by the window.",
+          "example_pt": "Ponhamos a mesa junto à janela."
+        },
+        {
+          "tense": "imperative_affirmative",
+          "person": "eles",
+          "form": "ponham",
+          "example_en": "Put the bags in the boot, please.",
+          "example_pt": "Ponham as malas na bagageira, por favor."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "tu",
+          "form": "ponhas",
+          "example_en": "Don't put your feet on the sofa.",
+          "example_pt": "Não ponhas os pés no sofá."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "ele",
+          "form": "ponha",
+          "example_en": "Don't put the box there, sir.",
+          "example_pt": "Não ponha a caixa ali, senhor."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "nos",
+          "form": "ponhamos",
+          "example_en": "Let's not put more chairs in the room.",
+          "example_pt": "Não ponhamos mais cadeiras na sala."
+        },
+        {
+          "tense": "imperative_negative",
+          "person": "eles",
+          "form": "ponham",
+          "example_en": "Don't put the glasses near the edge.",
+          "example_pt": "Não ponham os copos perto da beira."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eu",
+          "form": "pôr",
+          "example_en": "It's time for me to put the food on the table.",
+          "example_pt": "É hora de eu pôr a comida na mesa."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "tu",
+          "form": "pores",
+          "example_en": "Before you put on your shoes, sweep the floor.",
+          "example_pt": "Antes de pores os sapatos, varre o chão."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "ele",
+          "form": "pôr",
+          "example_en": "It's better for him to put the money in the bank.",
+          "example_pt": "É melhor ele pôr o dinheiro no banco."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "nos",
+          "form": "pormos",
+          "example_en": "They asked us to put the boxes in order.",
+          "example_pt": "Pediram para pormos as caixas em ordem."
+        },
+        {
+          "tense": "personal_infinitive",
+          "person": "eles",
+          "form": "porem",
+          "example_en": "It's important for them to put the helmets on.",
+          "example_pt": "É importante eles porem os capacetes."
+        },
+        {
+          "tense": "past_participle",
+          "person": "inv",
+          "form": "posto",
+          "example_en": "I have been putting money aside every month.",
+          "example_pt": "Tenho posto dinheiro de lado todos os meses."
+        },
+        {
+          "tense": "past_participle",
+          "person": "short",
+          "form": "posto",
+          "example_en": "He had put the car in the garage.",
+          "example_pt": "Ele tinha posto o carro na garagem."
+        },
+        {
+          "tense": "present_participle",
+          "person": "inv",
+          "form": "pondo",
+          "example_en": "She left in a hurry, putting on her coat.",
+          "example_pt": "Saiu à pressa, pondo o casaco."
+        }
+      ]
     }
   ]
 }

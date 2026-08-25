@@ -207,3 +207,59 @@ def test_upsert_verb_stores_alternative_forms(tmp_path):
         by_key = {(f.tense, f.person): f for f in verb.forms}
         assert by_key[("present_indicative", "eu")].accepted == ["oiço", "ouça"]
         assert by_key[("preterite", "eu")].accepted == ["ouvi"]
+
+
+def test_seed_cells_accept_alternatives(tmp_path, monkeypatch):
+    """A list-valued cell seeds its alternatives, which all grade as correct.
+
+    ``oiço``/``ouço`` are both current European Portuguese. If the seed file
+    could only carry one, re-seeding a verb exported from the database would
+    start marking the other one wrong.
+    """
+    Session = _session(tmp_path)
+    monkeypatch.setattr(
+        seed_mod,
+        "SEED_FILE",
+        _write_seed(
+            tmp_path,
+            [{
+                "infinitive": "ouvir",
+                "forms": {"present_indicative": {"eu": ["oiço", "ouço"]}},
+            }],
+        ),
+    )
+    with Session() as db:
+        assert seed_verbs(db) == 1
+        form = db.scalar(select(Form))
+        assert form.form_text == "oiço"  # the answer is the first entry
+        assert [v.text for v in form.variants] == ["ouço"]
+
+
+def test_short_participle_can_differ(tmp_path, monkeypatch):
+    """``aceitar`` takes ``aceitado`` with ter/haver but ``aceite`` with ser/estar.
+
+    Without the second field both rows would seed as ``aceitado``, quietly
+    losing the distinction the two participle rows exist to drill.
+    """
+    Session = _session(tmp_path)
+    monkeypatch.setattr(
+        seed_mod,
+        "SEED_FILE",
+        _write_seed(
+            tmp_path,
+            [{
+                "infinitive": "aceitar",
+                "past_participle": "aceitado",
+                "past_participle_short": ["aceite", "aceito"],
+                "forms": {},
+            }],
+        ),
+    )
+    with Session() as db:
+        assert seed_verbs(db) == 2
+        by_person = {f.person: f for f in db.scalars(select(Form)).all()}
+        assert by_person[INVARIABLE_PERSON].form_text == "aceitado"
+        assert by_person[SHORT_PERSON].form_text == "aceite"
+        assert [v.text for v in by_person[SHORT_PERSON].variants] == ["aceito"]
+        # The verb column tracks the ter/haver participle, not the short one.
+        assert db.scalar(select(Verb)).past_participle == "aceitado"
