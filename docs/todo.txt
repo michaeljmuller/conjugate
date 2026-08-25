@@ -49,9 +49,15 @@
   something is worth more than a row that never does.
 
   implemented as a display rule -- LanguageAdapter.contrastive_rows names the
-  (tense, person, mirrors) triple, api._redundant_rows drops the row when the
-  forms match.  both rows are still stored and seeded, so reverting to (a) is
+  (tense, person, mirrors) triple, api._contrast drops the row when the forms
+  match.  both rows are still stored and seeded, so reverting to (a) is
   returning [] from the adapter.  no migration, no data lost.
+
+  hiding the row also drops the surviving row's "ter / haver" label.  that
+  label is only true as a contrast with a visible "ser / estar" beneath it:
+  partido is what you use with either auxiliary, so a lone labelled row would
+  assert a restriction the verb does not have.  unlabelled it falls back to the
+  tense heading, as the gerund already does.
 
   it also needed no example backfill: aceitar is the only verb that still shows
   the row and its sentence was already correct.  the two wrong ter-auxiliary

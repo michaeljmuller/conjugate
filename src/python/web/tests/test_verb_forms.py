@@ -50,10 +50,14 @@ def _client(tmp_path, *, past: str, short: str, short_variants: tuple[str, ...] 
     return TestClient(app), vid
 
 
-def _participle_persons(client, vid):
+def _participle_rows(client, vid):
     blocks = client.get(f"/api/verbs/{vid}/forms").json()["blocks"]
     block = next(b for b in blocks if b["tense"] == PAST_PARTICIPLE_TENSE)
-    return [r["person"] for r in block["rows"]]
+    return [(r["person"], r["label"]) for r in block["rows"]]
+
+
+def _participle_persons(client, vid):
+    return [person for person, _ in _participle_rows(client, vid)]
 
 
 def test_short_participle_hidden_when_it_repeats_the_regular_one(tmp_path):
@@ -103,5 +107,31 @@ def test_variants_alone_do_not_keep_the_row(tmp_path):
     )
     try:
         assert _participle_persons(client, vid) == [INVARIABLE_PERSON]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_lone_participle_row_loses_its_auxiliary_label(tmp_path):
+    """"ter / haver" is only true as a contrast with a visible "ser / estar".
+
+    ``partido`` is what you use with either auxiliary, so labelling the one
+    surviving row "ter / haver" would assert a restriction the verb does not
+    have. The row falls back to the tense heading, as the gerund does.
+    """
+    client, vid = _client(tmp_path, past="partido", short="partido")
+    try:
+        assert _participle_rows(client, vid) == [(INVARIABLE_PERSON, "")]
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_both_rows_keep_their_labels_when_both_show(tmp_path):
+    """With the contrast visible, the auxiliaries are the point of the rows."""
+    client, vid = _client(tmp_path, past="aceitado", short="aceite")
+    try:
+        assert _participle_rows(client, vid) == [
+            (INVARIABLE_PERSON, "ter / haver"),
+            (SHORT_PERSON, "ser / estar"),
+        ]
     finally:
         app.dependency_overrides.clear()

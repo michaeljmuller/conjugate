@@ -304,9 +304,8 @@ def test_both_participle_rows_are_stored_but_only_one_is_drilled(env, monkeypatc
 
     blocks = client.get(f"/api/verbs/{job['verb_id']}/forms").json()["blocks"]
     participle = next(b for b in blocks if b["tense"] == "past_participle")
-    assert [(r["person"], r["label"]) for r in participle["rows"]] == [
-        ("inv", "ter / haver"),
-    ]
+    # The label goes with the contrast: alone, the row is just "the participle".
+    assert [(r["person"], r["label"]) for r in participle["rows"]] == [("inv", "")]
 
 
 # ---- failure -------------------------------------------------------------

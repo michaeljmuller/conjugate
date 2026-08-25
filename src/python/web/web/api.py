@@ -284,25 +284,35 @@ async def stream_verb_job(job_id: str, user: User = Depends(current_user)):
     )
 
 
-def _redundant_rows(adapter, by_key: dict[tuple[str, str], Form]) -> set[tuple[str, str]]:
-    """Contrastive rows this verb should not render, because nothing contrasts.
+def _contrast(
+    adapter, by_key: dict[tuple[str, str], Form]
+) -> tuple[set[tuple[str, str]], set[tuple[str, str]]]:
+    """``(rows to hide, rows to leave unlabelled)`` for one verb's stored forms.
 
     ``adapter.contrastive_rows`` names rows that only earn a place when they
     differ from another row — pt-PT's ser/estar participle against the ter/haver
     one. When the two hold the same form the second row is the answer above it
     typed again, so it is dropped from the drill.
 
+    Dropping it also costs the row it contrasted with its label. "ter / haver"
+    reads as a restriction, and it is only true as one against a visible
+    "ser / estar" beneath it: ``partido`` is what you use with either auxiliary,
+    so a lone row labelled "ter / haver" would assert something false. Left
+    unlabelled it falls back to the tense heading, as the gerund already does.
+
     Compares ``form_text`` only: a row whose alternatives differ still shows,
     since the displayed answer is what the learner is asked to produce.
     """
-    hidden = set()
+    hidden: set[tuple[str, str]] = set()
+    unlabelled: set[tuple[str, str]] = set()
     for tense, person, mirrors in adapter.contrastive_rows:
         row = by_key.get((tense, person))
         against = by_key.get((tense, mirrors))
         if row is not None and against is not None:
             if row.form_text == against.form_text:
                 hidden.add((tense, person))
-    return hidden
+                unlabelled.add((tense, mirrors))
+    return hidden, unlabelled
 
 
 @router.get("/verbs/{verb_id}/forms")
@@ -321,7 +331,7 @@ def verb_forms(
     by_key: dict[tuple[str, str], Form] = {
         (f.tense, f.person): f for f in verb.forms
     }
-    hidden = _redundant_rows(adapter, by_key)
+    hidden, unlabelled = _contrast(adapter, by_key)
     blocks = []
     for tense in _enabled_tenses(settings, adapter):
         rows = []
@@ -333,7 +343,11 @@ def verb_forms(
                 {
                     "form_id": form.id,
                     "person": person,
-                    "label": adapter.person_label(tense["key"], person),
+                    "label": (
+                        ""
+                        if (tense["key"], person) in unlabelled
+                        else adapter.person_label(tense["key"], person)
+                    ),
                     # The client grades locally and synchronously so focus can
                     # move without waiting on the network, so it needs both the
                     # answer and every other form that counts as correct.
