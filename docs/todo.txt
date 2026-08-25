@@ -20,6 +20,9 @@
 - get rid of the rule/line between the last tense and the end "score" and controls to start a new conjugation
 - add the 20 most common verbs: https://www.babbel.com/en/magazine/common-portuguese-verbs
   (now just repeated use of "Add a verb" — but a batch run would be nicer)
+- why does preterite 2nd-person singular trigger the auto-fill of person names?
+  can we mark that in a way that discourages this?
+  conditional 3rd-person singular has the same problem
 
 - follow-ups to "Add a verb":
   - delete a verb. nothing removes one today (Verb.forms already cascades)
