@@ -629,6 +629,7 @@ function makeRow(data, tenseLabel) { // tenseLabel: the heading text, mood inclu
     typedWrong: "",      // what they first typed, for the resolved note
     attemptId: null,     // server id, to reclassify as a typo
     dismissedTypo: false,// "just a typo" clicked — no longer counts as a mistake
+    attemptSeq: 0,       // bumped by clearError to abandon an in-flight record
   };
 
   input.addEventListener("focus", () => {
@@ -640,6 +641,12 @@ function makeRow(data, tenseLabel) { // tenseLabel: the heading text, mood inclu
     gradeRow(row);
   });
   input.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      // Some browsers revert an input's value on Escape; the key is ours here.
+      e.preventDefault();
+      onEscape(row);
+      return;
+    }
     const isTab = e.key === "Tab" && !e.shiftKey;
     if (!isTab && e.key !== "Enter") return;
 
@@ -691,6 +698,7 @@ function gradeRow(row) {
 // it" note (which needs that id for the "just a typo" reclassification). Grading
 // and focus never wait on this — it runs after the row is already marked.
 async function recordAttempt(row, text) {
+  const seq = ++row.attemptSeq;
   let result;
   try {
     result = await api("/api/attempts", {
@@ -698,8 +706,17 @@ async function recordAttempt(row, text) {
       body: JSON.stringify({ form_id: row.formId, submitted_text: text }),
     });
   } catch (e) {
-    row.recorded = false; // let a later grade (blur/re-tab) retry the record
+    // Only reopen recording if this is still the attempt of record — clearError
+    // has already reopened it otherwise, and may have a newer one in flight.
+    if (row.attemptSeq === seq) row.recorded = false;
     console.error("recording attempt failed", e);
+    return;
+  }
+  // Escape cleared the field while this was in flight. The answer it carries was
+  // taken back, so forgive it on the server and leave the ungraded row alone —
+  // marking it wrong now would restore the error the user just dismissed.
+  if (row.attemptSeq !== seq) {
+    if (!result.is_correct) forgiveAttempt(result.attempt_id);
     return;
   }
   if (!result.is_correct) {
@@ -711,15 +728,75 @@ async function recordAttempt(row, text) {
   }
 }
 
-async function dismissTypo(row) {
-  await api(`/api/attempts/${row.attemptId}/verdict`, {
+// Reclassify a recorded attempt as a typo, so it stops counting against the
+// score. The one server call behind both "just a typo" and Escape.
+const forgiveAttempt = (attemptId) =>
+  api(`/api/attempts/${attemptId}/verdict`, {
     method: "POST",
     body: JSON.stringify({ verdict: "typo" }),
   });
+
+// ``advance`` is what the button does: the note it lives in is about to be
+// removed from under the cursor, so focus has to go somewhere. Forgiving the
+// previous field from the keyboard passes false — focus is already in the field
+// after it, and advancing from the forgiven row would drag it backwards.
+async function dismissTypo(row, { advance = true } = {}) {
+  await forgiveAttempt(row.attemptId);
   row.dismissedTypo = true;
   renderRow(row);   // drops the note — and with it the button holding focus
   renderProgress(); // one fewer mistake on record
-  advanceFrom(row); // carry on where the keyboard left off
+  if (advance) advanceFrom(row); // carry on where the keyboard left off
+}
+
+// Take back the grade on a field, leaving it as though it had never been
+// answered — mark, note, mistake and all. Not the same as forgiving: a stray Tab
+// grades whatever is half-typed, and that answer should not stand at all, so the
+// next one becomes the attempt of record. Leave the field wrong again and the
+// error comes straight back.
+//
+// The typed text stays put. You reached this field by mistyping in it, and
+// finishing the word is the usual next move.
+async function clearError(row) {
+  const attemptId = row.attemptId;
+  row.attemptSeq++; // abandons any record still in flight (see recordAttempt)
+  row.graded = false;
+  row.correct = false;
+  row.matched = null;
+  row.firstWrong = false;
+  row.typedWrong = "";
+  row.attemptId = null;
+  row.dismissedTypo = false;
+  row.recorded = false; // the next answer is the one that counts
+  renderRow(row);
+  renderProgress(); // one fewer answered, and the footer hides again
+  if (attemptId) await forgiveAttempt(attemptId);
+}
+
+// A field currently showing an error, which Escape takes back.
+const hasError = (row) => !!row && row.graded && !row.correct;
+
+// A mistake still open to being forgiven: on record, not already forgiven, and
+// carrying the server id the reclassification posts to. Returns the row so it
+// composes as a lookup.
+const forgivable = (row) =>
+  row && row.firstWrong && !row.dismissedTypo && row.attemptId ? row : null;
+
+// Escape, from a drill field. Two jobs, because a mistake you can still fix and
+// one you have already moved past want opposite things:
+//
+//   - this field is wrong → take the grade back and let it be retyped. This is
+//     the stray-Tab case, where the answer graded was never meant to be sent.
+//   - this field is fine → forgive the mistake on the field just before it,
+//     which is the one you tabbed off. Retrying is no longer on offer there, so
+//     forgiving is all that is left, exactly as the button does.
+//
+// Exactly one field back, never a search for the nearest mistake: forgiving is a
+// claim about what you just typed, and scanning further would let one keystroke
+// rewrite a mistake made minutes ago somewhere off screen.
+function onEscape(row) {
+  if (hasError(row)) return void clearError(row);
+  const previous = forgivable(rows[rows.indexOf(row) - 1]);
+  if (previous) dismissTypo(previous, { advance: false });
 }
 
 // ---- Projections: model -> DOM -----------------------------------------
@@ -773,12 +850,16 @@ function renderNote(row) {
     hint.className = "answer";
     hint.innerHTML =
       `<span class="ans-text"></span> ` +
-      `<button class="typo-btn" type="button">just a typo</button>`;
+      `<button class="typo-btn" type="button">just a typo</button>` +
+      `<span class="esc-hint"></span>`;
     hint.querySelector(".typo-btn").addEventListener("click", () => dismissTypo(row));
     row.el.after(hint);
     row.note = hint;
   }
   row.note.classList.toggle("resolved", row.correct);
+  // Escape retries a field that is still wrong; once it has been corrected the
+  // key means something else entirely, so the hint goes away with the error.
+  row.note.querySelector(".esc-hint").textContent = row.correct ? "" : "esc to retry";
   // Build with textContent so a user's typed value can't inject markup.
   const at = row.note.querySelector(".ans-text");
   at.textContent = row.correct ? "you typed: " : "answer: ";

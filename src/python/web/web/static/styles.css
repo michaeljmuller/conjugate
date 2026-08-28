@@ -260,6 +260,12 @@ select {
   cursor: pointer;
 }
 .typo-btn:hover { border-color: var(--accent); color: var(--ink); }
+/* The keyboard route out of an error, named next to the mouse one. */
+.esc-hint {
+  margin-left: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
 
 /* Bottom-of-drill controls: restart this verb, or move on to another. */
 .footer-controls {
