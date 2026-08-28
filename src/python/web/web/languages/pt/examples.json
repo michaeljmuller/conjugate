@@ -78,7 +78,7 @@
   "verbs": [
     {
       "infinitive": "ser",
-      "english": "to be",
+      "english": "",
       "forms": [
         {
           "tense": "present_indicative",
@@ -186,6 +186,111 @@
           "example_pt": "Os invernos eram mais frios."
         },
         {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "fora",
+          "example_en": "I had been his student many years earlier.",
+          "example_pt": "Eu fora aluno dele muitos anos antes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "foras",
+          "example_en": "You had been warned, but you paid no attention.",
+          "example_pt": "Foras avisado, mas não ligaste."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "fora",
+          "example_en": "The house had been a school.",
+          "example_pt": "A casa fora uma escola."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "fôramos",
+          "example_en": "We had been colleagues years before.",
+          "example_pt": "Fôramos colegas anos antes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "foram",
+          "example_en": "The two companies had been partners before they split.",
+          "example_pt": "As duas empresas foram sócias antes de se separarem."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "serei",
+          "example_en": "One day I will be a doctor.",
+          "example_pt": "Um dia serei médico."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "serás",
+          "example_en": "You will be a great father.",
+          "example_pt": "Serás um ótimo pai."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "será",
+          "example_en": "Dinner will be at eight.",
+          "example_pt": "O jantar será às oito."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "seremos",
+          "example_en": "We will be on time tomorrow.",
+          "example_pt": "Amanhã seremos pontuais."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "serão",
+          "example_en": "The results will be published tomorrow.",
+          "example_pt": "Os resultados serão publicados amanhã."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "seria",
+          "example_en": "I would be happier in the countryside.",
+          "example_pt": "Seria mais feliz no campo."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "serias",
+          "example_en": "You would be a great teacher.",
+          "example_pt": "Serias um ótimo professor."
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "seria",
+          "example_en": "That would be a mistake.",
+          "example_pt": "Isso seria um erro."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "seríamos",
+          "example_en": "We would be a good team.",
+          "example_pt": "Seríamos uma boa equipa."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "seriam",
+          "example_en": "They would be perfect for this job.",
+          "example_pt": "Seriam perfeitos para este trabalho."
+        },
+        {
           "tense": "present_subjunctive",
           "person": "eu",
           "form": "seja",
@@ -291,111 +396,6 @@
           "example_pt": "Se forem baratos, compra dois."
         },
         {
-          "tense": "conditional",
-          "person": "eu",
-          "form": "seria",
-          "example_en": "I would be happier in the countryside.",
-          "example_pt": "Seria mais feliz no campo."
-        },
-        {
-          "tense": "conditional",
-          "person": "tu",
-          "form": "serias",
-          "example_en": "You would be a great teacher.",
-          "example_pt": "Serias um ótimo professor."
-        },
-        {
-          "tense": "conditional",
-          "person": "ele",
-          "form": "seria",
-          "example_en": "That would be a mistake.",
-          "example_pt": "Isso seria um erro."
-        },
-        {
-          "tense": "conditional",
-          "person": "nos",
-          "form": "seríamos",
-          "example_en": "We would be a good team.",
-          "example_pt": "Seríamos uma boa equipa."
-        },
-        {
-          "tense": "conditional",
-          "person": "eles",
-          "form": "seriam",
-          "example_en": "They would be perfect for this job.",
-          "example_pt": "Seriam perfeitos para este trabalho."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eu",
-          "form": "fora",
-          "example_en": "I had been his student many years earlier.",
-          "example_pt": "Eu fora aluno dele muitos anos antes."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "tu",
-          "form": "foras",
-          "example_en": "You had been warned, but you paid no attention.",
-          "example_pt": "Foras avisado, mas não ligaste."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "ele",
-          "form": "fora",
-          "example_en": "The house had been a school.",
-          "example_pt": "A casa fora uma escola."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "nos",
-          "form": "fôramos",
-          "example_en": "We had been colleagues years before.",
-          "example_pt": "Fôramos colegas anos antes."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eles",
-          "form": "foram",
-          "example_en": "The two companies had been partners before they split.",
-          "example_pt": "As duas empresas foram sócias antes de se separarem."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eu",
-          "form": "serei",
-          "example_en": "One day I will be a doctor.",
-          "example_pt": "Um dia serei médico."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "tu",
-          "form": "serás",
-          "example_en": "You will be a great father.",
-          "example_pt": "Serás um ótimo pai."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "ele",
-          "form": "será",
-          "example_en": "Dinner will be at eight.",
-          "example_pt": "O jantar será às oito."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "nos",
-          "form": "seremos",
-          "example_en": "We will be on time tomorrow.",
-          "example_pt": "Amanhã seremos pontuais."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eles",
-          "form": "serão",
-          "example_en": "The results will be published tomorrow.",
-          "example_pt": "Os resultados serão publicados amanhã."
-        },
-        {
           "tense": "imperative_affirmative",
           "person": "tu",
           "form": "sê",
@@ -426,28 +426,28 @@
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "não sejas",
+          "form": "sejas",
           "example_en": "Don't be silly!",
           "example_pt": "Não sejas tonto!"
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "não seja",
+          "form": "seja",
           "example_en": "Don't be so modest.",
           "example_pt": "Não seja tão modesto."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "não sejamos",
+          "form": "sejamos",
           "example_en": "Let's not be pessimistic.",
           "example_pt": "Não sejamos pessimistas."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "não sejam",
+          "form": "sejam",
           "example_en": "Don't be cruel.",
           "example_pt": "Não sejam cruéis."
         },
@@ -504,7 +504,7 @@
     },
     {
       "infinitive": "estar",
-      "english": "to be (state/location)",
+      "english": "",
       "forms": [
         {
           "tense": "present_indicative",
@@ -612,6 +612,111 @@
           "example_pt": "Estavam a brincar no quintal."
         },
         {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "estivera",
+          "example_en": "I had been in that hotel years before.",
+          "example_pt": "Eu estivera naquele hotel anos antes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "estiveras",
+          "example_en": "You had never been so happy.",
+          "example_pt": "Nunca estiveras tão feliz."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "estivera",
+          "example_en": "He had been ill weeks before.",
+          "example_pt": "Ele estivera doente semanas antes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "estivéramos",
+          "example_en": "We had been there the previous winter.",
+          "example_pt": "Estivéramos lá no inverno anterior."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "estiveram",
+          "example_en": "They had been together until dawn.",
+          "example_pt": "Estiveram juntos até de madrugada."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "estarei",
+          "example_en": "I will be at the office at nine.",
+          "example_pt": "Estarei no escritório às nove."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "estarás",
+          "example_en": "You will be tired tomorrow.",
+          "example_pt": "Amanhã estarás cansado."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "estará",
+          "example_en": "Dinner will be ready soon.",
+          "example_pt": "O jantar estará pronto em breve."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "estaremos",
+          "example_en": "We will be waiting for you.",
+          "example_pt": "Estaremos à tua espera."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "estarão",
+          "example_en": "They will be at the airport at noon.",
+          "example_pt": "Eles estarão no aeroporto ao meio-dia."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "estaria",
+          "example_en": "Without you, I would be lost.",
+          "example_pt": "Sem ti, estaria perdido."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "estarias",
+          "example_en": "You would be more comfortable here.",
+          "example_pt": "Estarias mais confortável aqui."
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "estaria",
+          "example_en": "By now, he would already be asleep.",
+          "example_pt": "A esta hora, ele já estaria a dormir."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "estaríamos",
+          "example_en": "Without the map, we would be lost.",
+          "example_pt": "Sem o mapa, estaríamos perdidos."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "estariam",
+          "example_en": "They would be safer at home.",
+          "example_pt": "Estariam mais seguros em casa."
+        },
+        {
           "tense": "present_subjunctive",
           "person": "eu",
           "form": "esteja",
@@ -717,111 +822,6 @@
           "example_pt": "Eles entram quando estiverem prontos."
         },
         {
-          "tense": "conditional",
-          "person": "eu",
-          "form": "estaria",
-          "example_en": "Without you, I would be lost.",
-          "example_pt": "Sem ti, estaria perdido."
-        },
-        {
-          "tense": "conditional",
-          "person": "tu",
-          "form": "estarias",
-          "example_en": "You would be more comfortable here.",
-          "example_pt": "Estarias mais confortável aqui."
-        },
-        {
-          "tense": "conditional",
-          "person": "ele",
-          "form": "estaria",
-          "example_en": "By now, he would already be asleep.",
-          "example_pt": "A esta hora, ele já estaria a dormir."
-        },
-        {
-          "tense": "conditional",
-          "person": "nos",
-          "form": "estaríamos",
-          "example_en": "Without the map, we would be lost.",
-          "example_pt": "Sem o mapa, estaríamos perdidos."
-        },
-        {
-          "tense": "conditional",
-          "person": "eles",
-          "form": "estariam",
-          "example_en": "They would be safer at home.",
-          "example_pt": "Estariam mais seguros em casa."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eu",
-          "form": "estivera",
-          "example_en": "I had been in that hotel years before.",
-          "example_pt": "Eu estivera naquele hotel anos antes."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "tu",
-          "form": "estiveras",
-          "example_en": "You had never been so happy.",
-          "example_pt": "Nunca estiveras tão feliz."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "ele",
-          "form": "estivera",
-          "example_en": "He had been ill weeks before.",
-          "example_pt": "Ele estivera doente semanas antes."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "nos",
-          "form": "estivéramos",
-          "example_en": "We had been there the previous winter.",
-          "example_pt": "Estivéramos lá no inverno anterior."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eles",
-          "form": "estiveram",
-          "example_en": "They had been together until dawn.",
-          "example_pt": "Estiveram juntos até de madrugada."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eu",
-          "form": "estarei",
-          "example_en": "I will be at the office at nine.",
-          "example_pt": "Estarei no escritório às nove."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "tu",
-          "form": "estarás",
-          "example_en": "You will be tired tomorrow.",
-          "example_pt": "Amanhã estarás cansado."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "ele",
-          "form": "estará",
-          "example_en": "Dinner will be ready soon.",
-          "example_pt": "O jantar estará pronto em breve."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "nos",
-          "form": "estaremos",
-          "example_en": "We will be waiting for you.",
-          "example_pt": "Estaremos à tua espera."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eles",
-          "form": "estarão",
-          "example_en": "They will be at the airport at noon.",
-          "example_pt": "Eles estarão no aeroporto ao meio-dia."
-        },
-        {
           "tense": "imperative_affirmative",
           "person": "tu",
           "form": "está",
@@ -852,28 +852,28 @@
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "não estejas",
+          "form": "estejas",
           "example_en": "Don't be sad.",
           "example_pt": "Não estejas triste."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "não esteja",
+          "form": "esteja",
           "example_en": "Don't be worried.",
           "example_pt": "Não esteja preocupado."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "não estejamos",
+          "form": "estejamos",
           "example_en": "Let's not be distracted during the meeting.",
           "example_pt": "Não estejamos distraídos durante a reunião."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "não estejam",
+          "form": "estejam",
           "example_en": "Don't be late tomorrow.",
           "example_pt": "Não estejam atrasados amanhã."
         },
@@ -930,7 +930,7 @@
     },
     {
       "infinitive": "ter",
-      "english": "to have",
+      "english": "",
       "forms": [
         {
           "tense": "present_indicative",
@@ -1038,6 +1038,111 @@
           "example_pt": "Tinham uma quinta no campo."
         },
         {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "tivera",
+          "example_en": "I had had the same idea years earlier.",
+          "example_pt": "Eu tivera a mesma ideia anos antes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "tiveras",
+          "example_en": "You had been lucky until that day.",
+          "example_pt": "Tiveras sorte até àquele dia."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "tivera",
+          "example_en": "He had had a difficult childhood.",
+          "example_pt": "Ele tivera uma infância difícil."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "tivéramos",
+          "example_en": "We had had little time to prepare.",
+          "example_pt": "Tivéramos pouco tempo para nos prepararmos."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "tiveram",
+          "example_en": "They had had many problems before that.",
+          "example_pt": "Eles tiveram muitos problemas antes disso."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "terei",
+          "example_en": "I will be glad to help.",
+          "example_pt": "Terei todo o gosto em ajudar."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "terás",
+          "example_en": "You will have a surprise tomorrow.",
+          "example_pt": "Terás uma surpresa amanhã."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "terá",
+          "example_en": "She will be twenty in May.",
+          "example_pt": "Ela terá vinte anos em maio."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "teremos",
+          "example_en": "We will have visitors on Sunday.",
+          "example_pt": "Teremos visitas no domingo."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "terão",
+          "example_en": "They will have to wait.",
+          "example_pt": "Eles terão de esperar."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "teria",
+          "example_en": "I would be careful with that.",
+          "example_pt": "Eu teria cuidado com isso."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "terias",
+          "example_en": "You would have more time if you lived closer.",
+          "example_pt": "Terias mais tempo se morasses mais perto."
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "teria",
+          "example_en": "He would be about forty.",
+          "example_pt": "Ele teria uns quarenta anos."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "teríamos",
+          "example_en": "We would have room for everyone.",
+          "example_pt": "Teríamos lugar para todos."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "teriam",
+          "example_en": "With this plan, they would have fewer expenses.",
+          "example_pt": "Com este plano, teriam menos despesas."
+        },
+        {
           "tense": "present_subjunctive",
           "person": "eu",
           "form": "tenha",
@@ -1143,111 +1248,6 @@
           "example_pt": "Se eles tiverem fome, há sopa."
         },
         {
-          "tense": "conditional",
-          "person": "eu",
-          "form": "teria",
-          "example_en": "I would be careful with that.",
-          "example_pt": "Eu teria cuidado com isso."
-        },
-        {
-          "tense": "conditional",
-          "person": "tu",
-          "form": "terias",
-          "example_en": "You would have more time if you lived closer.",
-          "example_pt": "Terias mais tempo se morasses mais perto."
-        },
-        {
-          "tense": "conditional",
-          "person": "ele",
-          "form": "teria",
-          "example_en": "He would be about forty.",
-          "example_pt": "Ele teria uns quarenta anos."
-        },
-        {
-          "tense": "conditional",
-          "person": "nos",
-          "form": "teríamos",
-          "example_en": "We would have room for everyone.",
-          "example_pt": "Teríamos lugar para todos."
-        },
-        {
-          "tense": "conditional",
-          "person": "eles",
-          "form": "teriam",
-          "example_en": "With this plan, they would have fewer expenses.",
-          "example_pt": "Com este plano, teriam menos despesas."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eu",
-          "form": "tivera",
-          "example_en": "I had had the same idea years earlier.",
-          "example_pt": "Eu tivera a mesma ideia anos antes."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "tu",
-          "form": "tiveras",
-          "example_en": "You had been lucky until that day.",
-          "example_pt": "Tiveras sorte até àquele dia."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "ele",
-          "form": "tivera",
-          "example_en": "He had had a difficult childhood.",
-          "example_pt": "Ele tivera uma infância difícil."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "nos",
-          "form": "tivéramos",
-          "example_en": "We had had little time to prepare.",
-          "example_pt": "Tivéramos pouco tempo para nos prepararmos."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eles",
-          "form": "tiveram",
-          "example_en": "They had had many problems before that.",
-          "example_pt": "Eles tiveram muitos problemas antes disso."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eu",
-          "form": "terei",
-          "example_en": "I will be glad to help.",
-          "example_pt": "Terei todo o gosto em ajudar."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "tu",
-          "form": "terás",
-          "example_en": "You will have a surprise tomorrow.",
-          "example_pt": "Terás uma surpresa amanhã."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "ele",
-          "form": "terá",
-          "example_en": "She will be twenty in May.",
-          "example_pt": "Ela terá vinte anos em maio."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "nos",
-          "form": "teremos",
-          "example_en": "We will have visitors on Sunday.",
-          "example_pt": "Teremos visitas no domingo."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eles",
-          "form": "terão",
-          "example_en": "They will have to wait.",
-          "example_pt": "Eles terão de esperar."
-        },
-        {
           "tense": "imperative_affirmative",
           "person": "tu",
           "form": "tem",
@@ -1278,28 +1278,28 @@
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "não tenhas",
+          "form": "tenhas",
           "example_en": "Don't be afraid.",
           "example_pt": "Não tenhas medo."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "não tenha",
+          "form": "tenha",
           "example_en": "Don't be in a hurry.",
           "example_pt": "Não tenha pressa."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "não tenhamos",
+          "form": "tenhamos",
           "example_en": "Let's have no illusions.",
           "example_pt": "Não tenhamos ilusões."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "não tenham",
+          "form": "tenham",
           "example_en": "Don't be embarrassed to ask.",
           "example_pt": "Não tenham vergonha de perguntar."
         },
@@ -1356,7 +1356,7 @@
     },
     {
       "infinitive": "poder",
-      "english": "to be able to / can",
+      "english": "",
       "forms": [
         {
           "tense": "present_indicative",
@@ -1464,6 +1464,111 @@
           "example_pt": "Antigamente, podiam nadar neste rio."
         },
         {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "pudera",
+          "example_en": "I had not been able to say goodbye to him.",
+          "example_pt": "Eu não pudera despedir-me dele."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "puderas",
+          "example_en": "You had never been able to travel until then.",
+          "example_pt": "Nunca puderas viajar até então."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "pudera",
+          "example_en": "He had not been able to come to the ceremony.",
+          "example_pt": "Ele não pudera vir à cerimónia."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "pudéramos",
+          "example_en": "We had not been able to warn anyone.",
+          "example_pt": "Não pudéramos avisar ninguém."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "puderam",
+          "example_en": "They had not been able to say goodbye before the departure.",
+          "example_pt": "Eles não puderam despedir-se antes da partida."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "poderei",
+          "example_en": "Tomorrow I will be able to answer for sure.",
+          "example_pt": "Amanhã poderei responder com certeza."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "poderás",
+          "example_en": "Soon you will be able to drive.",
+          "example_pt": "Em breve poderás conduzir."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "poderá",
+          "example_en": "She will be able to start on Monday.",
+          "example_pt": "Ela poderá começar na segunda-feira."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "poderemos",
+          "example_en": "After the works, we will be able to use the kitchen.",
+          "example_pt": "Depois das obras, poderemos usar a cozinha."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "poderão",
+          "example_en": "The members will be able to vote by post.",
+          "example_pt": "Os sócios poderão votar por correio."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "poderia",
+          "example_en": "I could be wrong.",
+          "example_pt": "Poderia estar enganado."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "poderias",
+          "example_en": "Could you arrive earlier?",
+          "example_pt": "Poderias chegar mais cedo?"
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "poderia",
+          "example_en": "This could be a problem.",
+          "example_pt": "Isto poderia ser um problema."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "poderíamos",
+          "example_en": "We could eat out tonight.",
+          "example_pt": "Poderíamos jantar fora hoje."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "poderiam",
+          "example_en": "They could win the championship.",
+          "example_pt": "Eles poderiam ganhar o campeonato."
+        },
+        {
           "tense": "present_subjunctive",
           "person": "eu",
           "form": "possa",
@@ -1569,111 +1674,6 @@
           "example_pt": "Eles ajudam quando puderem."
         },
         {
-          "tense": "conditional",
-          "person": "eu",
-          "form": "poderia",
-          "example_en": "I could be wrong.",
-          "example_pt": "Poderia estar enganado."
-        },
-        {
-          "tense": "conditional",
-          "person": "tu",
-          "form": "poderias",
-          "example_en": "Could you arrive earlier?",
-          "example_pt": "Poderias chegar mais cedo?"
-        },
-        {
-          "tense": "conditional",
-          "person": "ele",
-          "form": "poderia",
-          "example_en": "This could be a problem.",
-          "example_pt": "Isto poderia ser um problema."
-        },
-        {
-          "tense": "conditional",
-          "person": "nos",
-          "form": "poderíamos",
-          "example_en": "We could eat out tonight.",
-          "example_pt": "Poderíamos jantar fora hoje."
-        },
-        {
-          "tense": "conditional",
-          "person": "eles",
-          "form": "poderiam",
-          "example_en": "They could win the championship.",
-          "example_pt": "Eles poderiam ganhar o campeonato."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eu",
-          "form": "pudera",
-          "example_en": "I had not been able to say goodbye to him.",
-          "example_pt": "Eu não pudera despedir-me dele."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "tu",
-          "form": "puderas",
-          "example_en": "You had never been able to travel until then.",
-          "example_pt": "Nunca puderas viajar até então."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "ele",
-          "form": "pudera",
-          "example_en": "He had not been able to come to the ceremony.",
-          "example_pt": "Ele não pudera vir à cerimónia."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "nos",
-          "form": "pudéramos",
-          "example_en": "We had not been able to warn anyone.",
-          "example_pt": "Não pudéramos avisar ninguém."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eles",
-          "form": "puderam",
-          "example_en": "They had not been able to say goodbye before the departure.",
-          "example_pt": "Eles não puderam despedir-se antes da partida."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eu",
-          "form": "poderei",
-          "example_en": "Tomorrow I will be able to answer for sure.",
-          "example_pt": "Amanhã poderei responder com certeza."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "tu",
-          "form": "poderás",
-          "example_en": "Soon you will be able to drive.",
-          "example_pt": "Em breve poderás conduzir."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "ele",
-          "form": "poderá",
-          "example_en": "She will be able to start on Monday.",
-          "example_pt": "Ela poderá começar na segunda-feira."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "nos",
-          "form": "poderemos",
-          "example_en": "After the works, we will be able to use the kitchen.",
-          "example_pt": "Depois das obras, poderemos usar a cozinha."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eles",
-          "form": "poderão",
-          "example_en": "The members will be able to vote by post.",
-          "example_pt": "Os sócios poderão votar por correio."
-        },
-        {
           "tense": "imperative_affirmative",
           "person": "tu",
           "form": "pode",
@@ -1704,28 +1704,28 @@
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "não possas",
+          "form": "possas",
           "example_en": "I hope you can't guess the surprise.",
           "example_pt": "Espero que não possas adivinhar a surpresa."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "não possa",
+          "form": "possa",
           "example_en": "I hope he can't hear us.",
           "example_pt": "Espero que ele não possa ouvir-nos."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "não possamos",
+          "form": "possamos",
           "example_en": "It's a shame we can't stay longer.",
           "example_pt": "É pena que não possamos ficar mais tempo."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "não possam",
+          "form": "possam",
           "example_en": "I'm sorry you can't come to the wedding.",
           "example_pt": "Lamento que não possam vir ao casamento."
         },
@@ -1782,7 +1782,7 @@
     },
     {
       "infinitive": "ir",
-      "english": "to go",
+      "english": "",
       "forms": [
         {
           "tense": "present_indicative",
@@ -1890,6 +1890,111 @@
           "example_pt": "Iam de bicicleta para a escola."
         },
         {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "fora",
+          "example_en": "I had gone to the market that morning.",
+          "example_pt": "Eu fora ao mercado nessa manhã."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "foras",
+          "example_en": "You had left before the speech.",
+          "example_pt": "Tu foras embora antes do discurso."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "fora",
+          "example_en": "He had gone to Paris the year before.",
+          "example_pt": "Ele fora a Paris no ano anterior."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "fôramos",
+          "example_en": "We had gone there the previous summer.",
+          "example_pt": "Fôramos lá no verão anterior."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "foram",
+          "example_en": "They had left long before the party ended.",
+          "example_pt": "Eles foram embora muito antes de a festa acabar."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "irei",
+          "example_en": "I will go to Rome in the spring.",
+          "example_pt": "Irei a Roma na primavera."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "irás",
+          "example_en": "You will go far.",
+          "example_pt": "Irás longe."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "irá",
+          "example_en": "She will go by plane.",
+          "example_pt": "Ela irá de avião."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "iremos",
+          "example_en": "We will drive to the Algarve.",
+          "example_pt": "Iremos de carro até ao Algarve."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "irão",
+          "example_en": "They will go with us next year.",
+          "example_pt": "Eles irão connosco no próximo ano."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "iria",
+          "example_en": "I would go with you, but I'm ill.",
+          "example_pt": "Eu iria contigo, mas estou doente."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "irias",
+          "example_en": "Would you go to that concert?",
+          "example_pt": "Irias a esse concerto?"
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "iria",
+          "example_en": "She would go, but she doesn't have a car.",
+          "example_pt": "Ela iria, mas não tem carro."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "iríamos",
+          "example_en": "We would go by plane, but it's expensive.",
+          "example_pt": "Iríamos de avião, mas é caro."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "iriam",
+          "example_en": "They would go with us, but they can't.",
+          "example_pt": "Iriam connosco, mas não podem."
+        },
+        {
           "tense": "present_subjunctive",
           "person": "eu",
           "form": "vá",
@@ -1995,111 +2100,6 @@
           "example_pt": "Quando eles forem embora, arrumamos tudo."
         },
         {
-          "tense": "conditional",
-          "person": "eu",
-          "form": "iria",
-          "example_en": "I would go with you, but I'm ill.",
-          "example_pt": "Eu iria contigo, mas estou doente."
-        },
-        {
-          "tense": "conditional",
-          "person": "tu",
-          "form": "irias",
-          "example_en": "Would you go to that concert?",
-          "example_pt": "Irias a esse concerto?"
-        },
-        {
-          "tense": "conditional",
-          "person": "ele",
-          "form": "iria",
-          "example_en": "She would go, but she doesn't have a car.",
-          "example_pt": "Ela iria, mas não tem carro."
-        },
-        {
-          "tense": "conditional",
-          "person": "nos",
-          "form": "iríamos",
-          "example_en": "We would go by plane, but it's expensive.",
-          "example_pt": "Iríamos de avião, mas é caro."
-        },
-        {
-          "tense": "conditional",
-          "person": "eles",
-          "form": "iriam",
-          "example_en": "They would go with us, but they can't.",
-          "example_pt": "Iriam connosco, mas não podem."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eu",
-          "form": "fora",
-          "example_en": "I had gone to the market that morning.",
-          "example_pt": "Eu fora ao mercado nessa manhã."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "tu",
-          "form": "foras",
-          "example_en": "You had left before the speech.",
-          "example_pt": "Tu foras embora antes do discurso."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "ele",
-          "form": "fora",
-          "example_en": "He had gone to Paris the year before.",
-          "example_pt": "Ele fora a Paris no ano anterior."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "nos",
-          "form": "fôramos",
-          "example_en": "We had gone there the previous summer.",
-          "example_pt": "Fôramos lá no verão anterior."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eles",
-          "form": "foram",
-          "example_en": "They had left long before the party ended.",
-          "example_pt": "Eles foram embora muito antes de a festa acabar."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eu",
-          "form": "irei",
-          "example_en": "I will go to Rome in the spring.",
-          "example_pt": "Irei a Roma na primavera."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "tu",
-          "form": "irás",
-          "example_en": "You will go far.",
-          "example_pt": "Irás longe."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "ele",
-          "form": "irá",
-          "example_en": "She will go by plane.",
-          "example_pt": "Ela irá de avião."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "nos",
-          "form": "iremos",
-          "example_en": "We will drive to the Algarve.",
-          "example_pt": "Iremos de carro até ao Algarve."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eles",
-          "form": "irão",
-          "example_en": "They will go with us next year.",
-          "example_pt": "Eles irão connosco no próximo ano."
-        },
-        {
           "tense": "imperative_affirmative",
           "person": "tu",
           "form": "vai",
@@ -2130,28 +2130,28 @@
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "não vás",
+          "form": "vás",
           "example_en": "Don't leave yet.",
           "example_pt": "Não vás embora ainda."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "não vá",
+          "form": "vá",
           "example_en": "Don't go that way, it's under construction.",
           "example_pt": "Não vá por aí, está em obras."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "não vamos",
+          "form": "vamos",
           "example_en": "Let's not go this way.",
           "example_pt": "Não vamos por este caminho."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "não vão",
+          "form": "vão",
           "example_en": "Don't go without me!",
           "example_pt": "Não vão sem mim!"
         },
@@ -2208,7 +2208,7 @@
     },
     {
       "infinitive": "vir",
-      "english": "to come",
+      "english": "",
       "forms": [
         {
           "tense": "present_indicative",
@@ -2316,6 +2316,111 @@
           "example_pt": "Eles vinham jantar às sextas."
         },
         {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "viera",
+          "example_en": "I had come on foot from the station.",
+          "example_pt": "Eu viera a pé desde a estação."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "vieras",
+          "example_en": "You had come to warn us the day before.",
+          "example_pt": "Tu vieras avisar-nos na véspera."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "viera",
+          "example_en": "He had come from far away to see her.",
+          "example_pt": "Ele viera de longe para a ver."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "viéramos",
+          "example_en": "We had come by train the night before.",
+          "example_pt": "Viéramos de comboio na noite anterior."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "vieram",
+          "example_en": "They had come from another city days earlier.",
+          "example_pt": "Eles vieram de outra cidade dias antes."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "virei",
+          "example_en": "I will come and pick you up at eight.",
+          "example_pt": "Virei buscar-te às oito."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "virás",
+          "example_en": "Will you come with us next year?",
+          "example_pt": "Virás connosco para o ano?"
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "virá",
+          "example_en": "The technician will come tomorrow morning.",
+          "example_pt": "O técnico virá amanhã de manhã."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "viremos",
+          "example_en": "We will come and visit you at Christmas.",
+          "example_pt": "Viremos visitar-vos no Natal."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "virão",
+          "example_en": "They will come for dinner on Saturday.",
+          "example_pt": "Eles virão jantar no sábado."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "viria",
+          "example_en": "I would come, but I'm far away.",
+          "example_pt": "Eu viria, mas estou longe."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "virias",
+          "example_en": "Would you come if I paid for the trip?",
+          "example_pt": "Virias se eu pagasse a viagem?"
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "viria",
+          "example_en": "He said he would come later.",
+          "example_pt": "Ele disse que viria mais tarde."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "viríamos",
+          "example_en": "We would come more often, but it's far.",
+          "example_pt": "Viríamos mais vezes, mas é longe."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "viriam",
+          "example_en": "They would come, but the flight is expensive.",
+          "example_pt": "Eles viriam, mas o voo é caro."
+        },
+        {
           "tense": "present_subjunctive",
           "person": "eu",
           "form": "venha",
@@ -2421,111 +2526,6 @@
           "example_pt": "Quando vierem, mostramos-lhes a casa."
         },
         {
-          "tense": "conditional",
-          "person": "eu",
-          "form": "viria",
-          "example_en": "I would come, but I'm far away.",
-          "example_pt": "Eu viria, mas estou longe."
-        },
-        {
-          "tense": "conditional",
-          "person": "tu",
-          "form": "virias",
-          "example_en": "Would you come if I paid for the trip?",
-          "example_pt": "Virias se eu pagasse a viagem?"
-        },
-        {
-          "tense": "conditional",
-          "person": "ele",
-          "form": "viria",
-          "example_en": "He said he would come later.",
-          "example_pt": "Ele disse que viria mais tarde."
-        },
-        {
-          "tense": "conditional",
-          "person": "nos",
-          "form": "viríamos",
-          "example_en": "We would come more often, but it's far.",
-          "example_pt": "Viríamos mais vezes, mas é longe."
-        },
-        {
-          "tense": "conditional",
-          "person": "eles",
-          "form": "viriam",
-          "example_en": "They would come, but the flight is expensive.",
-          "example_pt": "Eles viriam, mas o voo é caro."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eu",
-          "form": "viera",
-          "example_en": "I had come on foot from the station.",
-          "example_pt": "Eu viera a pé desde a estação."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "tu",
-          "form": "vieras",
-          "example_en": "You had come to warn us the day before.",
-          "example_pt": "Tu vieras avisar-nos na véspera."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "ele",
-          "form": "viera",
-          "example_en": "He had come from far away to see her.",
-          "example_pt": "Ele viera de longe para a ver."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "nos",
-          "form": "viéramos",
-          "example_en": "We had come by train the night before.",
-          "example_pt": "Viéramos de comboio na noite anterior."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eles",
-          "form": "vieram",
-          "example_en": "They had come from another city days earlier.",
-          "example_pt": "Eles vieram de outra cidade dias antes."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eu",
-          "form": "virei",
-          "example_en": "I will come and pick you up at eight.",
-          "example_pt": "Virei buscar-te às oito."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "tu",
-          "form": "virás",
-          "example_en": "Will you come with us next year?",
-          "example_pt": "Virás connosco para o ano?"
-        },
-        {
-          "tense": "future_indicative",
-          "person": "ele",
-          "form": "virá",
-          "example_en": "The technician will come tomorrow morning.",
-          "example_pt": "O técnico virá amanhã de manhã."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "nos",
-          "form": "viremos",
-          "example_en": "We will come and visit you at Christmas.",
-          "example_pt": "Viremos visitar-vos no Natal."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eles",
-          "form": "virão",
-          "example_en": "They will come for dinner on Saturday.",
-          "example_pt": "Eles virão jantar no sábado."
-        },
-        {
           "tense": "imperative_affirmative",
           "person": "tu",
           "form": "vem",
@@ -2556,28 +2556,28 @@
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "não venhas",
+          "form": "venhas",
           "example_en": "Don't come home late.",
           "example_pt": "Não venhas tarde."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "não venha",
+          "form": "venha",
           "example_en": "Don't come before nine.",
           "example_pt": "Não venha antes das nove."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "não venhamos",
+          "form": "venhamos",
           "example_en": "Let's not all come at the same time.",
           "example_pt": "Não venhamos todos ao mesmo tempo."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "não venham",
+          "form": "venham",
           "example_en": "Don't come without letting us know.",
           "example_pt": "Não venham sem avisar."
         },
@@ -2634,7 +2634,7 @@
     },
     {
       "infinitive": "ver",
-      "english": "to see",
+      "english": "",
       "forms": [
         {
           "tense": "present_indicative",
@@ -2742,6 +2742,111 @@
           "example_pt": "Eles viam o jogo todas as semanas."
         },
         {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "vira",
+          "example_en": "I had seen that film years before.",
+          "example_pt": "Eu vira aquele filme anos antes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "viras",
+          "example_en": "You had seen the sea for the first time that summer.",
+          "example_pt": "Tu viras o mar pela primeira vez nesse verão."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "vira",
+          "example_en": "He had seen that face somewhere before.",
+          "example_pt": "Ele já vira aquela cara algures."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "víramos",
+          "example_en": "We had never seen so much snow.",
+          "example_pt": "Nunca víramos tanta neve."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "viram",
+          "example_en": "They had already seen the worst of the storm.",
+          "example_pt": "Eles já viram o pior da tempestade."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "verei",
+          "example_en": "I will see what to do later.",
+          "example_pt": "Logo verei o que fazer."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "verás",
+          "example_en": "One day you will see that I'm right.",
+          "example_pt": "Um dia verás que tenho razão."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "verá",
+          "example_en": "She will see the results tomorrow.",
+          "example_pt": "Ela verá os resultados amanhã."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "veremos",
+          "example_en": "We will look at that calmly tomorrow.",
+          "example_pt": "Veremos isso com calma amanhã."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "verão",
+          "example_en": "They will see the photos on Sunday.",
+          "example_pt": "Eles verão as fotografias no domingo."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "veria",
+          "example_en": "With glasses, I would see better.",
+          "example_pt": "Com óculos, veria melhor."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "verias",
+          "example_en": "From here you would see the whole stage.",
+          "example_pt": "Daqui verias o palco todo."
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "veria",
+          "example_en": "He would spot the mistake in a second.",
+          "example_pt": "Ele veria o erro num segundo."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "veríamos",
+          "example_en": "From the roof, we would see the parade.",
+          "example_pt": "Do telhado, veríamos o desfile."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "veriam",
+          "example_en": "With more light, they would see better.",
+          "example_pt": "Com mais luz, veriam melhor."
+        },
+        {
           "tense": "present_subjunctive",
           "person": "eu",
           "form": "veja",
@@ -2847,111 +2952,6 @@
           "example_pt": "Quando virem as fotos, vão rir."
         },
         {
-          "tense": "conditional",
-          "person": "eu",
-          "form": "veria",
-          "example_en": "With glasses, I would see better.",
-          "example_pt": "Com óculos, veria melhor."
-        },
-        {
-          "tense": "conditional",
-          "person": "tu",
-          "form": "verias",
-          "example_en": "From here you would see the whole stage.",
-          "example_pt": "Daqui verias o palco todo."
-        },
-        {
-          "tense": "conditional",
-          "person": "ele",
-          "form": "veria",
-          "example_en": "He would spot the mistake in a second.",
-          "example_pt": "Ele veria o erro num segundo."
-        },
-        {
-          "tense": "conditional",
-          "person": "nos",
-          "form": "veríamos",
-          "example_en": "From the roof, we would see the parade.",
-          "example_pt": "Do telhado, veríamos o desfile."
-        },
-        {
-          "tense": "conditional",
-          "person": "eles",
-          "form": "veriam",
-          "example_en": "With more light, they would see better.",
-          "example_pt": "Com mais luz, veriam melhor."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eu",
-          "form": "vira",
-          "example_en": "I had seen that film years before.",
-          "example_pt": "Eu vira aquele filme anos antes."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "tu",
-          "form": "viras",
-          "example_en": "You had seen the sea for the first time that summer.",
-          "example_pt": "Tu viras o mar pela primeira vez nesse verão."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "ele",
-          "form": "vira",
-          "example_en": "He had seen that face somewhere before.",
-          "example_pt": "Ele já vira aquela cara algures."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "nos",
-          "form": "víramos",
-          "example_en": "We had never seen so much snow.",
-          "example_pt": "Nunca víramos tanta neve."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eles",
-          "form": "viram",
-          "example_en": "They had already seen the worst of the storm.",
-          "example_pt": "Eles já viram o pior da tempestade."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eu",
-          "form": "verei",
-          "example_en": "I will see what to do later.",
-          "example_pt": "Logo verei o que fazer."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "tu",
-          "form": "verás",
-          "example_en": "One day you will see that I'm right.",
-          "example_pt": "Um dia verás que tenho razão."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "ele",
-          "form": "verá",
-          "example_en": "She will see the results tomorrow.",
-          "example_pt": "Ela verá os resultados amanhã."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "nos",
-          "form": "veremos",
-          "example_en": "We will look at that calmly tomorrow.",
-          "example_pt": "Veremos isso com calma amanhã."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eles",
-          "form": "verão",
-          "example_en": "They will see the photos on Sunday.",
-          "example_pt": "Eles verão as fotografias no domingo."
-        },
-        {
           "tense": "imperative_affirmative",
           "person": "tu",
           "form": "vê",
@@ -2982,28 +2982,28 @@
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "não vejas",
+          "form": "vejas",
           "example_en": "Don't watch the end of the film without me.",
           "example_pt": "Não vejas o fim do filme sem mim."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "não veja",
+          "form": "veja",
           "example_en": "Don't watch television so late.",
           "example_pt": "Não veja televisão até tão tarde."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "não vejamos",
+          "form": "vejamos",
           "example_en": "Let's not see only the flaws.",
           "example_pt": "Não vejamos só os defeitos."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "não vejam",
+          "form": "vejam",
           "example_en": "Don't watch that film, it's terrible.",
           "example_pt": "Não vejam esse filme, é péssimo."
         },
@@ -3060,7 +3060,7 @@
     },
     {
       "infinitive": "falar",
-      "english": "to speak",
+      "english": "",
       "forms": [
         {
           "tense": "present_indicative",
@@ -3168,6 +3168,111 @@
           "example_pt": "Falavam baixo para não acordar o bebé."
         },
         {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "falara",
+          "example_en": "I had spoken to her the day before.",
+          "example_pt": "Eu falara com ela na véspera."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "falaras",
+          "example_en": "You had mentioned it weeks earlier.",
+          "example_pt": "Tu falaras nisso semanas antes."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "falara",
+          "example_en": "He had spoken to the director that morning.",
+          "example_pt": "Ele falara com o diretor de manhã."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "faláramos",
+          "example_en": "We had talked about it at dinner.",
+          "example_pt": "Faláramos sobre isso ao jantar."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "falaram",
+          "example_en": "They had talked about it long before it happened.",
+          "example_pt": "Eles falaram disso muito antes de acontecer."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "falarei",
+          "example_en": "I will speak to him tomorrow.",
+          "example_pt": "Falarei com ele amanhã."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "falarás",
+          "example_en": "Soon you will speak Portuguese very well.",
+          "example_pt": "Em breve falarás português muito bem."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "falará",
+          "example_en": "The director will speak at the end of the meeting.",
+          "example_pt": "A diretora falará no fim da reunião."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "falaremos",
+          "example_en": "We will talk about that later.",
+          "example_pt": "Falaremos disso mais tarde."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "falarão",
+          "example_en": "The experts will speak at the conference.",
+          "example_pt": "Os especialistas falarão na conferência."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "falaria",
+          "example_en": "I would talk to him, but I don't know him.",
+          "example_pt": "Eu falaria com ele, mas não o conheço."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "falarias",
+          "example_en": "Would you speak in public?",
+          "example_pt": "Falarias em público?"
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "falaria",
+          "example_en": "She would talk to you, but she's busy.",
+          "example_pt": "Ela falaria contigo, mas está ocupada."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "falaríamos",
+          "example_en": "We would talk more, but there's no time.",
+          "example_pt": "Falaríamos mais, mas não há tempo."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "falariam",
+          "example_en": "They would talk to you, but they're busy.",
+          "example_pt": "Falariam contigo, mas estão ocupados."
+        },
+        {
           "tense": "present_subjunctive",
           "person": "eu",
           "form": "fale",
@@ -3273,111 +3378,6 @@
           "example_pt": "Quando eles falarem, toma notas."
         },
         {
-          "tense": "conditional",
-          "person": "eu",
-          "form": "falaria",
-          "example_en": "I would talk to him, but I don't know him.",
-          "example_pt": "Eu falaria com ele, mas não o conheço."
-        },
-        {
-          "tense": "conditional",
-          "person": "tu",
-          "form": "falarias",
-          "example_en": "Would you speak in public?",
-          "example_pt": "Falarias em público?"
-        },
-        {
-          "tense": "conditional",
-          "person": "ele",
-          "form": "falaria",
-          "example_en": "She would talk to you, but she's busy.",
-          "example_pt": "Ela falaria contigo, mas está ocupada."
-        },
-        {
-          "tense": "conditional",
-          "person": "nos",
-          "form": "falaríamos",
-          "example_en": "We would talk more, but there's no time.",
-          "example_pt": "Falaríamos mais, mas não há tempo."
-        },
-        {
-          "tense": "conditional",
-          "person": "eles",
-          "form": "falariam",
-          "example_en": "They would talk to you, but they're busy.",
-          "example_pt": "Falariam contigo, mas estão ocupados."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eu",
-          "form": "falara",
-          "example_en": "I had spoken to her the day before.",
-          "example_pt": "Eu falara com ela na véspera."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "tu",
-          "form": "falaras",
-          "example_en": "You had mentioned it weeks earlier.",
-          "example_pt": "Tu falaras nisso semanas antes."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "ele",
-          "form": "falara",
-          "example_en": "He had spoken to the director that morning.",
-          "example_pt": "Ele falara com o diretor de manhã."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "nos",
-          "form": "faláramos",
-          "example_en": "We had talked about it at dinner.",
-          "example_pt": "Faláramos sobre isso ao jantar."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eles",
-          "form": "falaram",
-          "example_en": "They had talked about it long before it happened.",
-          "example_pt": "Eles falaram disso muito antes de acontecer."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eu",
-          "form": "falarei",
-          "example_en": "I will speak to him tomorrow.",
-          "example_pt": "Falarei com ele amanhã."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "tu",
-          "form": "falarás",
-          "example_en": "Soon you will speak Portuguese very well.",
-          "example_pt": "Em breve falarás português muito bem."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "ele",
-          "form": "falará",
-          "example_en": "The director will speak at the end of the meeting.",
-          "example_pt": "A diretora falará no fim da reunião."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "nos",
-          "form": "falaremos",
-          "example_en": "We will talk about that later.",
-          "example_pt": "Falaremos disso mais tarde."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eles",
-          "form": "falarão",
-          "example_en": "The experts will speak at the conference.",
-          "example_pt": "Os especialistas falarão na conferência."
-        },
-        {
           "tense": "imperative_affirmative",
           "person": "tu",
           "form": "fala",
@@ -3408,28 +3408,28 @@
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "não fales",
+          "form": "fales",
           "example_en": "Don't talk with your mouth full.",
           "example_pt": "Não fales de boca cheia."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "não fale",
+          "form": "fale",
           "example_en": "Don't speak so loudly, please.",
           "example_pt": "Não fale tão alto, por favor."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "não falemos",
+          "form": "falemos",
           "example_en": "Let's not talk about work at dinner.",
           "example_pt": "Não falemos de trabalho ao jantar."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "não falem",
+          "form": "falem",
           "example_en": "Don't talk during the film.",
           "example_pt": "Não falem durante o filme."
         },
@@ -3486,7 +3486,7 @@
     },
     {
       "infinitive": "correr",
-      "english": "to run",
+      "english": "",
       "forms": [
         {
           "tense": "present_indicative",
@@ -3594,6 +3594,111 @@
           "example_pt": "Eles corriam na praia todas as manhãs."
         },
         {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "correra",
+          "example_en": "I had run the marathon the year before.",
+          "example_pt": "Eu correra a maratona no ano anterior."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "correras",
+          "example_en": "You had taken many risks until then.",
+          "example_pt": "Tu correras muitos riscos até aí."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "correra",
+          "example_en": "The game had gone badly from the start.",
+          "example_pt": "O jogo correra mal desde o início."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "corrêramos",
+          "example_en": "We had run ten kilometres before breakfast.",
+          "example_pt": "Corrêramos dez quilómetros antes do pequeno-almoço."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "correram",
+          "example_en": "They had run the same race years earlier.",
+          "example_pt": "Eles correram a mesma prova anos antes."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "correrei",
+          "example_en": "I will run the half-marathon in October.",
+          "example_pt": "Correrei a meia-maratona em outubro."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "correrás",
+          "example_en": "With training, you will run faster.",
+          "example_pt": "Com treino, correrás mais depressa."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "correrá",
+          "example_en": "Everything will go well.",
+          "example_pt": "Tudo correrá bem."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "correremos",
+          "example_en": "We will run together on Sunday.",
+          "example_pt": "Correremos juntos no domingo."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "correrão",
+          "example_en": "The athletes will run in the afternoon.",
+          "example_pt": "Os atletas correrão à tarde."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "correria",
+          "example_en": "I would run more, but my knee hurts.",
+          "example_pt": "Eu correria mais, mas o joelho dói."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "correrias",
+          "example_en": "Would you run a marathon?",
+          "example_pt": "Correrias uma maratona?"
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "correria",
+          "example_en": "He would run faster without the backpack.",
+          "example_pt": "Ele correria mais depressa sem a mochila."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "correríamos",
+          "example_en": "We would run outside, but it's raining.",
+          "example_pt": "Correríamos lá fora, mas está a chover."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "correriam",
+          "example_en": "They would run better with training.",
+          "example_pt": "Eles correriam melhor com treino."
+        },
+        {
           "tense": "present_subjunctive",
           "person": "eu",
           "form": "corra",
@@ -3699,111 +3804,6 @@
           "example_pt": "Se eles correrem amanhã, vou ver."
         },
         {
-          "tense": "conditional",
-          "person": "eu",
-          "form": "correria",
-          "example_en": "I would run more, but my knee hurts.",
-          "example_pt": "Eu correria mais, mas o joelho dói."
-        },
-        {
-          "tense": "conditional",
-          "person": "tu",
-          "form": "correrias",
-          "example_en": "Would you run a marathon?",
-          "example_pt": "Correrias uma maratona?"
-        },
-        {
-          "tense": "conditional",
-          "person": "ele",
-          "form": "correria",
-          "example_en": "He would run faster without the backpack.",
-          "example_pt": "Ele correria mais depressa sem a mochila."
-        },
-        {
-          "tense": "conditional",
-          "person": "nos",
-          "form": "correríamos",
-          "example_en": "We would run outside, but it's raining.",
-          "example_pt": "Correríamos lá fora, mas está a chover."
-        },
-        {
-          "tense": "conditional",
-          "person": "eles",
-          "form": "correriam",
-          "example_en": "They would run better with training.",
-          "example_pt": "Eles correriam melhor com treino."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eu",
-          "form": "correra",
-          "example_en": "I had run the marathon the year before.",
-          "example_pt": "Eu correra a maratona no ano anterior."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "tu",
-          "form": "correras",
-          "example_en": "You had taken many risks until then.",
-          "example_pt": "Tu correras muitos riscos até aí."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "ele",
-          "form": "correra",
-          "example_en": "The game had gone badly from the start.",
-          "example_pt": "O jogo correra mal desde o início."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "nos",
-          "form": "corrêramos",
-          "example_en": "We had run ten kilometres before breakfast.",
-          "example_pt": "Corrêramos dez quilómetros antes do pequeno-almoço."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eles",
-          "form": "correram",
-          "example_en": "They had run the same race years earlier.",
-          "example_pt": "Eles correram a mesma prova anos antes."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eu",
-          "form": "correrei",
-          "example_en": "I will run the half-marathon in October.",
-          "example_pt": "Correrei a meia-maratona em outubro."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "tu",
-          "form": "correrás",
-          "example_en": "With training, you will run faster.",
-          "example_pt": "Com treino, correrás mais depressa."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "ele",
-          "form": "correrá",
-          "example_en": "Everything will go well.",
-          "example_pt": "Tudo correrá bem."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "nos",
-          "form": "correremos",
-          "example_en": "We will run together on Sunday.",
-          "example_pt": "Correremos juntos no domingo."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eles",
-          "form": "correrão",
-          "example_en": "The athletes will run in the afternoon.",
-          "example_pt": "Os atletas correrão à tarde."
-        },
-        {
           "tense": "imperative_affirmative",
           "person": "tu",
           "form": "corre",
@@ -3834,28 +3834,28 @@
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "não corras",
+          "form": "corras",
           "example_en": "Don't run in the corridors.",
           "example_pt": "Não corras nos corredores."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "não corra",
+          "form": "corra",
           "example_en": "Don't run by the pool.",
           "example_pt": "Não corra à beira da piscina."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "não corramos",
+          "form": "corramos",
           "example_en": "Let's not take unnecessary risks.",
           "example_pt": "Não corramos riscos desnecessários."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "não corram",
+          "form": "corram",
           "example_en": "Don't run inside the house!",
           "example_pt": "Não corram dentro de casa!"
         },
@@ -3912,7 +3912,7 @@
     },
     {
       "infinitive": "dormir",
-      "english": "to sleep",
+      "english": "",
       "forms": [
         {
           "tense": "present_indicative",
@@ -4020,6 +4020,111 @@
           "example_pt": "Eles dormiam quando o alarme tocou."
         },
         {
+          "tense": "past_pluperfect",
+          "person": "eu",
+          "form": "dormira",
+          "example_en": "I had slept badly the night before.",
+          "example_pt": "Eu dormira mal na noite anterior."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "tu",
+          "form": "dormiras",
+          "example_en": "You had slept only three hours.",
+          "example_pt": "Tu dormiras apenas três horas."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "ele",
+          "form": "dormira",
+          "example_en": "He had slept on the sofa that night.",
+          "example_pt": "Ele dormira no sofá nessa noite."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "nos",
+          "form": "dormíramos",
+          "example_en": "We had slept little during the trip.",
+          "example_pt": "Dormíramos pouco durante a viagem."
+        },
+        {
+          "tense": "past_pluperfect",
+          "person": "eles",
+          "form": "dormiram",
+          "example_en": "They had taken a nap before going out.",
+          "example_pt": "Eles dormiram a sesta antes de sair."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eu",
+          "form": "dormirei",
+          "example_en": "Tonight I will sleep early.",
+          "example_pt": "Hoje dormirei cedo."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "tu",
+          "form": "dormirás",
+          "example_en": "After the hike, you will sleep well.",
+          "example_pt": "Depois da caminhada, dormirás bem."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "ele",
+          "form": "dormirá",
+          "example_en": "The baby will sleep all afternoon.",
+          "example_pt": "O bebé dormirá a tarde toda."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "nos",
+          "form": "dormiremos",
+          "example_en": "We will sleep at grandma's house.",
+          "example_pt": "Dormiremos na casa da avó."
+        },
+        {
+          "tense": "future_indicative",
+          "person": "eles",
+          "form": "dormirão",
+          "example_en": "The kids will sleep in the living room.",
+          "example_pt": "Os miúdos dormirão na sala."
+        },
+        {
+          "tense": "conditional",
+          "person": "eu",
+          "form": "dormiria",
+          "example_en": "I would sleep better without coffee.",
+          "example_pt": "Dormiria melhor sem café."
+        },
+        {
+          "tense": "conditional",
+          "person": "tu",
+          "form": "dormirias",
+          "example_en": "You would sleep better without your phone.",
+          "example_pt": "Dormirias melhor sem o telemóvel."
+        },
+        {
+          "tense": "conditional",
+          "person": "ele",
+          "form": "dormiria",
+          "example_en": "He would sleep all day if he could.",
+          "example_pt": "Ele dormiria o dia todo, se pudesse."
+        },
+        {
+          "tense": "conditional",
+          "person": "nos",
+          "form": "dormiríamos",
+          "example_en": "We would sleep better in a bigger bed.",
+          "example_pt": "Dormiríamos melhor numa cama maior."
+        },
+        {
+          "tense": "conditional",
+          "person": "eles",
+          "form": "dormiriam",
+          "example_en": "They would sleep better with less noise.",
+          "example_pt": "Dormiriam melhor com menos barulho."
+        },
+        {
           "tense": "present_subjunctive",
           "person": "eu",
           "form": "durma",
@@ -4125,111 +4230,6 @@
           "example_pt": "Quando eles dormirem, arrumo a sala."
         },
         {
-          "tense": "conditional",
-          "person": "eu",
-          "form": "dormiria",
-          "example_en": "I would sleep better without coffee.",
-          "example_pt": "Dormiria melhor sem café."
-        },
-        {
-          "tense": "conditional",
-          "person": "tu",
-          "form": "dormirias",
-          "example_en": "You would sleep better without your phone.",
-          "example_pt": "Dormirias melhor sem o telemóvel."
-        },
-        {
-          "tense": "conditional",
-          "person": "ele",
-          "form": "dormiria",
-          "example_en": "He would sleep all day if he could.",
-          "example_pt": "Ele dormiria o dia todo, se pudesse."
-        },
-        {
-          "tense": "conditional",
-          "person": "nos",
-          "form": "dormiríamos",
-          "example_en": "We would sleep better in a bigger bed.",
-          "example_pt": "Dormiríamos melhor numa cama maior."
-        },
-        {
-          "tense": "conditional",
-          "person": "eles",
-          "form": "dormiriam",
-          "example_en": "They would sleep better with less noise.",
-          "example_pt": "Dormiriam melhor com menos barulho."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eu",
-          "form": "dormira",
-          "example_en": "I had slept badly the night before.",
-          "example_pt": "Eu dormira mal na noite anterior."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "tu",
-          "form": "dormiras",
-          "example_en": "You had slept only three hours.",
-          "example_pt": "Tu dormiras apenas três horas."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "ele",
-          "form": "dormira",
-          "example_en": "He had slept on the sofa that night.",
-          "example_pt": "Ele dormira no sofá nessa noite."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "nos",
-          "form": "dormíramos",
-          "example_en": "We had slept little during the trip.",
-          "example_pt": "Dormíramos pouco durante a viagem."
-        },
-        {
-          "tense": "past_pluperfect",
-          "person": "eles",
-          "form": "dormiram",
-          "example_en": "They had taken a nap before going out.",
-          "example_pt": "Eles dormiram a sesta antes de sair."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eu",
-          "form": "dormirei",
-          "example_en": "Tonight I will sleep early.",
-          "example_pt": "Hoje dormirei cedo."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "tu",
-          "form": "dormirás",
-          "example_en": "After the hike, you will sleep well.",
-          "example_pt": "Depois da caminhada, dormirás bem."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "ele",
-          "form": "dormirá",
-          "example_en": "The baby will sleep all afternoon.",
-          "example_pt": "O bebé dormirá a tarde toda."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "nos",
-          "form": "dormiremos",
-          "example_en": "We will sleep at grandma's house.",
-          "example_pt": "Dormiremos na casa da avó."
-        },
-        {
-          "tense": "future_indicative",
-          "person": "eles",
-          "form": "dormirão",
-          "example_en": "The kids will sleep in the living room.",
-          "example_pt": "Os miúdos dormirão na sala."
-        },
-        {
           "tense": "imperative_affirmative",
           "person": "tu",
           "form": "dorme",
@@ -4260,28 +4260,28 @@
         {
           "tense": "imperative_negative",
           "person": "tu",
-          "form": "não durmas",
+          "form": "durmas",
           "example_en": "Don't sleep on the sofa.",
           "example_pt": "Não durmas no sofá."
         },
         {
           "tense": "imperative_negative",
           "person": "ele",
-          "form": "não durma",
+          "form": "durma",
           "example_en": "Don't sleep with the window open.",
           "example_pt": "Não durma com a janela aberta."
         },
         {
           "tense": "imperative_negative",
           "person": "nos",
-          "form": "não durmamos",
+          "form": "durmamos",
           "example_en": "Let's not sleep in tomorrow.",
           "example_pt": "Não durmamos até tarde amanhã."
         },
         {
           "tense": "imperative_negative",
           "person": "eles",
-          "form": "não durmam",
+          "form": "durmam",
           "example_en": "Don't sleep during the journey.",
           "example_pt": "Não durmam durante a viagem."
         },
@@ -4652,8 +4652,8 @@
           "tense": "future_subjunctive",
           "person": "eles",
           "form": "abrirem",
-          "example_en": "When they open the doors, we go in.",
-          "example_pt": "Quando eles abrirem as portas, entramos."
+          "example_en": "When they open the doors, we will go in.",
+          "example_pt": "Quando eles abrirem as portas, nós entraremos."
         },
         {
           "tense": "imperative_affirmative",
