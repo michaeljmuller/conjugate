@@ -54,6 +54,7 @@ web/
   data/verbs_seed.json   # the 10 bootstrap pt verbs, 6 persons × 12 tenses (+ participles)
   static/          # index.html, app.js, styles.css
 tests/             # pytest, against saved source pages — no network
+tools/pull_seed.sh        # refresh the seed files from the deployment's database
 tools/voc_check.py        # the pt regression gate: seed vs cplp.org
 tools/regular_endings.py  # regenerates the pt ending table from cplp.org
 tools/italian_endings.py  # regenerates the it ending table from Reverso
