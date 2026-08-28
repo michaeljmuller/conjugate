@@ -1,12 +1,28 @@
-# Build context = src/python/web (the component directory).
+# Build context = the repository root, so that .git is reachable (see below).
+
+# Stage one exists only to read git. It is discarded: nothing but the two lines
+# it writes reaches the final image, so the app never carries a git binary or the
+# object database.
+#
+# Copying .git alone is enough — rev-parse and log read the object database and
+# never look at a worktree. That keeps .dockerignore purely a size optimisation
+# rather than something correctness depends on.
+FROM alpine/git AS version
+COPY .git /src/.git
+RUN git -C /src rev-parse --short HEAD > /version.txt \
+ && git -C /src log -1 --format=%cI >> /version.txt
+
 FROM python:3.12-slim
 
 WORKDIR /app
 
 # Install the component. Copy the manifest first for layer caching, then source.
-COPY pyproject.toml ./
-COPY web ./web
+COPY src/python/web/pyproject.toml ./
+COPY src/python/web/web ./web
 RUN pip install --no-cache-dir .
+
+# Last, so that a new commit does not invalidate the pip layer above it.
+COPY --from=version /version.txt /app/VERSION
 
 EXPOSE 8000
 

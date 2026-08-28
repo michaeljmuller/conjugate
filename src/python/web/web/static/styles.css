@@ -587,3 +587,17 @@ select {
 .rp-after span, .rp-after b { display: block; }
 .rp-after { margin-top: 0.25rem; }
 .rp-after b { color: var(--green); }
+
+/* The header is a row of avatar + identity; the identity half stacks, so the
+   build line sits under the email rather than beside it. min-width:0 lets a long
+   email ellipsize instead of widening the menu. */
+.um-who { display: flex; flex-direction: column; min-width: 0; }
+
+/* Which commit is running, under the email in the avatar menu. Deliberately the
+   quietest thing on the panel: wanted when you go looking, never otherwise. */
+.um-build {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  opacity: 0.8;
+}

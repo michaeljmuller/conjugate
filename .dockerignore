@@ -1,0 +1,20 @@
+# Keep the build context small. Purely a size optimisation — nothing here is
+# load-bearing, because the version stage reads .git's object database and never
+# consults a worktree.
+#
+# .git is deliberately NOT excluded: the build reads the commit out of it.
+
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+build/
+
+# Runtime state and local secrets, which have no business in an image.
+/data/
+src/docker/.env
+**/settings.local.json
+
+# Not needed to build or run the app.
+/docs/

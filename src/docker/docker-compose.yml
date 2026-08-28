@@ -24,9 +24,11 @@ services:
   web:
     restart: ${RESTART_POLICY:-unless-stopped}
     build:
-      # Context is the component dir so the Dockerfile can COPY ./web.
-      context: ../python/web
-      dockerfile: ../../docker/web/Dockerfile
+      # Context is the repository root, not the component dir: the image stamps
+      # the running commit into /app/VERSION, and that means .git has to be
+      # reachable from the build. See the Dockerfile's first stage.
+      context: ../..
+      dockerfile: src/docker/web/Dockerfile
     environment:
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-conjugate}:${POSTGRES_PASSWORD:-conjugate}@db:5432/${POSTGRES_DB:-conjugate}
       SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET in .env}

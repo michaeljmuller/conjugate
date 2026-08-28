@@ -123,6 +123,30 @@ function wireControls() {
 
 // The user's name is a dropdown: "Tense configuration" opens the settings
 // panel, and "Sign out" sits last. Closes on outside click or Escape.
+// Which commit is serving this page, from /healthz — the same answer curl gets,
+// so the UI and a scripted check can never disagree. Quiet on failure: not
+// knowing the version is not worth an error message in front of a drill.
+async function showBuild() {
+  const el_ = el("um-build");
+  if (!el_) return;
+  try {
+    const res = await fetch("/healthz");
+    if (!res.ok) return;
+    const { version, committed } = await res.json();
+    // A date is what a person reads; the hash is what they quote back.
+    const when = committed ? new Date(committed) : null;
+    el_.textContent = when && !isNaN(when)
+      ? `${version} · ${when.toLocaleDateString(undefined, {
+          year: "numeric", month: "short", day: "numeric",
+        })}`
+      : version;
+    el_.title = committed || "";
+  } catch (e) {
+    /* leave it blank */
+  }
+}
+
+
 function buildUserMenu(name, email) {
   const area = el("user-area");
   area.innerHTML =
@@ -133,7 +157,10 @@ function buildUserMenu(name, email) {
     `<div class="user-menu hidden" id="user-menu" role="menu">` +
     `<div class="um-header">` +
     `<img class="avatar avatar-lg" src="/static/user.png" alt="" />` +
+    `<span class="um-who">` +
     `<span class="um-email"></span>` +
+    `<span class="um-build" id="um-build"></span>` +
+    `</span>` +
     `</div>` +
     `<button class="um-item" role="menuitem" id="menu-add-verb">Add a verb</button>` +
     `<button class="um-item" role="menuitem" id="menu-review">Example sentences</button>` +
@@ -146,6 +173,7 @@ function buildUserMenu(name, email) {
   // textContent: name/email are untrusted profile data.
   area.querySelector(".umb-name").textContent = name;
   area.querySelector(".um-email").textContent = email;
+  showBuild();
 
   const btn = el("user-menu-btn");
   const menu = el("user-menu");

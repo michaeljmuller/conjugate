@@ -17,6 +17,32 @@ from .seed import init_db, seed_examples, seed_verbs
 
 STATIC_DIR = Path(__file__).parent / "static"
 
+# Written by the Dockerfile's version stage: the short commit hash on the first
+# line, the commit's ISO timestamp on the second. An absolute path because it is
+# stamped next to the WORKDIR rather than into the installed package.
+VERSION_FILE = Path("/app/VERSION")
+
+
+def read_version(path: Path = VERSION_FILE) -> dict:
+    """``{"version", "committed"}`` for the running image.
+
+    Falls back to ``dev`` whenever the file is missing, short or unreadable —
+    running outside a container looks exactly like that, and so does a build that
+    somehow skipped the stamp. Never raises: this feeds /healthz, and a health
+    check that fails because it cannot name itself is worse than one that says
+    "dev".
+    """
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        lines = []
+    version = (lines[0].strip() if lines else "") or "dev"
+    committed = lines[1].strip() if len(lines) > 1 else ""
+    return {"version": version, "committed": committed}
+
+
+VERSION = read_version()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -53,7 +79,12 @@ app.include_router(export_api.router)
 
 @app.get("/healthz")
 def healthz():
-    return {"status": "ok"}
+    """Liveness, and which commit is answering.
+
+    Unauthenticated on purpose: "what is deployed right now" is a question you
+    want answerable by curl, without a browser and without signing in.
+    """
+    return {"status": "ok", **VERSION}
 
 
 @app.get("/")
