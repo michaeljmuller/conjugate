@@ -14,14 +14,22 @@ let lang = { code: "", name: "", accents: [], available: [] }; // drilled langua
 const labelOf = (o) => (ui.labels === "native" && o.label_native) || o.label;
 const moodOf = (o) => (ui.labels === "native" && o.mood_native) || o.mood;
 
-// The mood tag, as an HTML fragment — but suppressed when the label already
-// contains it (e.g. "Conditional" / conditional, "Past participle" / participle),
-// so we never render "Conditional conditional".
+// The mood is suppressed when the label already contains it (e.g. "Conditional"
+// / conditional, "Past participle" / participle), so we never render
+// "Conditional conditional".
+const moodRedundant = (o) =>
+  labelOf(o).toLowerCase().includes(moodOf(o).toLowerCase());
+
+// The mood tag, as an HTML fragment for the tense heading.
 function moodSpan(o, cls) {
-  const mood = moodOf(o);
-  if (labelOf(o).toLowerCase().includes(mood.toLowerCase())) return "";
-  return ` <span class="${cls}">${mood}</span>`;
+  if (moodRedundant(o)) return "";
+  return ` <span class="${cls}">${moodOf(o)}</span>`;
 }
+
+// The same heading as one plain string, for places that can't style a span.
+// The mood is not decoration here: "Present", "Future" and "Past imperfect" each
+// name both an indicative and a subjunctive tense, so a bare label is ambiguous.
+const tenseText = (o) => (moodRedundant(o) ? labelOf(o) : `${labelOf(o)} ${moodOf(o)}`);
 
 async function api(path, opts = {}) {
   const res = await fetch(path, {
@@ -566,7 +574,7 @@ function renderDrill(data) {
     wrap.className = "tense-block";
     wrap.innerHTML = `<h3>${labelOf(block)}${moodSpan(block, "mood")}</h3>`;
     for (const r of block.rows) {
-      const row = makeRow(r, labelOf(block));
+      const row = makeRow(r, tenseText(block));
       wrap.appendChild(row.el);
       rows.push(row);
     }
@@ -577,7 +585,7 @@ function renderDrill(data) {
 
 // Build a row's DOM once and return its state object. All later changes go
 // through the state + renderRow(); the element is never queried for truth.
-function makeRow(data, tenseLabel) {
+function makeRow(data, tenseLabel) { // tenseLabel: the heading text, mood included
   const div = document.createElement("div");
   div.className = "row";
   div.innerHTML =
