@@ -74,6 +74,26 @@ def paradigm_from_entry(entry: dict) -> Paradigm:
     return paradigm
 
 
+def paradigm_from_verb(verb: Verb) -> Paradigm:
+    """Rebuild a ``Paradigm`` from a stored verb — the inverse of ``upsert_verb``.
+
+    Needed wherever the model has to be told about a verb that is already in the
+    database, since the prompts are written against paradigms rather than ORM
+    rows. Carries the alternatives back into each ``Cell``, answer first, so a
+    cell survives the trip out and in unchanged.
+
+    Language-agnostic: cells are keyed by the ``(tense, person)`` they were
+    stored under, and nothing here needs to know what those mean.
+    """
+    paradigm = Paradigm(infinitive=verb.infinitive, translation=verb.translation)
+    for form in verb.forms:
+        texts = (form.form_text, *(v.text for v in form.variants))
+        cell = _cell(list(texts))
+        if cell:
+            paradigm.cells[(form.tense, form.person)] = cell
+    return paradigm
+
+
 def upsert_verb(
     db: Session, paradigm: Paradigm, *, adapter, created_by: int | None = None
 ) -> tuple[Verb, int]:

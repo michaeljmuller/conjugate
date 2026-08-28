@@ -24,7 +24,7 @@ from . import llm
 from .db import SessionLocal
 from .languages import NotAVerb, Paradigm, SourceUnavailable, UnknownWord, get_adapter
 from .models import Verb
-from .seed import apply_examples, upsert_verb
+from .seed import apply_examples, paradigm_from_verb, upsert_verb
 
 log = logging.getLogger(__name__)
 
@@ -41,11 +41,21 @@ STEP_DRAFT = "draft"
 STEP_REFINE = "refine"
 STEP_SAVE = "save"
 
-_STEP_LABELS: list[tuple[str, str]] = [
+STEP_IDENTIFY = "identify"
+STEP_REWRITE = "rewrite"
+
+ADD_STEPS: list[tuple[str, str]] = [
     (STEP_LOOKUP, "Look up the conjugation"),
     (STEP_DRAFT, "Write example sentences"),
     (STEP_REFINE, "Review and revise the examples"),
     (STEP_SAVE, "Save the verb"),
+]
+
+# Revising has no lookup and no save: the verb already exists, and the proposals
+# are not written until a human accepts them.
+REVISE_STEPS: list[tuple[str, str]] = [
+    (STEP_IDENTIFY, "Find the sentences to change"),
+    (STEP_REWRITE, "Write new sentences"),
 ]
 
 
@@ -82,8 +92,12 @@ class Job:
     # example sentences that stayed weak after the revision rounds.
     notes: list[str] = field(default_factory=list)
     steps: list[Step] = field(
-        default_factory=lambda: [Step(key=k, label=l) for k, l in _STEP_LABELS]
+        default_factory=lambda: [Step(key=k, label=l) for k, l in ADD_STEPS]
     )
+    # Sentence rewrites awaiting a human verdict. Left on the job rather than
+    # written: the accept call is what commits, so an abandoned review changes
+    # nothing, and eviction below disposes of it with the job.
+    proposals: list[dict] = field(default_factory=list)
     version: int = 0
     _event: asyncio.Event = field(default_factory=asyncio.Event, repr=False)
 
@@ -142,6 +156,7 @@ class Job:
             "question": self.question,
             "verb_id": self.verb_id,
             "notes": list(self.notes),
+            "proposals": list(self.proposals),
             "steps": [s.as_dict() for s in self.steps],
             "version": self.version,
         }
@@ -156,8 +171,12 @@ def get(job_id: str) -> Job | None:
     return _jobs.get(job_id)
 
 
-def create(infinitive: str) -> Job:
-    job = Job(id=uuid.uuid4().hex, infinitive=infinitive)
+def create(infinitive: str, steps: list[tuple[str, str]] = ADD_STEPS) -> Job:
+    job = Job(
+        id=uuid.uuid4().hex,
+        infinitive=infinitive,
+        steps=[Step(key=k, label=l) for k, l in steps],
+    )
     _jobs[job.id] = job
     _evict()
     return job
@@ -217,6 +236,117 @@ async def _run(job: Job, user_id: int | None, language: str, force: bool) -> Non
 
 class _StepFailed(Exception):
     """Raised after a step has recorded its own failure on the job."""
+
+
+# --- revising an existing verb's example sentences ------------------------
+
+
+def start_revision(
+    verb_id: int,
+    language: str,
+    *,
+    comments: dict[tuple[str, str], str],
+    batch_comment: str,
+) -> Job:
+    """Register a sentence-revision job and kick it off.
+
+    Same registry, streaming and step machinery as adding a verb; what differs
+    is that this one never touches the database. It leaves its proposals on the
+    job for ``POST /verbs/{id}/examples/apply`` to write once a human has picked
+    the ones to keep.
+    """
+    with SessionLocal() as db:
+        verb = db.get(Verb, verb_id)
+        infinitive = verb.infinitive if verb else str(verb_id)
+    job = create(infinitive, REVISE_STEPS)
+    job.verb_id = verb_id
+    task = asyncio.create_task(
+        _run_revision(job, verb_id, language, comments, batch_comment)
+    )
+    job._task = task  # type: ignore[attr-defined]
+    return job
+
+
+async def _run_revision(
+    job: Job,
+    verb_id: int,
+    language: str,
+    comments: dict[tuple[str, str], str],
+    batch_comment: str,
+) -> None:
+    adapter = get_adapter(language)
+    try:
+        with SessionLocal() as db:
+            verb = db.get(Verb, verb_id)
+            if verb is None:
+                job.fail(STEP_IDENTIFY, "That verb no longer exists.")
+                return
+            paradigm = paradigm_from_verb(verb)
+            current = {
+                (f.tense, f.person): llm.ExamplePair(
+                    tense=f.tense,
+                    person=f.person,
+                    example_en=f.example_en or "",
+                    example_native=f.example_pt or "",
+                )
+                for f in verb.forms
+                if f.example_en or f.example_pt
+            }
+
+        def progress(event: str, **kw) -> None:
+            if event == "identifying":
+                job.update(
+                    STEP_IDENTIFY,
+                    status=RUNNING,
+                    detail=f"{llm.MODEL} · checking {kw.get('total', 0)} sentences",
+                )
+            elif event == "rewriting":
+                job.update(STEP_IDENTIFY, status=DONE, detail=f"{kw.get('total', 0)} to change")
+                job.update(
+                    STEP_REWRITE, status=RUNNING, detail=f"rewriting {kw.get('total', 0)}"
+                )
+
+        # No batch comment means nothing to identify: the comments name their own
+        # slots, so that step is already answered before the job starts.
+        if not batch_comment.strip():
+            job.update(STEP_IDENTIFY, status=DONE, detail=f"{len(comments)} commented on")
+
+        try:
+            result = await llm.revise_examples(
+                paradigm,
+                adapter,
+                current=current,
+                comments=comments,
+                batch_comment=batch_comment,
+                progress=progress,
+            )
+        except llm.ExamplesUnavailable as exc:
+            failed = next((s for s in job.steps if s.status == RUNNING), job.step(STEP_IDENTIFY))
+            job.fail(failed.key, f"Could not rewrite the sentences. {exc}")
+            return
+
+        job.proposals = [p.as_dict() for p in result.proposals]
+        if job.step(STEP_IDENTIFY).status != DONE:
+            job.update(STEP_IDENTIFY, status=DONE, detail=f"{len(result.proposals)} to change")
+        job.update(
+            STEP_REWRITE,
+            status=DONE,
+            detail=(
+                f"{len(result.proposals)} rewritten"
+                if result.proposals
+                else "nothing to change"
+            ),
+        )
+        if result.unresolved:
+            job.note(
+                f"{len(result.unresolved)} sentence(s) came back no better and are not "
+                "offered: " + ", ".join(f"{p.tense}/{p.person}" for p in result.unresolved[:8])
+            )
+        job.finish(verb_id)
+    except Exception as exc:  # noqa: BLE001 - last resort, must not kill the task
+        log.exception("revision job failed", extra={"verb_id": verb_id})
+        running = next((s for s in job.steps if s.status == RUNNING), job.steps[-1])
+        job.fail(running.key, f"Unexpected error: {exc}")
 
 
 async def _look_up(job: Job, adapter) -> Paradigm:

@@ -12,7 +12,7 @@ from web.languages.pt.catalogue import (
     PRESENT_PARTICIPLE_TENSE,
     SHORT_PERSON,
 )
-from web.models import Base, Form, Verb
+from web.models import Base, Form, FormVariant, Verb
 from web.languages import get_adapter
 from web.languages.base import Cell, Paradigm
 from web.seed import (
@@ -263,3 +263,28 @@ def test_short_participle_can_differ(tmp_path, monkeypatch):
         assert [v.text for v in by_person[SHORT_PERSON].variants] == ["aceito"]
         # The verb column tracks the ter/haver participle, not the short one.
         assert db.scalar(select(Verb)).past_participle == "aceitado"
+
+
+def test_paradigm_from_verb_carries_alternatives_back(tmp_path):
+    """The inverse of upsert_verb: a cell survives the trip out and in.
+
+    Rewriting a stored verb's sentences means describing it to the model again,
+    so a cell that loses its alternatives here would be offered back as a
+    narrower verb than the one in the database.
+    """
+    Session = _session(tmp_path)
+    with Session() as db:
+        verb = Verb(infinitive="ouvir", translation="to hear")
+        form = Form(tense="present_indicative", person="eu", form_text="oiço")
+        form.variants = [FormVariant(text="ouço")]
+        verb.forms.append(form)
+        verb.forms.append(Form(tense="preterite", person="eu", form_text="ouvi"))
+        db.add(verb)
+        db.commit()
+
+        paradigm = seed_mod.paradigm_from_verb(db.get(Verb, verb.id))
+
+    assert paradigm.infinitive == "ouvir"
+    assert paradigm.translation == "to hear"
+    assert paradigm.cell("present_indicative", "eu").forms == ("oiço", "ouço")
+    assert paradigm.cell("preterite", "eu").forms == ("ouvi",)

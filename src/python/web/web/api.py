@@ -18,6 +18,7 @@ from .db import get_db
 from .languages import DEFAULT_LANGUAGE, get_adapter, languages
 from .grading import grade
 from .models import Attempt, Form, User, UserSettings, Verb
+from .seed import apply_examples
 
 router = APIRouter(prefix="/api")
 
@@ -381,6 +382,154 @@ def verb_forms(
         "translation": verb.translation,
         "blocks": blocks,
     }
+
+
+# --- reviewing a verb's example sentences ---------------------------------
+
+
+def _example_verb(verb_id: int, db: Session) -> tuple[Verb, object]:
+    verb = db.get(Verb, verb_id)
+    if verb is None:
+        raise HTTPException(status_code=404, detail="verb not found")
+    return verb, get_adapter(verb.language)
+
+
+@router.get("/verbs/{verb_id}/examples")
+def verb_examples(
+    verb_id: int, db: Session = Depends(get_db), user: User = Depends(current_user)
+):
+    """Every example sentence on a verb, in drill order, for review.
+
+    Unlike ``verb_forms`` this ignores the user's tense preferences: you are
+    editing the verb's own data here, and a sentence you have switched off is
+    still a sentence that will be shown to whoever switches it back on. It does
+    honour ``_contrast``, so the panel offers exactly the rows the drill renders.
+    """
+    verb, adapter = _example_verb(verb_id, db)
+    by_key: dict[tuple[str, str], Form] = {(f.tense, f.person): f for f in verb.forms}
+    hidden, unlabelled = _contrast(adapter, by_key)
+
+    blocks = []
+    for tense in adapter.tenses:
+        rows = []
+        for person in adapter.drill_persons:
+            key = (tense["key"], person)
+            form = by_key.get(key)
+            if form is None or key in hidden:
+                continue
+            rows.append(
+                {
+                    "tense": tense["key"],
+                    "person": person,
+                    "label": "" if key in unlabelled else adapter.person_label(*key),
+                    "form": form.form_text,
+                    "example_en": form.example_en or "",
+                    "example_native": form.example_pt or "",
+                }
+            )
+        if rows:
+            blocks.append({**tense, "rows": rows})
+    return {
+        "id": verb.id,
+        "infinitive": verb.infinitive,
+        "translation": verb.translation,
+        "blocks": blocks,
+    }
+
+
+class SlotComment(BaseModel):
+    tense: str
+    person: str
+    comment: str
+
+
+class ReviseIn(BaseModel):
+    # What is wrong with particular sentences, named by their slot.
+    comments: list[SlotComment] = []
+    # A standing test for the whole set; the model decides where it applies.
+    comment: str = ""
+
+
+@router.post("/verbs/{verb_id}/examples/revise", status_code=202)
+async def revise_examples(
+    verb_id: int,
+    payload: ReviseIn,
+    db: Session = Depends(get_db),
+    user: User = Depends(current_user),
+):
+    """Start a job that proposes new sentences. Writes nothing — see ``apply``.
+
+    Async for the same reason ``add_verb`` is: it schedules an asyncio task.
+    """
+    verb, adapter = _example_verb(verb_id, db)
+    comments = {
+        (c.tense, c.person): c.comment for c in payload.comments if c.comment.strip()
+    }
+    if not comments and not payload.comment.strip():
+        raise HTTPException(status_code=400, detail="say what should change")
+    if not llm.is_configured():
+        raise HTTPException(
+            status_code=503,
+            detail="Rewriting sentences needs ANTHROPIC_API_KEY, which is not set on the server.",
+        )
+    return jobs.start_revision(
+        verb.id,
+        adapter.code,
+        comments=comments,
+        batch_comment=payload.comment,
+    ).as_dict()
+
+
+class SlotRef(BaseModel):
+    tense: str
+    person: str
+
+
+class ApplyIn(BaseModel):
+    job_id: str
+    # The slots to keep, as ``[{"tense", "person"}, …]``. Anything not named is
+    # discarded with the job — rejecting is simply not accepting.
+    accept: list[SlotRef] = []
+
+
+@router.post("/verbs/{verb_id}/examples/apply")
+def apply_revision(
+    verb_id: int,
+    payload: ApplyIn,
+    db: Session = Depends(get_db),
+    user: User = Depends(current_user),
+):
+    """Write the accepted proposals onto the verb's forms.
+
+    The job is the only source of the new text — the client sends back which
+    slots to keep, never the sentences themselves, so nothing a browser made up
+    can reach the database.
+    """
+    verb, _ = _example_verb(verb_id, db)
+    job = jobs.get(payload.job_id)
+    if job is None:
+        raise HTTPException(
+            status_code=404, detail="that review has expired — run it again"
+        )
+    if job.verb_id != verb.id:
+        raise HTTPException(status_code=400, detail="that review is for another verb")
+
+    wanted = {(a.tense, a.person) for a in payload.accept}
+    slots = [
+        {
+            "tense": p["tense"],
+            "person": p["person"],
+            "example_en": p["after_en"],
+            "example_pt": p["after_native"],
+        }
+        for p in job.proposals
+        if (p["tense"], p["person"]) in wanted
+    ]
+    # apply_examples already ignores slots with no matching form and never writes
+    # a blank over existing text.
+    written = apply_examples(verb, slots) // 2  # two columns per sentence pair
+    db.commit()
+    return {"applied": written}
 
 
 class AttemptIn(BaseModel):

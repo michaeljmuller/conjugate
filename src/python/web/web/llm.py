@@ -145,6 +145,10 @@ class SlotProblem(BaseModel):
     person: str
     reason: str = Field(description="One short clause on what is wrong.")
 
+    @property
+    def key(self) -> tuple[str, str]:
+        return (self.tense, self.person)
+
 
 class ExampleCritique(BaseModel):
     problems: list[SlotProblem] = Field(
@@ -180,11 +184,22 @@ Style guide:
 {m.guidance}"""
 
 
-def _critique_system(m: PromptMaterial) -> str:
+def _critique_system(m: PromptMaterial, extra_rule: str = "") -> str:
+    # A reader's instruction about the whole batch ("make sure every sentence
+    # only fits the tense it illustrates") is a test to apply, which is what this
+    # prompt already is — so it goes in as one more ground for rejection rather
+    # than as a separate kind of request.
+    asked = (
+        f"\n\nThe person who owns these sentences has asked for this specifically. "
+        f"Treat it as the most important reason to report an entry, and report "
+        f"EVERY entry it applies to:\n\n{extra_rule.strip()}"
+        if extra_rule.strip()
+        else ""
+    )
     return f"""You are reviewing example sentences for a {m.name} conjugation drill.
 
 Each entry pairs a verb form with an English sentence and its {m.name}
-translation. Report ONLY entries that need rewriting, and say briefly why.
+translation. Report ONLY entries that need rewriting, and say briefly why.{asked}
 
 Report an entry when:
 - the translation does not contain the exact given form, or alters its spelling
@@ -290,6 +305,7 @@ async def _critique(
     pairs: dict[tuple[str, str], ExamplePair],
     client: AsyncAnthropic,
     m: PromptMaterial,
+    extra_rule: str = "",
 ) -> list[SlotProblem]:
     payload = [
         {
@@ -309,7 +325,7 @@ async def _critique(
         model=MODEL,
         max_tokens=MAX_TOKENS,
         thinking={"type": "adaptive"},
-        system=_critique_system(m),
+        system=_critique_system(m, extra_rule),
         messages=[
             {
                 "role": "user",
@@ -446,6 +462,151 @@ async def generate_examples(
         )
 
     result.pairs = pairs
+    return result
+
+
+@dataclass
+class Proposal:
+    """One sentence the model wants to change, with what it is replacing."""
+
+    tense: str
+    person: str
+    form: str
+    reason: str  # the comment or critique finding that prompted the rewrite
+    before_en: str
+    before_native: str
+    after_en: str
+    after_native: str
+
+    def as_dict(self) -> dict:
+        return {
+            "tense": self.tense,
+            "person": self.person,
+            "form": self.form,
+            "reason": self.reason,
+            "before_en": self.before_en,
+            "before_native": self.before_native,
+            "after_en": self.after_en,
+            "after_native": self.after_native,
+        }
+
+
+@dataclass
+class ReviseResult:
+    proposals: list[Proposal] = field(default_factory=list)
+    # Slots asked about that came back no better — reported rather than proposed,
+    # since offering an unchanged or broken sentence as a change wastes a click.
+    unresolved: list[SlotProblem] = field(default_factory=list)
+
+
+async def revise_examples(
+    paradigm: Paradigm,
+    adapter,
+    *,
+    current: dict[tuple[str, str], ExamplePair],
+    comments: dict[tuple[str, str], str] | None = None,
+    batch_comment: str = "",
+    client: AsyncAnthropic | None = None,
+    progress: ProgressFn | None = None,
+) -> ReviseResult:
+    """Rewrite example sentences a reader has objected to.
+
+    Two kinds of objection, which meet in the same place:
+
+    - ``comments`` names a slot and says what is wrong with it. Nothing has to be
+      identified, so this costs no critique call.
+    - ``batch_comment`` is a standing test for the whole set ("make sure every
+      sentence only fits the tense it illustrates"). One critique call decides
+      which slots it applies to.
+
+    Either way the result is a list of ``SlotProblem``, which is what ``_rewrite``
+    already consumes — a reader's comment and the model's own finding travel the
+    same path, and the rewrite happens in ONE call for every flagged slot at once.
+    Batching it is not only cheaper: the model sees the whole set, so the new
+    sentences stay consistent with the ones being kept.
+
+    Nothing is written. The proposals are returned for a human to accept.
+    """
+    if client is None and not is_configured():
+        raise ExamplesUnavailable(
+            "ANTHROPIC_API_KEY is not set, so example sentences cannot be rewritten."
+        )
+    client = client or _client()
+    material = adapter.prompt_material()
+    slots = slots_for(paradigm, adapter)
+    by_key = {s.key: s for s in slots}
+    note = progress or (lambda *a, **k: None)
+    comments = {k: v.strip() for k, v in (comments or {}).items() if v.strip()}
+
+    # 1. Work out what to rewrite.
+    problems: list[SlotProblem] = []
+    if batch_comment.strip():
+        note("identifying", total=len(slots))
+        found = await _critique(
+            paradigm, slots, current, client, material, batch_comment
+        )
+        problems = [p for p in found if p.key in by_key and p.key not in comments]
+    # A comment names its slot outright, and overrides whatever the critique said
+    # about it — the reader is the one being served here.
+    problems += [
+        SlotProblem(tense=t, person=p, reason=reason)
+        for (t, p), reason in comments.items()
+        if (t, p) in by_key
+    ]
+    if not problems:
+        return ReviseResult()
+
+    # 2. Rewrite them all in one call.
+    note("rewriting", total=len(problems))
+    redraft = await _rewrite(paradigm, problems, by_key, current, client, material)
+    rewritten = {(e.tense, e.person): e for e in redraft.examples}
+
+    # 3. A rewrite that dropped the drilled form is unusable however well it
+    # reads, and the check is free. Give those one more try, then stop: a second
+    # failure is a sentence the model cannot write, not one more round away.
+    rewritten = {k: v for k, v in rewritten.items() if k in by_key}
+    checked = [by_key[k] for k in rewritten]
+    broken = mechanical_problems(rewritten, checked)
+    if broken:
+        note("rewriting", total=len(broken))
+        retry = await _rewrite(paradigm, broken, by_key, rewritten, client, material)
+        for e in retry.examples:
+            if (e.tense, e.person) in rewritten:
+                rewritten[(e.tense, e.person)] = e
+
+    # 4. Keep only the ones that came back usable and actually different.
+    result = ReviseResult()
+    still_broken = {
+        p.key for p in mechanical_problems(rewritten, [by_key[k] for k in rewritten])
+    }
+    for problem in problems:
+        key = problem.key
+        new = rewritten.get(key)
+        was = current.get(key)
+        if new is None or key in still_broken:
+            result.unresolved.append(problem)
+            continue
+        if was and (new.example_en.strip(), new.example_native.strip()) == (
+            was.example_en.strip(),
+            was.example_native.strip(),
+        ):
+            result.unresolved.append(
+                SlotProblem(tense=key[0], person=key[1], reason="came back unchanged")
+            )
+            continue
+        result.proposals.append(
+            Proposal(
+                tense=key[0],
+                person=key[1],
+                form=by_key[key].form,
+                reason=problem.reason,
+                before_en=was.example_en if was else "",
+                before_native=was.example_native if was else "",
+                after_en=new.example_en.strip(),
+                after_native=new.example_native.strip(),
+            )
+        )
+    note("done", proposed=len(result.proposals), unresolved=len(result.unresolved))
     return result
 
 

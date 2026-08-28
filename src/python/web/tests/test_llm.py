@@ -249,3 +249,149 @@ def test_a_languages_guidance_glosses_every_person_it_drills(code):
     persons = json.loads(adapter.prompt_material().guidance)["guidance"]["persons"]
     missing = set(adapter.drill_persons) - set(persons)
     assert not missing, f"{code}: no gloss for {sorted(missing)}"
+
+
+# ---- revise_examples -----------------------------------------------------
+
+class _ReviseStub:
+    """Answers a revision, recording the reasons it was asked to fix.
+
+    ``critique_finds`` are the slots a batch comment is told to apply to;
+    ``breaks`` are slots whose rewrite comes back without the drilled form, to
+    exercise the corrective pass.
+    """
+
+    def __init__(self, *, critique_finds=(), breaks=(), echo_unchanged=()):
+        self.critique_finds = list(critique_finds)
+        self.breaks = set(breaks)
+        self.echo_unchanged = set(echo_unchanged)
+        self.rewrite_requests: list[list[dict]] = []
+        self.critique_systems: list[str] = []
+        self.calls = {"critique": 0, "rewrite": 0}
+        self.messages = self
+
+    async def parse(self, **kw):
+        content = kw["messages"][0]["content"]
+        if kw["output_format"] is ExampleCritique:
+            self.calls["critique"] += 1
+            self.critique_systems.append(kw["system"])
+            return _Parsed(ExampleCritique(problems=[
+                SlotProblem(tense=t, person=p, reason="fails the batch test")
+                for t, p in self.critique_finds
+            ]))
+
+        self.calls["rewrite"] += 1
+        payload = json.loads(content[content.index("[") :])
+        self.rewrite_requests.append(payload)
+        out = []
+        for entry in payload:
+            key = (entry["tense"], entry["person"])
+            if key in self.echo_unchanged:
+                native, english = entry["previous_native"], entry["previous_en"]
+            elif key in self.breaks and self.calls["rewrite"] == 1:
+                native, english = "Sem a forma.", "Broken."   # form is missing
+            else:
+                native, english = f"Ontem, frase com {entry['form']}.", "Yesterday, fixed."
+            out.append(ExamplePair(
+                tense=entry["tense"], person=entry["person"],
+                example_en=english, example_native=native,
+            ))
+        return _Parsed(ExampleDraft(translation="", examples=out))
+
+
+def _current(*keys):
+    """Existing sentences for the given slots, keyed as revise_examples wants."""
+    by_key = {s.key: s for s in slots_for(ENTRY, ADAPTER)}
+    return {
+        k: ExamplePair(tense=k[0], person=k[1], example_en="I run.",
+                       example_native=f"Frase com {by_key[k].form}.")
+        for k in keys
+    }
+
+
+def test_comment_on_one_slot_costs_no_critique_call():
+    """A comment names its own slot, so there is nothing to identify."""
+    key = ("preterite", "eu")
+    stub = _ReviseStub()
+    result = asyncio.run(llm.revise_examples(
+        ENTRY, ADAPTER, current=_current(key),
+        comments={key: "this could be present or past; add 'yesterday'"},
+        client=stub,
+    ))
+
+    assert stub.calls == {"critique": 0, "rewrite": 1}
+    # The comment reaches the rewrite verbatim as the problem to fix.
+    assert stub.rewrite_requests[0][0]["problem"].startswith("this could be present")
+    assert [(p.tense, p.person) for p in result.proposals] == [key]
+    assert result.proposals[0].before_native == "Frase com corri."
+    assert result.proposals[0].after_native == "Ontem, frase com corri."
+
+
+def test_batch_comment_identifies_then_rewrites_in_two_calls():
+    """One call to find the slots, one to fix them all together — not one each."""
+    finds = [("preterite", "eu"), ("present_indicative", "tu")]
+    stub = _ReviseStub(critique_finds=finds)
+    result = asyncio.run(llm.revise_examples(
+        ENTRY, ADAPTER, current=_current(*finds),
+        batch_comment="ensure every sentence only fits the tense it illustrates",
+        client=stub,
+    ))
+
+    assert stub.calls == {"critique": 1, "rewrite": 1}
+    assert len(stub.rewrite_requests[0]) == 2          # both slots, one call
+    assert {(p.tense, p.person) for p in result.proposals} == set(finds)
+    # The batch comment is put to the model as its own ground for rejection.
+    assert "only fits the tense it illustrates" in stub.critique_systems[0]
+
+
+def test_a_slot_comment_overrides_the_batch_critique():
+    """The reader's own words win: they are more specific than the model's."""
+    key = ("preterite", "eu")
+    stub = _ReviseStub(critique_finds=[key])
+    asyncio.run(llm.revise_examples(
+        ENTRY, ADAPTER, current=_current(key),
+        comments={key: "use a different subject"},
+        batch_comment="check the tenses",
+        client=stub,
+    ))
+
+    asked = stub.rewrite_requests[0]
+    assert len(asked) == 1                              # not queued twice
+    assert asked[0]["problem"] == "use a different subject"
+
+
+def test_a_rewrite_that_drops_the_form_gets_one_more_try():
+    """A sentence without the drilled form is unusable however well it reads."""
+    key = ("preterite", "eu")
+    stub = _ReviseStub(breaks=[key])
+    result = asyncio.run(llm.revise_examples(
+        ENTRY, ADAPTER, current=_current(key), comments={key: "fix it"}, client=stub,
+    ))
+
+    assert stub.calls["rewrite"] == 2                   # the corrective pass ran
+    assert result.proposals[0].after_native == "Ontem, frase com corri."
+    assert result.unresolved == []
+
+
+def test_an_unchanged_rewrite_is_not_offered_as_a_change():
+    """Nothing to accept, so it is reported instead of wasting a click."""
+    key = ("preterite", "eu")
+    stub = _ReviseStub(echo_unchanged=[key])
+    result = asyncio.run(llm.revise_examples(
+        ENTRY, ADAPTER, current=_current(key), comments={key: "fix it"}, client=stub,
+    ))
+
+    assert result.proposals == []
+    assert [p.tense for p in result.unresolved] == ["preterite"]
+
+
+def test_nothing_to_do_makes_no_rewrite_call():
+    """A batch comment the critique finds nothing for stops there."""
+    stub = _ReviseStub(critique_finds=[])
+    result = asyncio.run(llm.revise_examples(
+        ENTRY, ADAPTER, current=_current(("preterite", "eu")),
+        batch_comment="check the tenses", client=stub,
+    ))
+
+    assert stub.calls == {"critique": 1, "rewrite": 0}
+    assert result.proposals == []
