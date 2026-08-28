@@ -161,6 +161,17 @@ the tense/aspect — plus a faithful {m.name} translation of that same
 sentence which naturally contains the exact given form, spelled exactly as
 given, accents and all.
 
+The English sentence is the whole of the prompt the learner sees, so it has to
+pin the tense down on its own. "I put the keys on the table" does not: it reads
+just as easily as a present habit, and English "put" is spelled the same either
+way — so the learner cannot tell which form is being asked for. Fix it with
+whatever the sentence needs: "Yesterday I put the keys on the table" for the
+past, "Whenever I get home I put the keys on the table" for the habit. A time
+word, a subordinate clause, or an explicit contrast all work.
+
+Before you settle on an English sentence, ask whether some other tense of the
+same verb could translate it too. If it could, the sentence is not finished.
+
 Keep both sentences short and concrete. Return one entry per slot, echoing the
 slot's tense and person unchanged. Also give a short English gloss of the verb.
 
@@ -180,6 +191,10 @@ Report an entry when:
   or accents;
 - it is unnatural, or not how the sentence would actually be said;
 - the sentence does not actually illustrate the given tense or aspect;
+- the English would translate just as well into a different tense of the same
+  verb, naming no time, habit or condition that rules the others out — the
+  learner is being asked for a form the prompt does not identify ("I put the
+  keys on the table" against "Yesterday I put the keys on the table");
 - the subject does not match the given person;
 - the English and the translation do not mean the same thing;
 {m.critique_rules}
