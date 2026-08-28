@@ -11,7 +11,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
-from . import api, auth
+from . import api, auth, export_api
 from .db import SessionLocal, engine
 from .seed import init_db, seed_examples, seed_verbs
 
@@ -48,6 +48,7 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(api.router)
+app.include_router(export_api.router)
 
 
 @app.get("/healthz")

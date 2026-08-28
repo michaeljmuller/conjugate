@@ -29,7 +29,11 @@
   - review/edit a verb's forms and example sentences -- for someone who knows
     the language; wanted for existing verbs too, not just newly added ones
   - regenerate the example sentences for a verb
-  - export db-added verbs back into verbs_seed.json
+  - DONE: export db-added verbs back into verbs_seed.json -- now GET
+    /export/verbs_seed.json and /export/examples.json, basic auth, outside the
+    google session so a script can fetch them.  startup seeding fills blanks
+    only, so the db is authoritative and the files are the seed; the export is
+    how the committed files catch up.
   - VERIFY the participle rule the UI now asserts: regular form with ter/haver,
     short form with ser/estar. standard grammar, but never confirmed against a
     primary source, and the row labels state it as fact.

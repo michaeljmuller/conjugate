@@ -38,6 +38,11 @@ services:
       # Required to add a verb: writes its example sentences. Without it the
       # add-verb endpoint returns 503; drilling is unaffected.
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      # Basic-auth pair for GET /export/*.json, which dumps the seed files from
+      # the database so the committed ones can be brought up to date. Outside the
+      # Google session because a script fetches it. Unset = the routes 404.
+      EXPORT_USER: ${EXPORT_USER:-}
+      EXPORT_PASSWORD: ${EXPORT_PASSWORD:-}
       # DEV_LOGIN=1 bypasses Google for local testing. Never set in prod.
       DEV_LOGIN: ${DEV_LOGIN:-}
     ports:

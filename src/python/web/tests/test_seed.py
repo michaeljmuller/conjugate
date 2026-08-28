@@ -288,3 +288,63 @@ def test_paradigm_from_verb_carries_alternatives_back(tmp_path):
     assert paradigm.translation == "to hear"
     assert paradigm.cell("present_indicative", "eu").forms == ("oiço", "ouço")
     assert paradigm.cell("preterite", "eu").forms == ("ouvi",)
+
+
+def test_seeding_never_overwrites_a_sentence_the_form_already_has(tmp_path, monkeypatch):
+    """A correction made in the running app has to survive the next deploy.
+
+    Startup seeding used to write examples.json over whatever was there, which
+    silently reverted anything fixed through the review panel. It fills blanks
+    now; catching the file back up is the export endpoint's job.
+    """
+    Session = _session(tmp_path)
+    examples = tmp_path / "examples.json"
+    examples.write_text(json.dumps({"verbs": [{
+        "infinitive": "correr",
+        "forms": [
+            {"tense": "preterite", "person": "eu",
+             "example_en": "From the file.", "example_pt": "Do ficheiro."},
+            {"tense": "present_indicative", "person": "eu",
+             "example_en": "Also from the file.", "example_pt": "Tambem do ficheiro."},
+        ],
+    }]}), encoding="utf-8")
+    monkeypatch.setattr(seed_mod, "EXAMPLES_FILE", examples)
+
+    with Session() as db:
+        verb = Verb(infinitive="correr")
+        verb.forms.append(Form(
+            tense="preterite", person="eu", form_text="corri",
+            example_en="Fixed by hand.", example_pt="Corrigido a mao.",
+        ))
+        # No sentence yet: this one the file is welcome to fill.
+        verb.forms.append(Form(
+            tense="present_indicative", person="eu", form_text="corro"
+        ))
+        db.add(verb)
+        db.commit()
+
+        seed_mod.seed_examples(db)
+        by_tense = {f.tense: f for f in db.scalar(select(Verb)).forms}
+
+    assert by_tense["preterite"].example_en == "Fixed by hand."      # left alone
+    assert by_tense["present_indicative"].example_en == "Also from the file."
+
+
+def test_apply_examples_still_overwrites_when_asked(tmp_path):
+    """The review panel's accept path depends on it — that is the whole point."""
+    Session = _session(tmp_path)
+    with Session() as db:
+        verb = Verb(infinitive="correr")
+        verb.forms.append(Form(
+            tense="preterite", person="eu", form_text="corri",
+            example_en="Old.", example_pt="Velho.",
+        ))
+        db.add(verb)
+        db.commit()
+
+        written = seed_mod.apply_examples(verb, [{
+            "tense": "preterite", "person": "eu",
+            "example_en": "New.", "example_pt": "Novo.",
+        }])
+        assert written == 2
+        assert verb.forms[0].example_en == "New."

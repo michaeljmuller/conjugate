@@ -173,12 +173,15 @@ def seed_verbs(db: Session) -> int:
     return inserted
 
 
-def apply_examples(verb: Verb, slots: list[dict]) -> int:
+def apply_examples(verb: Verb, slots: list[dict], *, overwrite: bool = True) -> int:
     """Write example sentences onto a verb's forms. Returns fields updated.
 
     Each slot is ``{"tense", "person", "example_en", "example_pt"}``. Only
     non-empty values are applied, so a blank never wipes existing text, and
     slots with no matching form are ignored. Does not commit.
+
+    ``overwrite=False`` fills empty columns only, leaving any sentence the form
+    already has. That is what startup seeding wants — see ``seed_examples``.
     """
     by_key = {(f.tense, f.person): f for f in verb.forms}
     updated = 0
@@ -188,17 +191,27 @@ def apply_examples(verb: Verb, slots: list[dict]) -> int:
             continue
         for col in ("example_en", "example_pt"):
             text = (slot.get(col) or "").strip()
-            if text and getattr(form, col) != text:
-                setattr(form, col, text)
-                updated += 1
+            if not text or getattr(form, col) == text:
+                continue
+            if not overwrite and (getattr(form, col) or "").strip():
+                continue
+            setattr(form, col, text)
+            updated += 1
     return updated
 
 
 def seed_examples(db: Session) -> int:
-    """Sync example sentences (English + pt-PT) from examples.json into forms.
+    """Fill in missing example sentences from examples.json. Returns fields written.
 
-    Runs every startup so re-deploying with a more-filled form updates the DB.
-    pt-PT only, like the file itself. Returns the number of fields updated.
+    Runs every startup, and fills blanks ONLY: a sentence already on a form is
+    left alone, whatever the file says. Sentences are editable in the running app
+    now, and a redeploy that reverted somebody's correction to whatever happened
+    to be committed would make that editing pointless.
+
+    So the database wins on conflict and the file is the seed, not the master.
+    Catching the file back up is the export endpoint's job — see ``web/export.py``.
+
+    pt-PT only, like the file itself.
     """
     if not EXAMPLES_FILE.exists():
         return 0
@@ -213,7 +226,7 @@ def seed_examples(db: Session) -> int:
         )
         if verb is None:
             continue
-        updated += apply_examples(verb, entry.get("forms", []))
+        updated += apply_examples(verb, entry.get("forms", []), overwrite=False)
     if updated:
         db.commit()
     return updated
