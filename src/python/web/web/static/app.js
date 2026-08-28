@@ -110,6 +110,12 @@ function wireControls() {
   el("interface-close").addEventListener("click", closeInterface);
   el("add-verb-go").addEventListener("click", () => addGoAction());
   el("add-verb-close").addEventListener("click", closeAddVerb);
+  // The primary button means "rewrite" before there are proposals and "save"
+  // after, so it dispatches on which state the card is showing.
+  el("review-go").addEventListener("click", () =>
+    reviewProposals.length ? saveReview() : submitReview()
+  );
+  el("review-close").addEventListener("click", closeReview);
   el("add-verb-input").addEventListener("keydown", (e) => {
     if (e.key === "Enter") submitAddVerb();
   });
@@ -130,6 +136,7 @@ function buildUserMenu(name, email) {
     `<span class="um-email"></span>` +
     `</div>` +
     `<button class="um-item" role="menuitem" id="menu-add-verb">Add a verb</button>` +
+    `<button class="um-item" role="menuitem" id="menu-review">Example sentences</button>` +
     `<button class="um-item" role="menuitem" id="menu-tenses">Tense configuration</button>` +
     `<button class="um-item" role="menuitem" id="menu-interface">Interface</button>` +
     `<div class="um-divider" role="separator"></div>` +
@@ -157,6 +164,11 @@ function buildUserMenu(name, email) {
   el("menu-add-verb").addEventListener("click", () => {
     setOpen(false);
     openAddVerb();
+  });
+  // Acts on the verb on screen — there is no other verb it could mean.
+  el("menu-review").addEventListener("click", () => {
+    setOpen(false);
+    if (currentVerbId) openReview(currentVerbId);
   });
   el("menu-tenses").addEventListener("click", () => {
     setOpen(false);
@@ -411,9 +423,18 @@ async function submitAddVerb(force = false) {
   followJob(job.job_id);
 }
 
+// Both jobs — adding a verb and rewriting its sentences — are watched the same
+// way, so the reconnect logic below is written once and told which panel to
+// report into. `ui` is {prefix, onFinish, onLost}; prefix names the element ids.
+const ADD_PANEL = {
+  prefix: "add-verb",
+  onFinish: (job) => finishJob(job),
+  onLost: (msg) => showAddError(msg),
+};
+
 // Watch the job over SSE, falling back to polling if the stream can't be held
 // open (a proxy timeout, or a browser that suspended the tab).
-function followJob(jobId) {
+function followJob(jobId, panel = ADD_PANEL) {
   closeAddStream();
   let polling = false;
   const source = new EventSource(`/api/verbs/jobs/${jobId}/stream`);
@@ -421,10 +442,10 @@ function followJob(jobId) {
 
   source.onmessage = (e) => {
     const job = JSON.parse(e.data);
-    renderJob(job);
+    renderJob(job, panel.prefix);
     if (job.status !== "running") {
       closeAddStream();
-      finishJob(job);
+      panel.onFinish(job);
     }
   };
   source.onerror = () => {
@@ -433,21 +454,21 @@ function followJob(jobId) {
     if (source !== addStream || polling) return;
     closeAddStream();
     polling = true;
-    pollJob(jobId);
+    pollJob(jobId, panel);
   };
 }
 
-async function pollJob(jobId) {
+async function pollJob(jobId, panel = ADD_PANEL) {
   for (;;) {
     let job;
     try {
       job = await api(`/api/verbs/jobs/${jobId}`);
     } catch (e) {
-      return showAddError("Lost track of that job — reload to see if it finished.");
+      return panel.onLost("Lost track of that job — reload to see if it finished.");
     }
     if (!job) return;
-    renderJob(job);
-    if (job.status !== "running") return finishJob(job);
+    renderJob(job, panel.prefix);
+    if (job.status !== "running") return panel.onFinish(job);
     await new Promise((r) => setTimeout(r, 1500));
   }
 }
@@ -475,19 +496,257 @@ async function finishJob(job) {
 
   await loadVerbs();
   addOnClose = () => startVerb(job.verb_id);
+  // Sentences written by a model are worth a look before they become the only
+  // prompt for a form, so the review panel is offered rather than hidden behind
+  // the menu. Closing instead still drills the verb.
+  addGoAction = () => {
+    addOnClose = null;
+    closeAddVerb();
+    openReview(job.verb_id);
+  };
   // Notes are things the user should actually read — a form the check corrected,
-  // or a sentence that stayed weak. Hold the panel open for them; otherwise
-  // there's nothing to say, so get out of the way.
-  if (job.notes.length) setAddButtons("", `Drill ${job.infinitive}`);
-  else closeAddVerb();
+  // or a sentence that stayed weak. Hold the panel open for them either way now
+  // that there is something to offer.
+  setAddButtons("Review sentences", `Drill ${job.infinitive}`);
 }
 
-function renderJob(job) {
+// ---- Reviewing a verb's example sentences -------------------------------
+//
+// One card, three states in sequence: the sentences with a comment box each,
+// then the job's progress, then the proposals to accept or reject. Nothing is
+// written until "Save accepted" — the server keeps the new sentences on the job
+// and is sent back only the slots to keep.
+
+let reviewVerbId = null;
+let reviewProposals = [];   // what came back, in the order it is displayed
+let reviewJobId = null;
+// How to name a slot, built while listing the sentences. The proposals come
+// back keyed by (tense, person) alone, and raw keys are not what the rest of the
+// UI calls them — "Presente indicativo · eu", not "present_indicative · eu".
+let reviewLabels = {};
+
+async function openReview(verbId) {
+  closeAddStream();
+  reviewVerbId = verbId;
+  reviewJobId = null;
+  reviewProposals = [];
+  reviewLabels = {};
+  el("review-comment").value = "";
+  el("review-error").classList.add("hidden");
+  el("review-proposals").classList.add("hidden");
+  el("review-steps").classList.add("hidden");
+  el("review-notes").classList.add("hidden");
+  el("review-compose").classList.remove("hidden");
+  setReviewButtons("Rewrite", "Close");
+  el("review-panel").classList.remove("hidden");
+
+  const list = el("review-list");
+  list.innerHTML = "";
+  let data;
+  try {
+    data = await api(`/api/verbs/${verbId}/examples`);
+  } catch (e) {
+    return showReviewError("Could not load the sentences.");
+  }
+  if (!data) return;
+  el("review-subject").textContent = data.infinitive;
+
+  for (const block of data.blocks) {
+    const h = document.createElement("h3");
+    h.className = "review-tense";
+    h.textContent = tenseText(block);
+    list.appendChild(h);
+    for (const row of block.rows) {
+      reviewLabels[`${row.tense}/${row.person}`] = [tenseText(block), row.label]
+        .filter(Boolean)
+        .join(" · ");
+      list.appendChild(reviewRow(row));
+    }
+  }
+}
+
+// One sentence, with somewhere to say what is wrong with it. textContent
+// throughout: every string here is model-generated.
+function reviewRow(row) {
+  const div = document.createElement("div");
+  div.className = "review-row";
+  div.innerHTML =
+    `<div class="rr-head"><span class="rr-person"></span><b class="rr-form"></b></div>` +
+    `<div class="rr-en"></div><div class="rr-native"></div>` +
+    `<input class="rr-comment" type="text" placeholder="what should change?" />`;
+  div.querySelector(".rr-person").textContent = row.label;
+  div.querySelector(".rr-form").textContent = row.form;
+  div.querySelector(".rr-en").textContent = row.example_en || "(no sentence yet)";
+  div.querySelector(".rr-native").textContent = row.example_native || "";
+  div.dataset.tense = row.tense;
+  div.dataset.person = row.person;
+  return div;
+}
+
+function showReviewError(message) {
+  const err = el("review-error");
+  err.textContent = message;
+  err.classList.remove("hidden");
+}
+
+// An empty `go` label hides the primary button, as in the add panel.
+function setReviewButtons(go, close) {
+  const btn = el("review-go");
+  btn.textContent = go;
+  btn.classList.toggle("hidden", !go);
+  el("review-close").textContent = close;
+}
+
+const REVIEW_PANEL = {
+  prefix: "review",
+  onFinish: (job) => finishReview(job),
+  onLost: (msg) => showReviewError(msg),
+};
+
+async function submitReview() {
+  const comments = [...el("review-list").querySelectorAll(".review-row")]
+    .map((row) => ({
+      tense: row.dataset.tense,
+      person: row.dataset.person,
+      comment: row.querySelector(".rr-comment").value.trim(),
+    }))
+    .filter((c) => c.comment);
+  const comment = el("review-comment").value.trim();
+  if (!comments.length && !comment) {
+    return showReviewError("Comment on a sentence, or on all of them.");
+  }
+
+  el("review-error").classList.add("hidden");
+  let res;
+  try {
+    res = await fetch(`/api/verbs/${reviewVerbId}/examples/revise`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ comments, comment }),
+    });
+  } catch (e) {
+    return showReviewError("Could not reach the server.");
+  }
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    return showReviewError(body.detail || `Could not start that (${res.status}).`);
+  }
+
+  const job = await res.json();
+  reviewJobId = job.job_id;
+  el("review-compose").classList.add("hidden");
+  setReviewButtons("", "Close");
+  renderJob(job, "review");
+  followJob(job.job_id, REVIEW_PANEL);
+}
+
+function finishReview(job) {
+  if (job.status === "failed") {
+    el("review-compose").classList.remove("hidden");
+    showReviewError(job.error);
+    setReviewButtons("Try again", "Close");
+    return;
+  }
+  reviewProposals = job.proposals || [];
+  if (!reviewProposals.length) {
+    // The job's own notes say why, when there is a why.
+    showReviewError("Nothing to change — the sentences came back as they were.");
+    el("review-compose").classList.remove("hidden");
+    setReviewButtons("Try again", "Close");
+    return;
+  }
+  renderProposals(); // which sets the buttons, from how many are accepted
+}
+
+// Each proposal is accepted or rejected on its own; the checkbox is the whole
+// verdict, so there is no separate reject button to leave out of sync.
+function renderProposals() {
+  const box = el("review-proposals");
+  box.innerHTML =
+    `<div class="rp-head">` +
+    `<span id="rp-count"></span>` +
+    `<button class="btn ghost sm" type="button" id="rp-all">Accept all</button>` +
+    `<button class="btn ghost sm" type="button" id="rp-none">Reject all</button>` +
+    `</div>`;
+  box.classList.remove("hidden");
+
+  for (const [i, p] of reviewProposals.entries()) {
+    const div = document.createElement("div");
+    div.className = "rp-item";
+    div.innerHTML =
+      `<label class="rp-accept"><input type="checkbox" checked /> <span class="rp-where"></span></label>` +
+      `<div class="rp-reason"></div>` +
+      `<div class="rp-before"><s class="rp-before-en"></s><s class="rp-before-native"></s></div>` +
+      `<div class="rp-after"><span class="rp-after-en"></span><b class="rp-after-native"></b></div>`;
+    const where = reviewLabels[`${p.tense}/${p.person}`] || `${p.tense} · ${p.person}`;
+    div.querySelector(".rp-where").textContent = `${where} — ${p.form}`;
+    div.querySelector(".rp-reason").textContent = p.reason;
+    div.querySelector(".rp-before-en").textContent = p.before_en;
+    div.querySelector(".rp-before-native").textContent = p.before_native;
+    div.querySelector(".rp-after-en").textContent = p.after_en;
+    div.querySelector(".rp-after-native").textContent = p.after_native;
+    div.querySelector("input").addEventListener("change", renderProposalCount);
+    div.dataset.index = i;
+    box.appendChild(div);
+  }
+
+  el("rp-all").addEventListener("click", () => setAllProposals(true));
+  el("rp-none").addEventListener("click", () => setAllProposals(false));
+  renderProposalCount();
+}
+
+function proposalBoxes() {
+  return [...el("review-proposals").querySelectorAll(".rp-item input")];
+}
+
+function setAllProposals(on) {
+  for (const box of proposalBoxes()) box.checked = on;
+  renderProposalCount();
+}
+
+function renderProposalCount() {
+  const accepted = proposalBoxes().filter((b) => b.checked).length;
+  el("rp-count").textContent =
+    `${accepted} of ${reviewProposals.length} change${reviewProposals.length === 1 ? "" : "s"} accepted`;
+  // Nothing accepted is a valid answer, but "Save" would be a lie.
+  setReviewButtons(accepted ? "Save accepted" : "", "Discard");
+}
+
+async function saveReview() {
+  const accept = [...el("review-proposals").querySelectorAll(".rp-item")]
+    .filter((d) => d.querySelector("input").checked)
+    .map((d) => reviewProposals[Number(d.dataset.index)])
+    .map((p) => ({ tense: p.tense, person: p.person }));
+
+  let body;
+  try {
+    body = await api(`/api/verbs/${reviewVerbId}/examples/apply`, {
+      method: "POST",
+      body: JSON.stringify({ job_id: reviewJobId, accept }),
+    });
+  } catch (e) {
+    return showReviewError("Could not save those changes.");
+  }
+  if (!body) return;
+  closeReview();
+  // The drill holds its own copy of every sentence, so it has to be reloaded
+  // for the new ones to appear.
+  if (reviewVerbId === currentVerbId) await loadVerb(currentVerbId);
+  showToast(`Saved ${body.applied} sentence${body.applied === 1 ? "" : "s"}`);
+}
+
+function closeReview() {
+  closeAddStream();
+  el("review-panel").classList.add("hidden");
+}
+
+
+function renderJob(job, prefix = "add-verb") {
   // Name the verb in the heading: once the form is hidden the steps are the
   // only thing on screen, and none of them says what is being added.
-  el("add-verb-subject").textContent = job.infinitive;
+  el(`${prefix}-subject`).textContent = job.infinitive;
 
-  const list = el("add-verb-steps");
+  const list = el(`${prefix}-steps`);
   list.classList.remove("hidden");
   list.innerHTML = "";
   for (const step of job.steps) {
@@ -512,7 +771,7 @@ function renderJob(job) {
     list.appendChild(li);
   }
 
-  const notes = el("add-verb-notes");
+  const notes = el(`${prefix}-notes`);
   notes.innerHTML = "";
   notes.classList.toggle("hidden", !job.notes.length);
   for (const text of job.notes) {

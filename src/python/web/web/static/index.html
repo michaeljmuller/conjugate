@@ -110,6 +110,37 @@
     </div>
   </div>
 
+  <!-- Review a verb's example sentences: comment, regenerate, accept or reject.
+       Three states in one card — the sentence list, the job's progress, then the
+       proposals — since they are steps of one task rather than three dialogs. -->
+  <div id="review-panel" class="settings-panel hidden" role="dialog" aria-modal="true" aria-label="Example sentences">
+    <div class="settings-card review-card">
+      <h2>Example sentences <span id="review-subject" class="add-verb-subject"></span></h2>
+
+      <div id="review-compose">
+        <p class="settings-hint">
+          Say what should change — about one sentence, or about all of them.
+          Nothing is rewritten until you ask, and nothing is saved until you accept it.
+        </p>
+        <label class="review-batch">
+          <span>About every sentence</span>
+          <textarea id="review-comment" rows="2" placeholder="e.g. make sure each sentence only fits the tense it illustrates"></textarea>
+        </label>
+        <div id="review-list" class="review-list"></div>
+      </div>
+
+      <ol id="review-steps" class="job-steps hidden" aria-live="polite"></ol>
+      <ul id="review-notes" class="job-notes hidden"></ul>
+      <div id="review-proposals" class="review-proposals hidden"></div>
+      <p id="review-error" class="settings-error hidden"></p>
+
+      <div class="settings-actions">
+        <button id="review-go" class="btn primary" type="button">Rewrite</button>
+        <button id="review-close" class="btn ghost" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Transient "Correct!" toast; fixed position, never takes focus. -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 

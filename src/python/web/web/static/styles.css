@@ -507,3 +507,83 @@ select {
   text-align: center;
   padding: 2rem 1rem;
 }
+
+/* Reviewing a verb's example sentences. Wider than the other modals: ~60
+   sentences with a comment box each is a working list, not a short form, and
+   the card scrolls inside itself so the actions stay reachable. */
+.review-card {
+  max-width: 46rem;
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+}
+/* The heading, the batch box and the actions keep their size; the sentence list
+   and the proposals are what give way, so the buttons stay on screen however
+   many sentences the verb has. A flex child will not shrink below its content
+   without min-height:0, and the scrolling element has to be the flex child
+   itself — nesting it one level deeper lets the parent grow past the card. */
+.review-card > * { min-height: 0; flex-shrink: 0; }
+#review-compose {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.review-batch { display: block; margin-bottom: 1rem; }
+.review-batch > span {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+.review-batch textarea,
+.rr-comment {
+  width: 100%;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85rem;
+}
+.review-batch textarea:focus,
+.rr-comment:focus { outline: none; border-color: var(--accent); }
+
+.review-list { overflow-y: auto; min-height: 0; flex: 1 1 auto; }
+.review-tense {
+  margin: 1rem 0 0.4rem;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.2rem;
+}
+.review-row { padding: 0.5rem 0; border-bottom: 1px solid var(--line); }
+.rr-head { display: flex; gap: 0.5rem; align-items: baseline; font-size: 0.85rem; }
+.rr-person { color: var(--muted); }
+.rr-en { font-size: 0.9rem; margin: 0.15rem 0; }
+.rr-native { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.35rem; }
+
+/* The proposals: what each sentence was, and what it would become. */
+.review-proposals { overflow-y: auto; min-height: 0; flex: 1 1 auto; }
+.rp-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.rp-head span { margin-right: auto; }
+.btn.sm { padding: 0.15rem 0.5rem; font-size: 0.78rem; }
+
+.rp-item { padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
+.rp-accept { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+.rp-where { font-size: 0.85rem; }
+.rp-reason { font-size: 0.8rem; color: var(--muted); margin: 0.1rem 0 0.35rem 1.4rem; }
+.rp-before, .rp-after { margin-left: 1.4rem; font-size: 0.9rem; }
+.rp-before s { display: block; color: var(--muted); text-decoration-color: var(--red); }
+.rp-after span, .rp-after b { display: block; }
+.rp-after { margin-top: 0.25rem; }
+.rp-after b { color: var(--green); }
