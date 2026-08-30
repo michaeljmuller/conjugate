@@ -45,6 +45,8 @@ services:
       # Google session because a script fetches it. Unset = the routes 404.
       EXPORT_USER: ${EXPORT_USER:-}
       EXPORT_PASSWORD: ${EXPORT_PASSWORD:-}
+      # How long the "Correct!" toast dwells, in milliseconds.
+      TOAST_MS: ${TOAST_MS:-2800}
       # DEV_LOGIN=1 bypasses Google for local testing. Never set in prod.
       DEV_LOGIN: ${DEV_LOGIN:-}
     ports:

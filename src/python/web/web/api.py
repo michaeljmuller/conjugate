@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import re
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -21,6 +22,11 @@ from .models import Attempt, Form, User, UserSettings, Verb
 from .seed import apply_examples
 
 router = APIRouter(prefix="/api")
+
+# How long the "Correct!" toast stays up, in milliseconds. The drill page is
+# static JS, so the server is where a deployment-time knob can live; the client
+# reads it off /api/settings.
+TOAST_MS = int(os.environ.get("TOAST_MS", "2800"))
 
 
 def _load_settings(db: Session, user: User) -> dict:
@@ -123,6 +129,7 @@ def _settings_response(settings: dict, adapter) -> dict:
         "accents": adapter.accents,
         "tenses": adapter.resolve_tense_prefs(_saved_tenses(settings, adapter.code)),
         "interface": _resolve_interface(settings),
+        "toast_ms": TOAST_MS,
     }
 
 

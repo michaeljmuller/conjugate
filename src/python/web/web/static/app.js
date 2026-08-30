@@ -295,6 +295,7 @@ async function saveSettings() {
 // bar offers — comes from here rather than being baked into the client.
 function applySettings(data) {
   ui = data.interface;
+  toastMs = data.toast_ms || toastMs;
   lang = {
     code: data.language,
     name: data.language_name,
@@ -1219,8 +1220,9 @@ function renderMistakes(complete) {
 
 // Brief fixed-position "Correct!" toast. Never focusable, so it doesn't
 // interrupt typing; fades itself out shortly after appearing. An optional
-// second line carries detail (the pt-PT sentence on a correct answer).
-const TOAST_MS = 1400;
+// second line carries detail (the pt-PT sentence on a correct answer). How long
+// it dwells is the server's TOAST_MS env var, delivered with the settings.
+let toastMs = 2800;
 let toastTimer = null;
 function showToast(msg, detail) {
   const t = el("toast");
@@ -1238,7 +1240,7 @@ function showToast(msg, detail) {
   t.classList.toggle("has-detail", Boolean(detail));
   t.classList.add("show");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove("show"), TOAST_MS);
+  toastTimer = setTimeout(() => t.classList.remove("show"), toastMs);
 }
 
 // ---- Navigation helpers (view concerns: focus + scroll) -----------------
