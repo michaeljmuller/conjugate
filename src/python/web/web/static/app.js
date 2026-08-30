@@ -127,20 +127,24 @@ function wireControls() {
 // so the UI and a scripted check can never disagree. Quiet on failure: not
 // knowing the version is not worth an error message in front of a drill.
 async function showBuild() {
-  const el_ = el("um-build");
-  if (!el_) return;
+  const box = el("um-build");
+  if (!box) return;
   try {
     const res = await fetch("/healthz");
     if (!res.ok) return;
     const { version, committed } = await res.json();
-    // A date is what a person reads; the hash is what they quote back.
+    box.querySelector(".um-build-version").textContent = `Version ${version}`;
+    // Date and time, in the reader's own locale and zone: "when did what I am
+    // looking at get built" is the question this line answers.
     const when = committed ? new Date(committed) : null;
-    el_.textContent = when && !isNaN(when)
-      ? `${version} · ${when.toLocaleDateString(undefined, {
-          year: "numeric", month: "short", day: "numeric",
-        })}`
-      : version;
-    el_.title = committed || "";
+    box.querySelector(".um-build-when").textContent =
+      when && !isNaN(when)
+        ? when.toLocaleString(undefined, {
+            year: "numeric", month: "short", day: "numeric",
+            hour: "numeric", minute: "2-digit",
+          })
+        : "";
+    box.title = committed || "";
   } catch (e) {
     /* leave it blank */
   }
@@ -159,13 +163,17 @@ function buildUserMenu(name, email) {
     `<img class="avatar avatar-lg" src="/static/user.png" alt="" />` +
     `<span class="um-who">` +
     `<span class="um-email"></span>` +
-    `<span class="um-build" id="um-build"></span>` +
     `</span>` +
     `</div>` +
     `<button class="um-item" role="menuitem" id="menu-add-verb">Add a verb</button>` +
     `<button class="um-item" role="menuitem" id="menu-review">Example sentences</button>` +
     `<button class="um-item" role="menuitem" id="menu-tenses">Tense configuration</button>` +
     `<button class="um-item" role="menuitem" id="menu-interface">Interface</button>` +
+    `<div class="um-divider" role="separator"></div>` +
+    `<div class="um-build" id="um-build">` +
+    `<span class="um-build-version"></span>` +
+    `<span class="um-build-when"></span>` +
+    `</div>` +
     `<div class="um-divider" role="separator"></div>` +
     `<button class="um-item um-danger" role="menuitem" id="menu-logout">` +
     `<span class="um-arrow" aria-hidden="true">→</span> Sign out</button>` +

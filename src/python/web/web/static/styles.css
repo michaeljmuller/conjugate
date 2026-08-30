@@ -604,10 +604,14 @@ select {
    email ellipsize instead of widening the menu. */
 .um-who { display: flex; flex-direction: column; min-width: 0; }
 
-/* Which commit is running, under the email in the avatar menu. Deliberately the
-   quietest thing on the panel: wanted when you go looking, never otherwise. */
+/* Which commit is running, in its own band above "Sign out" (dividers either
+   side). Deliberately the quietest thing on the panel: wanted when you go
+   looking, never otherwise. */
 .um-build {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.3rem 0.7rem;
   font-size: 0.72rem;
   color: var(--muted);
   opacity: 0.8;
