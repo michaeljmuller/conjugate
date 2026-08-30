@@ -977,7 +977,7 @@ function gradeRow(row) {
 
   renderRow(row);
   renderProgress();
-  if (row.correct && !wasCorrect) showToast("Correct!"); // pop once, on the transition
+  if (row.correct && !wasCorrect) showToast("Correct!", row.exampleNative); // pop once, on the transition
 }
 
 // Persist the first attempt in the background. The server also returns the
@@ -1218,14 +1218,27 @@ function renderMistakes(complete) {
 }
 
 // Brief fixed-position "Correct!" toast. Never focusable, so it doesn't
-// interrupt typing; fades itself out shortly after appearing.
+// interrupt typing; fades itself out shortly after appearing. An optional
+// second line carries detail (the pt-PT sentence on a correct answer).
+const TOAST_MS = 1400;
 let toastTimer = null;
-function showToast(msg) {
+function showToast(msg, detail) {
   const t = el("toast");
-  t.textContent = msg;
+  t.textContent = "";
+  const head = document.createElement("div");
+  head.className = "toast-msg";
+  head.textContent = msg;
+  t.appendChild(head);
+  if (detail) {
+    const d = document.createElement("div");
+    d.className = "toast-detail";
+    d.textContent = detail; // model-generated: never innerHTML
+    t.appendChild(d);
+  }
+  t.classList.toggle("has-detail", Boolean(detail));
   t.classList.add("show");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove("show"), 700);
+  toastTimer = setTimeout(() => t.classList.remove("show"), TOAST_MS);
 }
 
 // ---- Navigation helpers (view concerns: focus + scroll) -----------------

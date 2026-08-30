@@ -379,6 +379,17 @@ select {
   opacity: 1;
   transform: translate(-50%, 0);
 }
+/* With the target-language sentence under it: a rounded card, not a pill. */
+.toast.has-detail {
+  border-radius: 14px;
+  max-width: min(90vw, 32rem);
+  text-align: center;
+}
+.toast-detail {
+  margin-top: 0.15rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
 
 /* Add-a-verb panel: the infinitive field, then the job's step list. */
 .add-verb-input {
