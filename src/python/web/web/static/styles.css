@@ -33,7 +33,10 @@ body {
   border-bottom: 1px solid var(--line);
 }
 .topbar h1 { font-size: 1.15rem; margin: 0; }
-.user-area { font-size: 0.9rem; color: var(--muted); position: relative; }
+.topbar-right { display: flex; align-items: center; gap: 0.5rem; }
+.lang-area,
+.user-area { position: relative; }
+.user-area { font-size: 0.9rem; color: var(--muted); }
 
 .avatar {
   width: 28px;
@@ -42,9 +45,9 @@ body {
   object-fit: cover;
   flex: none;
 }
-.avatar-lg { width: 38px; height: 38px; }
 
-.user-menu-btn {
+/* Shared by the two header dropdowns: the language picker and the user menu. */
+.menu-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -56,32 +59,44 @@ body {
   font-size: 0.95rem;
   cursor: pointer;
 }
-.user-menu-btn:hover { background: var(--bg); }
+.menu-btn:hover { background: var(--bg); }
 .umb-caret { font-size: 0.65rem; color: var(--muted); }
 
-.user-menu {
+.menu-panel {
   position: absolute;
   right: 0;
   top: calc(100% + 0.5rem);
   z-index: 20;
-  min-width: 15rem;
   padding: 0.4rem;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
+.user-menu { min-width: 15rem; }
+.lang-menu { min-width: 12rem; }
+
+/* 3:2, the ratio all three flags are drawn at. The border keeps the white band
+   of the Italian flag from bleeding into the panel behind it. */
+.flag {
+  flex: none;
+  width: 21px;
+  height: 14px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+}
+.lang-name { white-space: nowrap; }
+
 .um-header {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
   padding: 0.5rem 0.6rem 0.7rem;
   margin-bottom: 0.3rem;
   border-bottom: 1px solid var(--line);
 }
 .um-email { font-size: 0.95rem; color: var(--ink); overflow: hidden; text-overflow: ellipsis; }
 .um-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   width: 100%;
   text-align: left;
   padding: 0.55rem 0.7rem;
@@ -93,9 +108,16 @@ body {
   cursor: pointer;
 }
 .um-item:hover { background: var(--bg); }
+/* A fixed column for the tick, so the items that have one and the items that
+   don't still start their text in the same place. */
+.um-check {
+  flex: none;
+  width: 0.9rem;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
 .um-divider { height: 1px; background: var(--line); margin: 0.3rem 0; }
 .um-danger { color: var(--red); }
-.um-arrow { margin-right: 0.35rem; }
 
 .signed-out { max-width: 30rem; margin: 4rem auto; text-align: center; }
 
@@ -346,17 +368,6 @@ select {
 .settings-error { color: var(--red); font-size: 0.85rem; margin: 0.5rem 0 0; }
 .settings-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
 
-/* Interface panel: label-language radios and the accent-buttons checkbox. */
-.iface-group {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 0.5rem 0.75rem 0.75rem;
-  margin: 0 0 0.9rem;
-}
-.iface-group legend { padding: 0 0.35rem; font-size: 0.85rem; color: var(--muted); }
-.iface-radio { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0; cursor: pointer; }
-.iface-check { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-
 /* Fixed, non-interactive "Correct!" toast. Same spot regardless of scroll. */
 .toast {
   position: fixed;
@@ -599,11 +610,6 @@ select {
 .rp-after { margin-top: 0.25rem; }
 .rp-after b { color: var(--green); }
 
-/* The header is a row of avatar + identity; the identity half stacks, so the
-   build line sits under the email rather than beside it. min-width:0 lets a long
-   email ellipsize instead of widening the menu. */
-.um-who { display: flex; flex-direction: column; min-width: 0; }
-
 /* Which commit is running, in its own band above "Sign out" (dividers either
    side). Deliberately the quietest thing on the panel: wanted when you go
    looking, never otherwise. */
@@ -615,4 +621,21 @@ select {
   font-size: 0.72rem;
   color: var(--muted);
   opacity: 0.8;
+}
+
+/* The verb row's two actions sit to the right of the picker. Disabled means
+   there is no verb on screen to edit. */
+.controls .btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  border-color: var(--line);
+}
+
+/* Phone width: the header carries a title, a language and an avatar, which is
+   one thing too many. The flag alone still says which language is being
+   drilled, and the open menu still spells the names out. */
+@media (max-width: 30rem) {
+  .topbar { padding: 0.6rem 0.8rem; gap: 0.5rem; }
+  .lang-btn .lang-name { display: none; }
+  .user-menu-btn .umb-name { display: none; }
 }

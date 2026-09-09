@@ -8,8 +8,13 @@
 </head>
 <body>
   <header class="topbar">
-    <h1>Conjugation Practice</h1>
-    <div id="user-area" class="user-area"></div>
+    <h1>Conjugate</h1>
+    <div class="topbar-right">
+      <!-- Which language is being drilled. A button + dropdown rather than a
+           <select>, because the options carry flags and a select can't hold one. -->
+      <div id="lang-area" class="lang-area"></div>
+      <div id="user-area" class="user-area"></div>
+    </div>
   </header>
 
   <!-- Signed-out view -->
@@ -23,6 +28,10 @@
     <div class="controls">
       <label for="verb-select">Verb</label>
       <select id="verb-select"></select>
+      <!-- Both act on this row: one adds a verb to the list, the other edits
+           the example sentences of whichever verb is selected. -->
+      <button id="verb-add" class="btn" type="button">+ Add a verb</button>
+      <button id="verb-edit" class="btn" type="button">Edit sentences</button>
     </div>
 
     <!-- Verb banner + accent bar stay pinned to the top together while scrolling. -->
@@ -52,37 +61,13 @@
   <!-- Settings modal. Choose which tenses to drill and in what order. -->
   <div id="settings-panel" class="settings-panel hidden" role="dialog" aria-modal="true" aria-label="Settings">
     <div class="settings-card">
-      <h2>Tense Configuration</h2>
+      <h2>Select tenses</h2>
       <p class="settings-hint">Tick the tenses to practise; drag to set their order.</p>
       <ul id="tense-prefs" class="tense-prefs"></ul>
       <p id="settings-error" class="settings-error hidden"></p>
       <div class="settings-actions">
         <button id="settings-save" class="btn primary" type="button">Save</button>
         <button id="settings-close" class="btn ghost" type="button">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Interface modal. Label language and accent-button visibility. -->
-  <div id="interface-panel" class="settings-panel hidden" role="dialog" aria-modal="true" aria-label="Interface">
-    <div class="settings-card">
-      <h2>Interface</h2>
-      <fieldset class="iface-group">
-        <legend>Language</legend>
-        <!-- Options are filled in from /api/settings; each language has its own
-             verb list, tense order and accent bar. -->
-        <select id="iface-language"></select>
-      </fieldset>
-      <fieldset class="iface-group">
-        <legend>Tense labels</legend>
-        <label class="iface-radio"><input type="radio" name="iface-labels" value="en" /> English</label>
-        <!-- Labelled at runtime with whichever language is being drilled. -->
-        <label class="iface-radio"><input type="radio" name="iface-labels" value="native" /> <span id="iface-native-label"></span></label>
-      </fieldset>
-      <label class="iface-check"><input type="checkbox" id="iface-accents" /> Show accent buttons</label>
-      <div class="settings-actions">
-        <button id="interface-save" class="btn primary" type="button">Save</button>
-        <button id="interface-close" class="btn ghost" type="button">Cancel</button>
       </div>
     </div>
   </div>
@@ -97,7 +82,7 @@
           example sentences are written for every form.
         </p>
         <input id="add-verb-input" class="add-verb-input" type="text" autocomplete="off"
-               autocapitalize="off" spellcheck="false" placeholder="e.g. partir" />
+               autocapitalize="off" spellcheck="false" />
         <p id="add-verb-error" class="settings-error hidden"></p>
       </div>
       <ol id="add-verb-steps" class="job-steps hidden" aria-live="polite"></ol>

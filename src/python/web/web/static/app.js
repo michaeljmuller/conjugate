@@ -53,6 +53,7 @@ async function init() {
   wireControls();
 
   applySettings(await api("/api/settings"));
+  buildLanguageMenu();
   buildAccentBar();
   applyInterface();
 
@@ -63,51 +64,85 @@ async function init() {
 
   const verbs = await loadVerbs();
   if (verbs.length) await loadVerb(verbs[0].id);
+  else showEmptyLanguage();
   updateStickyHeight();
   window.addEventListener("resize", updateStickyHeight);
 }
 
 // (Re)fill both verb pickers from the server. Called at startup and again
 // whenever a verb is added, so the new one appears without a reload.
+//
+// Regular verbs lead, under their own heading. They are the models the
+// irregular ones are departures from, so they are what you reach for first —
+// and the split is the same one the add-a-verb confirmation reports, from the
+// same `pattern` the server sends here.
 async function loadVerbs() {
   const verbs = await api("/api/verbs");
-  const options = verbs
-    .map((v) => `<option value="${v.id}"></option>`)
-    .join("");
+  const regular = verbs.filter((v) => v.pattern);
+  const irregular = verbs.filter((v) => !v.pattern);
   for (const id of ["verb-select", "verb-select-bottom"]) {
     const sel = el(id);
     const keep = sel.value;
-    sel.innerHTML = options;
-    // textContent: infinitives are model-generated, so never interpolated as HTML.
-    [...sel.options].forEach((opt, i) => (opt.textContent = verbs[i].infinitive));
+    sel.innerHTML = "";
+    // Group only when both kinds are present: a heading over every verb in the
+    // list divides nothing.
+    if (regular.length && irregular.length) {
+      sel.appendChild(verbGroup("Regular", regular));
+      sel.appendChild(verbGroup("Irregular", irregular));
+    } else {
+      for (const v of verbs) sel.appendChild(verbOption(v));
+    }
     if (keep) sel.value = keep;
   }
   return verbs;
 }
 
+// textContent, not innerHTML: infinitives are model-generated.
+function verbOption(verb) {
+  const opt = document.createElement("option");
+  opt.value = verb.id;
+  opt.textContent = verb.infinitive;
+  return opt;
+}
+
+function verbGroup(label, verbs) {
+  const group = document.createElement("optgroup");
+  group.label = label;
+  for (const v of verbs) group.appendChild(verbOption(v));
+  return group;
+}
+
+// The bar's buttons, rebuilt whenever the drilled language changes. Only the
+// buttons: the click handler is wired once in wireControls(), because it lives
+// on the bar itself and re-adding it here would insert a character once per
+// language switch made since the page loaded.
 function buildAccentBar() {
   el("accent-bar").innerHTML = lang.accents.map(
     (c) => `<button type="button" data-ch="${c}">${c}</button>`
   ).join("");
-  el("accent-bar").addEventListener("click", (e) => {
-    const ch = e.target.getAttribute("data-ch");
-    if (!ch || !lastFocused) return;
-    const inp = lastFocused;
-    const start = inp.selectionStart ?? inp.value.length;
-    const end = inp.selectionEnd ?? inp.value.length;
-    inp.value = inp.value.slice(0, start) + ch + inp.value.slice(end);
-    inp.focus();
-    const pos = start + ch.length;
-    inp.setSelectionRange(pos, pos);
-  });
+}
+
+function insertAccent(ch) {
+  if (!ch || !lastFocused) return;
+  const inp = lastFocused;
+  const start = inp.selectionStart ?? inp.value.length;
+  const end = inp.selectionEnd ?? inp.value.length;
+  inp.value = inp.value.slice(0, start) + ch + inp.value.slice(end);
+  inp.focus();
+  const pos = start + ch.length;
+  inp.setSelectionRange(pos, pos);
 }
 
 function wireControls() {
   el("again").addEventListener("click", () => startVerb(currentVerbId));
+  el("accent-bar").addEventListener("click", (e) =>
+    insertAccent(e.target.getAttribute("data-ch"))
+  );
+  el("verb-add").addEventListener("click", openAddVerb);
+  // Acts on the verb on screen — there is no other verb it could mean.
+  el("verb-edit").addEventListener("click", () => openReview(currentVerbId));
   el("settings-save").addEventListener("click", saveSettings);
   el("settings-close").addEventListener("click", closeSettings);
-  el("interface-save").addEventListener("click", saveInterface);
-  el("interface-close").addEventListener("click", closeInterface);
   el("add-verb-go").addEventListener("click", () => addGoAction());
   el("add-verb-close").addEventListener("click", closeAddVerb);
   // The primary button means "rewrite" before there are proposals and "save"
@@ -121,8 +156,6 @@ function wireControls() {
   });
 }
 
-// The user's name is a dropdown: "Tense configuration" opens the settings
-// panel, and "Sign out" sits last. Closes on outside click or Escape.
 // Which commit is serving this page, from /healthz — the same answer curl gets,
 // so the UI and a scripted check can never disagree. Quiet on failure: not
 // knowing the version is not worth an error message in front of a drill.
@@ -151,24 +184,44 @@ async function showBuild() {
 }
 
 
+// Both header dropdowns — the language picker and the user menu — open on their
+// button and close on an outside click or Escape. Returns the open/close setter,
+// so an item that should close the menu can say so.
+function wireDropdown(btn, menu) {
+  const setOpen = (open) => {
+    menu.classList.toggle("hidden", !open);
+    btn.setAttribute("aria-expanded", String(open));
+  };
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setOpen(menu.classList.contains("hidden"));
+  });
+  document.addEventListener("click", () => setOpen(false));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+  return setOpen;
+}
+
+// The avatar is a dropdown: the tense panel, the two interface preferences, the
+// build line, and "Sign out" last.
 function buildUserMenu(name, email) {
   const area = el("user-area");
   area.innerHTML =
-    `<button class="user-menu-btn" id="user-menu-btn" aria-haspopup="true" aria-expanded="false">` +
+    `<button class="menu-btn user-menu-btn" id="user-menu-btn" aria-haspopup="true" aria-expanded="false">` +
     `<img class="avatar" src="/static/user.png" alt="" />` +
     `<span class="umb-name"></span><span class="umb-caret" aria-hidden="true">▾</span>` +
     `</button>` +
-    `<div class="user-menu hidden" id="user-menu" role="menu">` +
-    `<div class="um-header">` +
-    `<img class="avatar avatar-lg" src="/static/user.png" alt="" />` +
-    `<span class="um-who">` +
-    `<span class="um-email"></span>` +
-    `</span>` +
-    `</div>` +
-    `<button class="um-item" role="menuitem" id="menu-add-verb">Add a verb</button>` +
-    `<button class="um-item" role="menuitem" id="menu-review">Example sentences</button>` +
-    `<button class="um-item" role="menuitem" id="menu-tenses">Tense configuration</button>` +
-    `<button class="um-item" role="menuitem" id="menu-interface">Interface</button>` +
+    `<div class="menu-panel user-menu hidden" id="user-menu" role="menu">` +
+    `<div class="um-header"><span class="um-email"></span></div>` +
+    `<button class="um-item" role="menuitem" id="menu-tenses">` +
+    `<span class="um-check"></span>Select tenses</button>` +
+    // Checkable items rather than a panel: each is one setting, and a setting
+    // that takes effect when you click it needs no Save button.
+    `<button class="um-item" role="menuitemcheckbox" aria-checked="false" id="menu-labels">` +
+    `<span class="um-check"></span>English tense labels</button>` +
+    `<button class="um-item" role="menuitemcheckbox" aria-checked="false" id="menu-accents">` +
+    `<span class="um-check"></span>Show accent buttons</button>` +
     `<div class="um-divider" role="separator"></div>` +
     `<div class="um-build" id="um-build">` +
     `<span class="um-build-version"></span>` +
@@ -183,36 +236,20 @@ function buildUserMenu(name, email) {
   area.querySelector(".um-email").textContent = email;
   showBuild();
 
-  const btn = el("user-menu-btn");
-  const menu = el("user-menu");
-  const setOpen = (open) => {
-    menu.classList.toggle("hidden", !open);
-    btn.setAttribute("aria-expanded", String(open));
-  };
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    setOpen(menu.classList.contains("hidden"));
-  });
-  document.addEventListener("click", () => setOpen(false));
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") setOpen(false);
-  });
-  el("menu-add-verb").addEventListener("click", () => {
-    setOpen(false);
-    openAddVerb();
-  });
-  // Acts on the verb on screen — there is no other verb it could mean.
-  el("menu-review").addEventListener("click", () => {
-    setOpen(false);
-    if (currentVerbId) openReview(currentVerbId);
-  });
+  const setOpen = wireDropdown(el("user-menu-btn"), el("user-menu"));
   el("menu-tenses").addEventListener("click", () => {
     setOpen(false);
     openSettings();
   });
-  el("menu-interface").addEventListener("click", () => {
-    setOpen(false);
-    openInterface();
+  // The toggles leave the menu open, so both can be flipped in one visit: the
+  // stopPropagation is what keeps the click off the document handler above.
+  el("menu-labels").addEventListener("click", (e) => {
+    e.stopPropagation();
+    setInterface({ labels: ui.labels === "en" ? "native" : "en" });
+  });
+  el("menu-accents").addEventListener("click", (e) => {
+    e.stopPropagation();
+    setInterface({ show_accents: !ui.show_accents });
   });
   el("menu-logout").addEventListener("click", async () => {
     await api("/auth/logout", { method: "POST" });
@@ -312,49 +349,105 @@ function applySettings(data) {
   };
 }
 
-function openInterface() {
-  el("iface-accents").checked = ui.show_accents;
-  el("iface-language").innerHTML = lang.available
-    .map((l) => `<option value="${l.code}">${l.name}</option>`)
-    .join("");
-  el("iface-language").value = lang.code;
-  // The "native names" option is labelled with the language it means.
-  el("iface-native-label").textContent = lang.name;
-  for (const r of document.getElementsByName("iface-labels"))
-    r.checked = r.value === ui.labels;
-  el("interface-panel").classList.remove("hidden");
+// One interface preference, written and reflected at once. The menu item is the
+// setting, so there is nothing to save.
+async function setInterface(patch) {
+  applySettings(
+    await api("/api/settings", {
+      method: "PUT",
+      body: JSON.stringify({ interface: patch }),
+    })
+  );
+  applyInterface();
+  // Tense headings are drawn through labelOf()/moodOf() at render time, so the
+  // label language only reaches the drill by drawing it again.
+  if (patch.labels !== undefined && currentVerbId) await loadVerb(currentVerbId);
 }
 
-function closeInterface() {
-  el("interface-panel").classList.add("hidden");
-}
+// ---- The drilled language, in the header --------------------------------
 
-async function saveInterface() {
-  const labels =
-    [...document.getElementsByName("iface-labels")].find((r) => r.checked)?.value || "en";
-  const show_accents = el("iface-accents").checked;
-  const language = el("iface-language").value;
-  const switched = language !== lang.code;
-  const data = await api("/api/settings", {
-    method: "PUT",
-    body: JSON.stringify({ language, interface: { labels, show_accents } }),
+// Each language's flag, drawn small: at 20px the arms of Portugal's armillary
+// sphere are a smudge, so it is a disc, and Spain's coat of arms is left off.
+// Inline rather than files under static/, which pyproject.toml's `static/*`
+// package-data glob would not reach.
+const FLAGS = {
+  "pt-PT":
+    `<svg class="flag" viewBox="0 0 30 20" aria-hidden="true">` +
+    `<rect width="30" height="20" fill="#046a38"/>` +
+    `<rect x="12" width="18" height="20" fill="#da291c"/>` +
+    `<circle cx="12" cy="10" r="4.4" fill="#ffe900" stroke="#046a38" stroke-width="0.7"/>` +
+    `<circle cx="12" cy="10" r="2.2" fill="#fff" stroke="#da291c" stroke-width="1.5"/></svg>`,
+  es:
+    `<svg class="flag" viewBox="0 0 30 20" aria-hidden="true">` +
+    `<rect width="30" height="20" fill="#c60b1e"/>` +
+    `<rect y="5" width="30" height="10" fill="#ffc400"/></svg>`,
+  it:
+    `<svg class="flag" viewBox="0 0 30 20" aria-hidden="true">` +
+    `<rect width="10" height="20" fill="#009246"/>` +
+    `<rect x="10" width="10" height="20" fill="#fff"/>` +
+    `<rect x="20" width="10" height="20" fill="#ce2b37"/></svg>`,
+};
+
+// A button and a dropdown rather than a <select>: the options carry flags, and
+// a <select> can only hold text.
+function buildLanguageMenu() {
+  const area = el("lang-area");
+  area.innerHTML =
+    `<button class="menu-btn lang-btn" id="lang-btn" aria-haspopup="true" aria-expanded="false"></button>` +
+    `<div class="menu-panel lang-menu hidden" id="lang-menu" role="menu"></div>`;
+  renderLanguageMenu();
+  const setOpen = wireDropdown(el("lang-btn"), el("lang-menu"));
+  el("lang-menu").addEventListener("click", (e) => {
+    const item = e.target.closest(".lang-item");
+    if (!item) return;
+    setOpen(false);
+    if (item.dataset.code !== lang.code) switchLanguage(item.dataset.code);
   });
-  applySettings(data);
-  // A different language means a different accent bar.
+}
+
+// Button and list are both projections of `lang`, so one call relabels the
+// header after a switch. Flags are our own constants and go in as markup; the
+// names are server data and go in as text.
+function renderLanguageMenu() {
+  const btn = el("lang-btn");
+  btn.innerHTML =
+    `${FLAGS[lang.code] || ""}<span class="lang-name"></span>` +
+    `<span class="umb-caret" aria-hidden="true">▾</span>`;
+  btn.querySelector(".lang-name").textContent = lang.name;
+
+  const menu = el("lang-menu");
+  menu.innerHTML = "";
+  for (const l of lang.available) {
+    const item = document.createElement("button");
+    item.className = "um-item lang-item";
+    item.type = "button";
+    item.setAttribute("role", "menuitemradio");
+    item.setAttribute("aria-checked", String(l.code === lang.code));
+    item.dataset.code = l.code;
+    item.innerHTML = `${FLAGS[l.code] || ""}<span class="lang-name"></span>`;
+    item.querySelector(".lang-name").textContent = l.name;
+    menu.appendChild(item);
+  }
+}
+
+// Drill a different language. Everything the drill is made of is per language —
+// the verb list, the tense order, the accent bar — so this reloads the view
+// rather than relabelling it.
+async function switchLanguage(code) {
+  applySettings(
+    await api("/api/settings", {
+      method: "PUT",
+      body: JSON.stringify({ language: code }),
+    })
+  );
+  renderLanguageMenu();
   buildAccentBar();
   applyInterface();
-  closeInterface();
-
-  if (switched) {
-    // The verb list is per language, so the old selection is gone. Start on the
-    // new language's first verb, or clear the drill if it has none yet.
-    currentVerbId = null;
-    const verbs = await loadVerbs();
-    if (verbs.length) await loadVerb(verbs[0].id);
-    else showEmptyLanguage();
-  } else if (currentVerbId) {
-    await loadVerb(currentVerbId); // relabel the drill in the new label language
-  }
+  // The verb list is per language, so the old selection is gone.
+  currentVerbId = null;
+  const verbs = await loadVerbs();
+  if (verbs.length) await loadVerb(verbs[0].id);
+  else showEmptyLanguage();
 }
 
 // A language with no verbs yet: clear the drill rather than leave the previous
@@ -364,10 +457,11 @@ function showEmptyLanguage() {
   el("drill").innerHTML = "";
   // The banner names the verb being drilled, and there is no longer one.
   el("verb-indicator").classList.add("hidden");
+  setEditEnabled();
   // textContent, not innerHTML: lang.name is server data, never markup.
   const note = document.createElement("p");
   note.className = "empty-language";
-  note.textContent = `No ${lang.name} verbs yet — add one from the avatar menu.`;
+  note.textContent = `No ${lang.name} verbs yet — use "Add a verb" above.`;
   el("drill").appendChild(note);
   for (const id of ["verb-select", "verb-select-bottom"]) el(id).innerHTML = "";
 }
@@ -535,11 +629,17 @@ async function finishJob(job) {
   addOnClose = () => startVerb(job.verb_id);
   // Sentences written by a model are worth a look before they become the only
   // prompt for a form, so the review panel is offered rather than hidden behind
-  // the menu. Closing instead still drills the verb.
+  // the menu. Either way the drill ends up on the verb just added — reviewing
+  // first used to leave it on the previous one, which read as the add having
+  // silently failed. loadVerb rather than startVerb on this path: the review
+  // panel is about to cover the drill, and focusing a field behind a modal
+  // helps nobody.
   addGoAction = () => {
-    addOnClose = null;
+    addOnClose = () => {
+      loadVerb(job.verb_id);
+      openReview(job.verb_id);
+    };
     closeAddVerb();
-    openReview(job.verb_id);
   };
   // Notes are things the user should actually read — a form the check corrected,
   // or a sentence that stayed weak. Hold the panel open for them either way now
@@ -823,7 +923,14 @@ function renderJob(job, prefix = "add-verb") {
 // scroll clear of — recompute the sticky offset whenever it toggles.
 function applyInterface() {
   el("accent-bar").classList.toggle("hidden", !ui.show_accents);
+  setCheck(el("menu-labels"), ui.labels === "en");
+  setCheck(el("menu-accents"), ui.show_accents);
   updateStickyHeight();
+}
+
+function setCheck(item, on) {
+  item.querySelector(".um-check").textContent = on ? "✓" : "";
+  item.setAttribute("aria-checked", String(on));
 }
 
 // Keep drill sections from scrolling under the sticky header: expose its live
@@ -833,8 +940,13 @@ function updateStickyHeight() {
   document.documentElement.style.setProperty("--sticky-h", `${h + 8}px`);
 }
 
+// "Edit sentences" acts on the verb on screen; with no verb there is nothing
+// for it to open.
+const setEditEnabled = () => (el("verb-edit").disabled = !currentVerbId);
+
 async function loadVerb(verbId) {
   currentVerbId = verbId;
+  setEditEnabled();
   const data = await api(`/api/verbs/${verbId}/forms`);
   renderDrill(data);
   el("verb-select").value = verbId;
