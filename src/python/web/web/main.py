@@ -13,6 +13,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from . import api, auth, export_api
 from .db import SessionLocal, engine
+from .migrate import patch_schema
 from .seed import init_db, seed_examples, seed_verbs
 
 STATIC_DIR = Path(__file__).parent / "static"
@@ -47,6 +48,10 @@ VERSION = read_version()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db(engine)
+    # create_all() above adds missing tables but never a missing column, so an
+    # older database is brought up to shape here — before the seeding below,
+    # which writes through columns a patch may have just added.
+    patch_schema(engine)
     with SessionLocal() as db:
         seed_verbs(db)
         seed_examples(db)

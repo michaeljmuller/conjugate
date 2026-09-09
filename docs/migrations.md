@@ -6,9 +6,24 @@ no migration — a new table appears by itself, and new settings go into the
 `user_settings` JSON blob rather than into columns.
 
 It will **not** add a column to a table that already exists. Those are listed
-here, newest first, to be run once against the production database before
-deploying the release that needs them. A fresh database needs none of them:
-`create_all()` builds the current shape directly.
+here, newest first. A fresh database needs none of them: `create_all()` builds
+the current shape directly.
+
+Since 2026-09-09 they are applied automatically, at startup, by
+`web/migrate.py` — so a deployment no longer depends on anyone remembering to
+run the SQL below. Each patch inspects the live schema first and does nothing
+unless what it would change is genuinely missing, which makes it safe on every
+boot and safe on a database where the SQL was already run by hand. It also
+finishes a half-applied migration rather than failing on the step that is
+already there.
+
+The SQL is still recorded here, for three reasons: it is the record of what
+changed and why, it is what you read to undo a patch by hand, and the automatic
+patch is PostgreSQL-only. Adding a patch to `migrate.py` does not retire its
+entry here.
+
+To see what a boot did, look for `schema patch applied:` in the web container's
+log. Silence means there was nothing to do.
 
 ## `verbs.language`
 

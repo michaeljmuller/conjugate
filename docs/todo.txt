@@ -8,6 +8,17 @@
   - accent button display
   - scramble order of tenses
   - scramble all the tenses / person
+- back the database up to hetzner s3.  nothing copies the conjugate-db volume
+  off the host today; the only backups are the manual pg_dump the release docs
+  ask for.  what is at risk is the drill history, per-user settings and the
+  users themselves -- the verbs and their example sentences can be rebuilt from
+  the seed files via /export/*.json (tools/pull_seed.sh), so long as those have
+  been refreshed lately.
+  - a companion container running pg_dump on a schedule, or a script for the
+    host's own scheduler.  decide which; the host already owns backups.
+  - needs a bucket, credentials in .env, and a retention rule.
+  - test the RESTORE, not just the dump.
+
 - remove the "audio created by" db column that the AI over-helpfully added
   (not in this app -- models.py only has audio_url. probably the vocab app?)
 - pluperfect and future, simple vs compound:
