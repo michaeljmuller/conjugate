@@ -11,7 +11,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from sqlalchemy import Integer, func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from . import jobs, llm
 from .auth import current_user
@@ -19,7 +19,7 @@ from .db import get_db
 from .languages import DEFAULT_LANGUAGE, get_adapter, languages
 from .grading import grade
 from .models import Attempt, Form, User, UserSettings, Verb
-from .seed import apply_examples
+from .seed import apply_examples, paradigm_from_verb
 
 router = APIRouter(prefix="/api")
 
@@ -193,13 +193,30 @@ def put_settings(
 
 @router.get("/verbs")
 def list_verbs(db: Session = Depends(get_db), user: User = Depends(current_user)):
-    """The drilled language's verbs. Another language's are a different list."""
+    """The drilled language's verbs. Another language's are a different list.
+
+    ``pattern`` is the regular conjugation a verb follows, or ``""`` for one
+    that follows none — the picker leads with the regular verbs, since they are
+    the models the rest are measured against. Derived from the stored forms
+    rather than held on the row: it is a fact about the forms, and computing it
+    keeps it from going stale behind them.
+    """
     _, adapter = _drilling(db, user)
     verbs = db.scalars(
-        select(Verb).where(Verb.language == adapter.code).order_by(Verb.infinitive)
+        select(Verb)
+        .where(Verb.language == adapter.code)
+        # The pattern is read off the forms, so fetch them with the verbs
+        # instead of lazily, one query per verb.
+        .options(selectinload(Verb.forms).selectinload(Form.variants))
+        .order_by(Verb.infinitive)
     ).all()
     return [
-        {"id": v.id, "infinitive": v.infinitive, "translation": v.translation}
+        {
+            "id": v.id,
+            "infinitive": v.infinitive,
+            "translation": v.translation,
+            "pattern": adapter.regular_pattern(paradigm_from_verb(v)),
+        }
         for v in verbs
     ]
 

@@ -320,3 +320,38 @@ def classify(paradigm: Paradigm) -> Classification:
 def is_regular(paradigm: Paradigm) -> bool:
     """True when the paradigm holds nothing the ending table doesn't predict."""
     return classify(paradigm).is_regular
+
+
+def pattern_of(paradigm: Paradigm) -> str | None:
+    """Which regular pattern this paradigm conforms to, as far as it goes.
+
+    A weaker question than ``classify``, asked of different input. ``classify``
+    judges a paradigm fresh from the source, where every cell the source
+    publishes is present, and calls anything short of a complete match
+    irregular. This judges what the *database* holds, which for a verb stored
+    before a cell existed is a subset, and asks only whether the
+    cells that are there contradict the table.
+
+    Cells the table has no opinion about take no part, exactly as in
+    ``classify``. Cells the table has and the paradigm lacks take no part
+    either, which is the whole difference between the two.
+
+    So this can call a verb regular where ``classify`` would not, if the cells
+    it is missing are where the irregularity lived. That is the right trade for
+    what it is for — grouping the verb picker, and pointing out that a second
+    regular -ar verb teaches little — and the wrong one for the
+    add-a-verb report, which keeps using ``classify`` on the complete paradigm.
+    """
+    for pattern in patterns_for(paradigm.infinitive):
+        expected = regular_forms(paradigm.infinitive, pattern)
+        if expected is None:
+            continue
+        covered = {key: cell for key, cell in paradigm.cells.items() if key in expected}
+        if not covered:
+            continue
+        # Compared as sets, as classify does: which of several equally regular
+        # forms the source listed first is not a signal about the verb.
+        if not all(set(cell.forms) == set(expected[key]) for key, cell in covered.items()):
+            continue
+        return pattern
+    return None

@@ -32,7 +32,7 @@ from ..base import (
     resolve_tense_prefs,
 )
 from . import cplp, prompts
-from .regular import classify
+from .regular import PATTERN_NAMES, classify, pattern_of
 from .catalogue import (
     ACCENTS,
     DRILL_PERSONS,
@@ -186,6 +186,10 @@ class PortugueseAdapter:
 
     def describe(self, paradigm: Paradigm) -> str:
         return classify(paradigm).describe()
+
+    def regular_pattern(self, paradigm: Paradigm) -> str:
+        pattern = pattern_of(paradigm)
+        return PATTERN_NAMES.get(pattern, pattern or "") if pattern else ""
 
     def prompt_material(self) -> PromptMaterial:
         return prompts.prompt_material()

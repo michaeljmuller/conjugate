@@ -44,6 +44,9 @@ IRREGULAR = "irregular"
 # Ending per conjugation, in this order.
 CONJUGATIONS = ("ar", "er", "ir")
 
+# How to name a conjugation to the reader.
+PATTERN_NAMES = {"ar": "-ar", "er": "-er", "ir": "-ir"}
+
 # (tense, person) -> the -ar, -er, -ir ending. Generated; see the module
 # docstring before editing by hand.
 ENDINGS: dict[tuple[str, str], tuple[str, str, str]] = {
@@ -238,6 +241,7 @@ def spelling_change(infinitive: str) -> Spelling | None:
 @dataclass(frozen=True)
 class Classification:
     kind: str
+    pattern: str | None = None
     spelling: Spelling | None = None
 
     @property
@@ -248,9 +252,13 @@ class Classification:
         """The verdict as a clause to follow the infinitive."""
         if self.kind == IRREGULAR:
             return "is an irregular verb."
+        named = PATTERN_NAMES.get(self.pattern, self.pattern)
         if self.kind == REGULAR:
-            return "is a regular verb."
-        return f"is regular, apart from a spelling change: {self.spelling.describe()}."
+            return f"is a regular {named} verb."
+        return (
+            f"is a regular {named} verb, apart from a spelling change: "
+            f"{self.spelling.describe()}."
+        )
 
 
 def classify(paradigm: Paradigm) -> Classification:
@@ -266,12 +274,47 @@ def classify(paradigm: Paradigm) -> Classification:
         return Classification(IRREGULAR)
     if not all(cell.forms == (expected[key],) for key, cell in paradigm.cells.items()):
         return Classification(IRREGULAR)
+    conjugation = _conjugation(paradigm.infinitive)
     change = spelling_change(paradigm.infinitive)
     return (
-        Classification(REGULAR_WITH_SPELLING, change) if change else Classification(REGULAR)
+        Classification(REGULAR_WITH_SPELLING, conjugation, change)
+        if change
+        else Classification(REGULAR, conjugation)
     )
 
 
 def is_regular(paradigm: Paradigm) -> bool:
     """True when the paradigm holds nothing the ending table doesn't predict."""
     return classify(paradigm).is_regular
+
+
+def pattern_of(paradigm: Paradigm) -> str | None:
+    """Which regular conjugation this paradigm conforms to, as far as it goes.
+
+    A weaker question than ``classify``, asked of different input. ``classify``
+    judges a paradigm fresh from the source, where every cell the source
+    publishes is present, and calls anything short of a complete match
+    irregular. This judges what the *database* holds, which for a verb stored
+    before a cell existed is a subset — ``falar`` carries no vós
+    imperatives, though ``partir``, added later, does —, and asks only whether the
+    cells that are there contradict the table.
+
+    Cells the table has no opinion about take no part, exactly as in
+    ``classify``. Cells the table has and the paradigm lacks take no part
+    either, which is the whole difference between the two.
+
+    So this can call a verb regular where ``classify`` would not, if the cells
+    it is missing are where the irregularity lived. That is the right trade for
+    what it is for — grouping the verb picker, and pointing out that a second
+    regular -ar verb teaches little — and the wrong one for the
+    add-a-verb report, which keeps using ``classify`` on the complete paradigm.
+    """
+    expected = regular_forms(paradigm.infinitive)
+    if expected is None:
+        return None
+    covered = {key: cell for key, cell in paradigm.cells.items() if key in expected}
+    if not covered:
+        return None
+    if not all(cell.forms == (expected[key],) for key, cell in covered.items()):
+        return None
+    return _conjugation(paradigm.infinitive)

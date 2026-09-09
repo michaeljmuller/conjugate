@@ -251,6 +251,21 @@ class LanguageAdapter(Protocol):
         is nothing to report; the confirmation then just names the verb.
         """
 
+    def regular_pattern(self, paradigm: Paradigm) -> str:
+        """Which regular pattern this verb follows, named for a reader —
+        ``-ar``, ``-ire (with the -isc- infix)`` — or ``""`` for one that
+        follows none.
+
+        Unlike ``describe``, this is asked of verbs already in the database,
+        whose stored cells may be a subset of what the source publishes. It
+        therefore answers the weaker question "does anything here contradict
+        the pattern", so that a verb seeded before some cell existed is not
+        called irregular for a gap. Two verbs sharing a non-empty answer drill
+        the same endings as each other.
+
+        Return ``""`` for a language that cannot say.
+        """
+
     def prompt_material(self) -> PromptMaterial:
         """The language-specific half of the example-sentence prompts."""
 

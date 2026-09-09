@@ -386,7 +386,7 @@ def test_a_plainly_regular_verb_says_so(env, monkeypatch):
     _stub_regular_lookup(monkeypatch)
 
     job = _await_job(client, client.post("/api/verbs", json={"infinitive": "falar"}).json()["job_id"])
-    assert job["question"] == "falar is a regular verb. Add it?"
+    assert job["question"] == "falar is a regular -ar verb. Add it?"
 
 
 def test_a_spelling_change_is_named_rather_than_hidden(env, monkeypatch):
@@ -397,9 +397,60 @@ def test_a_spelling_change_is_named_rather_than_hidden(env, monkeypatch):
 
     job = _await_job(client, client.post("/api/verbs", json={"infinitive": "jogar"}).json()["job_id"])
     assert job["question"] == (
-        "jogar is regular, apart from a spelling change: g → gu before e "
+        "jogar is a regular -ar verb, apart from a spelling change: g → gu before e "
         "(jogue, joguei). Add it?"
     )
+
+
+def test_a_second_verb_on_a_pattern_already_drilled_says_which(env, monkeypatch):
+    """Regular verbs of one conjugation drill the same endings as each other, so
+    the confirmation names the one already in the list rather than letting the
+    learner discover the duplication after ~60 sentences have been written."""
+    client, _ = env
+    _stub_regular_lookup(monkeypatch)
+
+    _await_job(client, _confirmed(client, "falar").json()["job_id"])  # already drilled
+    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "andar"}).json()["job_id"])
+
+    assert job["question"] == (
+        "andar is a regular -ar verb. You already drill falar. Add it anyway?"
+    )
+
+
+def test_a_different_conjugation_is_not_a_duplicate(env, monkeypatch):
+    """-er endings are not -ar endings, so having falar says nothing about
+    comer."""
+    client, _ = env
+    _stub_regular_lookup(monkeypatch)
+
+    _await_job(client, _confirmed(client, "falar").json()["job_id"])
+    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "comer"}).json()["job_id"])
+
+    assert job["question"] == "comer is a regular -er verb. Add it?"
+
+
+def test_an_irregular_verb_never_warns_about_duplication(env, monkeypatch):
+    """Two irregular verbs share nothing, so having one is no argument against
+    the other however many are already in the list."""
+    client, _ = env
+    _stub_regular_lookup(monkeypatch)
+    _await_job(client, _confirmed(client, "falar").json()["job_id"])
+
+    _stub_lookup(monkeypatch)  # back to the irregular fixture
+    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "ser"}).json()["job_id"])
+
+    assert "already drill" not in job["question"]
+
+
+def test_several_verbs_on_one_pattern_are_all_named(env, monkeypatch):
+    client, _ = env
+    _stub_regular_lookup(monkeypatch)
+
+    for verb in ("falar", "andar"):
+        _await_job(client, _confirmed(client, verb).json()["job_id"])
+    job = _await_job(client, client.post("/api/verbs", json={"infinitive": "gostar"}).json()["job_id"])
+
+    assert "You already drill andar and falar." in job["question"]
 
 
 def test_an_irregular_verb_is_confirmed_too(env, monkeypatch):

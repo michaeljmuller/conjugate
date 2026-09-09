@@ -47,7 +47,7 @@ from .catalogue import (
     positional_persons,
 )
 from .catalogue import person_label as _it_person_label
-from .regular import classify
+from .regular import PATTERN_NAMES, classify, pattern_of
 
 CODE = "it"
 
@@ -156,6 +156,10 @@ class ItalianAdapter:
 
     def describe(self, paradigm: Paradigm) -> str:
         return classify(paradigm).describe()
+
+    def regular_pattern(self, paradigm: Paradigm) -> str:
+        pattern = pattern_of(paradigm)
+        return PATTERN_NAMES.get(pattern, pattern or "") if pattern else ""
 
     def prompt_material(self) -> PromptMaterial:
         return prompts.prompt_material()

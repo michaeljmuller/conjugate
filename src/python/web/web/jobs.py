@@ -19,11 +19,12 @@ from collections import OrderedDict
 from dataclasses import dataclass, field
 
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from . import llm
 from .db import SessionLocal
 from .languages import NotAVerb, Paradigm, SourceUnavailable, UnknownWord, get_adapter
-from .models import Verb
+from .models import Form, Verb
 from .seed import apply_examples, paradigm_from_verb, upsert_verb
 
 log = logging.getLogger(__name__)
@@ -232,7 +233,19 @@ async def _run(
         # to undo.
         if not force:
             found = adapter.describe(paradigm)
-            asked = f"{job.infinitive} {found} Add it?" if found else f"Add {job.infinitive}?"
+            # A second verb on a pattern you already drill teaches the endings
+            # you already know, so say which verb that is before the expensive
+            # half runs. Only for regular verbs: two irregular ones share
+            # nothing, so having one is no argument against the other.
+            already = _same_pattern(job.infinitive, paradigm, language, adapter)
+            if not found:
+                asked = f"Add {job.infinitive}?"
+            elif already:
+                # ``found`` has just named the pattern, so this names only the
+                # verbs already on it.
+                asked = f"{job.infinitive} {found} You already drill {already}. Add it anyway?"
+            else:
+                asked = f"{job.infinitive} {found} Add it?"
             job.ask(f"{preface} {asked}".strip() if preface else asked)
             return
         slots = await _write_examples(job, paradigm, adapter)
@@ -466,6 +479,34 @@ def _save(
 def normalize_infinitive(infinitive: str) -> str:
     """Collapse user input to the single lowercase word used as the lookup key."""
     return " ".join(infinitive.split()).strip().lower()
+
+
+def _same_pattern(infinitive: str, paradigm, language: str, adapter) -> str:
+    """Verbs already stored that follow the same regular pattern, named.
+
+    ``""`` when the verb being added is irregular, when the language cannot
+    classify it, or when nothing stored matches — all three meaning there is
+    nothing to warn about. Both sides are judged by ``regular_pattern``, so a
+    verb seeded before some cell existed is not excused from matching.
+    """
+    pattern = adapter.regular_pattern(paradigm)
+    if not pattern:
+        return ""
+    with SessionLocal() as db:
+        verbs = db.scalars(
+            select(Verb)
+            .where(Verb.language == language, Verb.infinitive != infinitive)
+            .options(selectinload(Verb.forms).selectinload(Form.variants))
+            .order_by(Verb.infinitive)
+        ).all()
+        matches = [
+            v.infinitive
+            for v in verbs
+            if adapter.regular_pattern(paradigm_from_verb(v)) == pattern
+        ]
+    if len(matches) <= 1:
+        return matches[0] if matches else ""
+    return ", ".join(matches[:-1]) + f" and {matches[-1]}"
 
 
 def verb_exists(db, infinitive: str, language: str) -> bool:
