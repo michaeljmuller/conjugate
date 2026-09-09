@@ -8,7 +8,8 @@ and get immediate feedback.
   two participles. `vós` is stored but skipped, matching the original sheet.
 - **Drilled — Italian:** 10 tenses × 6 persons (`io, tu, lui/lei, noi, voi,
   loro`) plus the gerund and past participle. `voi` *is* drilled, unlike `vós`.
-  Only simple tenses; see [Why no compound tenses](#why-no-compound-tenses).
+  Only simple tenses; see
+  [Why no compound tenses in Italian](#why-no-compound-tenses-in-italian).
 - **Drilled — Spanish:** 14 tenses × 6 persons (`yo, tú, él/ella/Ud., nosotros,
   vosotros, ellos/ellas/Uds.`) plus the gerund and past participle. `vosotros`
   *is* drilled — see [Spanish and vosotros](#spanish-and-vosotros) — and so are
@@ -115,7 +116,37 @@ An option to hide the row (and a `pt-BR` variety, which would need a different
 source — cplp.org's tables are identical under both editions) is wanted but not
 built.
 
-Spanish **does** drill its compound tenses, unlike Italian. The reason Italian
+### Spanish and reflexive verbs
+
+Typing a reflexive infinitive adds the plain verb: `levantarse` adds `levantar`,
+`dormirse` adds `dormir`. The confirmation says so before you agree to it.
+
+The reason is that a reflexive adds no conjugation. Measured against `levantar`,
+the 85 cells of `levantarse` are one identical (the participle takes no
+pronoun), 78 that are the same conjugated form with a fixed pronoun in front —
+`me`, `te`, `se`, `nos`, `os`, `se`, chosen by the person and never anything
+else — and 6 where the pronoun fuses onto the end (`levántate`, `levantémonos`,
+`levantaos`). Even those six leave the conjugation alone; only the spelling of
+the fused word changes. So drilling a reflexive asks for the same six-item
+pronoun list eighty times per verb, which is vocabulary, not conjugation.
+
+The pronoun is also a separate axis rather than part of the verb: `te levanto`
+("I get you up") is equally good Spanish. Drilling the reflexive would cover only
+the slice of that axis where the object happens to be the subject, and this drill
+has no way to model the rest — the same shape of problem that keeps Italian's
+compound tenses out.
+
+Nothing is lost. The reflexive *sense* still reaches the learner through the
+example sentences, which are told to mix it with the plain one — so `levantar`'s
+`yo` row can be *Me levanto temprano* and its `tú` row *Levantas las pesas*.
+
+The one machinery this needs is `LanguageAdapter.substitute`, which Portuguese
+and Italian both leave as `None`. Italian has the same clitic question
+(`lavarsi`) and does not currently answer it.
+
+### Spanish and compound tenses
+
+Spanish **does** drill them, unlike Italian. The reason Italian
 excludes them does not apply: after *haber* the participle never agrees, so
 every Spanish compound tense is exactly six rows. Reverso publishes three tenses
 that are not drilled because they are dead rather than out of scope — the
@@ -123,7 +154,7 @@ that are not drilled because they are dead rather than out of scope — the
 *hubiere hablado*). Portuguese drills its future subjunctive because the tense
 is alive there; Spanish is where it died.
 
-### Why no compound tenses
+### Why no compound tenses in Italian
 
 Reverso publishes Italian's eight compound tenses; none are drilled. Their row
 count depends on the verb: `parlare` (avere) gives six, `arrivare` (essere)

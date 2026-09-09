@@ -26,23 +26,25 @@ changes side:
   disturbs it — ``vencer`` → ``venzo``, ``coger`` → ``cojo``, ``distinguir`` →
   ``distingo``, ``delinquir`` → ``delinco``
 
-**Two gaps worth knowing about.** The first is reflexives. ``levantarse`` does
-not end in ``-ar``, ``-er`` or ``-ir``, so no pattern applies and it is
-irregular by default — and even with the ``-se`` stripped its drilled answers
-carry a clitic (``me levanto``) that no ending table predicts. Every reflexive
-verb therefore reports as irregular, including entirely regular ones.
+**One gap worth knowing about**, and one that used to be. Reflexives were the
+one that used to be: ``levantarse`` does not end in ``-ar``, ``-er`` or ``-ir``,
+so no pattern applied and it came out irregular however regular it was. That no
+longer reaches a user — ``SpanishAdapter.substitute`` swaps a reflexive
+infinitive for its plain verb before the lookup, so it is ``levantar`` that gets
+classified. Calling ``classify`` on a reflexive paradigm directly still returns
+irregular, and correctly: those forms carry a clitic no ending table predicts.
 
-The second is stem changes — ``pensar`` → ``pienso``, ``poder`` → ``puedo``,
+The gap that remains is stem changes — ``pensar`` → ``pienso``, ``poder`` → ``puedo``,
 ``pedir`` → ``pido``. Which vowel changes, and whether one changes at all, is
 not recoverable from the infinitive (``pensar`` changes, ``pasar`` does not), so
 these classify as irregular too.
 
-Both are the same one-sided error Portuguese and Italian already document: a
+This is the same one-sided error Portuguese and Italian already document: a
 missing rule understates how predictable a verb is, never the reverse, since
 overstating it would need the table to reproduce an irregular paradigm exactly.
-But it bites harder here, because reflexives and stem-changers are ordinary
-Spanish 1 vocabulary rather than a handful of exceptions. Expect ``describe()``
-to say "irregular" for a large minority of perfectly ordinary verbs.
+But it bites harder here, because stem-changers are ordinary Spanish 1
+vocabulary rather than a handful of exceptions. Expect ``describe()`` to say
+"irregular" for a large minority of perfectly ordinary verbs.
 
 The table is not typed from memory. ``tools/spanish_endings.py`` regenerates it
 by fetching Reverso's own ``hablar`` / ``comer`` / ``vivir`` and subtracting the

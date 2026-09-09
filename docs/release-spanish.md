@@ -66,8 +66,10 @@ podman logs conjugate-web-1 --tail 20                                          #
    - the compound tenses read `he hablado`, not a bare `hablado`
    - the imperfect subjunctive answers `hablara`, and typing `hablase` is also
      accepted and reported as the alternative
-6. Optionally add `levantarse` to see a reflexive: every answer carries its
-   clitic (`me levanto`, `me he levantado`), and the gerund is `levantándose`.
+6. Type `levantarse` into Add a verb. It should offer `levantar` instead,
+   explaining that the reflexive pronoun is not part of the conjugation. If
+   `levantar` is already in the list you get a 409 naming it, which is also
+   correct.
 7. Switch back to European Portuguese and confirm your verbs, tense order and
    scores are all as they were.
 
@@ -89,10 +91,15 @@ podman logs conjugate-web-1 --tail 20                                          #
   and no hand-checked seed to gate against — the same debt Italian already
   carries. `tools/spanish_endings.py --check` is the one canary there is: it
   refetches the model verbs and fails if the table has moved.
-- **Reflexive and stem-changing verbs report as "irregular"** in the add-a-verb
-  confirmation, even when they are entirely predictable. `web/languages/es/
-  regular.py` explains why; the error is one-sided (it understates how regular a
-  verb is, never overstates) but it covers a lot of ordinary Spanish vocabulary.
+- **A reflexive infinitive adds the plain verb.** `levantarse` adds `levantar`,
+  and the confirmation says why before you agree. The reflexive pronoun is fixed
+  per person and adds no conjugation; the reflexive sense still shows up in the
+  example sentences. See the README.
+- **Stem-changing verbs report as "irregular"** in the add-a-verb confirmation,
+  even though they are otherwise predictable — `pensar` → `pienso` is not
+  recoverable from the infinitive. `web/languages/es/regular.py` explains why;
+  the error is one-sided (it understates how regular a verb is, never
+  overstates) but it covers a lot of ordinary Spanish vocabulary.
 - **No negative imperative.** Reverso publishes none and this project does not
   derive forms. Spanish's negative imperative is the present subjunctive, which
   is drilled in its own right, so little is missing.

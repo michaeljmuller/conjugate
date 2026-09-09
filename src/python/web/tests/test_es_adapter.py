@@ -16,7 +16,12 @@ import pytest
 from web.languages import get_adapter, reverso
 from web.languages.base import INVARIABLE_PERSON, UnknownWord
 from web.languages.es import catalogue
-from web.languages.es.adapter import BLOCK_TENSES, SITE, to_paradigm
+from web.languages.es.adapter import (
+    BLOCK_TENSES,
+    SITE,
+    plain_infinitive,
+    to_paradigm,
+)
 
 FIXTURES = Path(__file__).parent / "fixtures" / "reverso"
 
@@ -194,6 +199,73 @@ def test_a_reflexive_participle_carries_no_clitic():
 ])
 def test_positional_persons_chooses_by_row_count(title, rows, expected):
     assert catalogue.positional_persons(title, rows) == expected
+
+
+# ---- reflexives become their plain verb ----------------------------------
+
+@pytest.mark.parametrize("reflexive,plain", [
+    ("levantarse", "levantar"),
+    ("quejarse", "quejar"),
+    ("dormirse", "dormir"),
+    ("ponerse", "poner"),
+    ("reírse", "reír"),      # the accented -ír infinitives
+    ("irse", "ir"),
+])
+def test_a_reflexive_infinitive_is_recognised(reflexive, plain):
+    assert plain_infinitive(reflexive) == plain
+
+
+@pytest.mark.parametrize("verb", ["hablar", "comer", "vivir", "coser", "ser", "mesa"])
+def test_a_plain_infinitive_is_not_mistaken_for_one(verb):
+    """A Spanish infinitive ends in -ar/-er/-ir, so nothing that ends in -se can
+    be one — but the check must not fire on a verb that merely contains an s."""
+    assert plain_infinitive(verb) is None
+
+
+def test_a_reflexive_substitutes_the_plain_verb():
+    """The clitic is not conjugation: of levantarse's 85 cells, 78 are the plain
+    form with a fixed pronoun in front and 1 is identical. Drilling it asks for
+    the same six-item list eighty times."""
+    swap = get_adapter("es").substitute("levantarse")
+    assert swap is not None
+    plain, why = swap
+    assert plain == "levantar"
+    assert "levantarse" in why and "levantar" in why
+    assert get_adapter("es").substitute("levantar") is None
+
+
+def test_the_substitution_is_idempotent():
+    """api.py applies it once when the job starts and again when the user says
+    yes, so a substituted verb must not substitute again."""
+    adapter = get_adapter("es")
+    plain, _ = adapter.substitute("levantarse")
+    assert adapter.substitute(plain) is None
+
+
+def test_the_other_languages_substitute_nothing():
+    assert get_adapter("pt-PT").substitute("levantar-se") is None
+    assert get_adapter("it").substitute("lavarsi") is None
+
+
+def test_only_the_clitic_separates_a_reflexive_from_its_plain_verb():
+    """The measurement the refusal rests on, against the saved pages: strip the
+    detached clitic and levantarse's cells are levantar's, bar the six where the
+    clitic fuses onto the end."""
+    clitics = ("me", "te", "se", "nos", "os")
+    plain, reflexive = paradigm("levantar").cells, paradigm("levantarse").cells
+    assert set(plain) == set(reflexive)
+    fused = set()
+    for key, cell in reflexive.items():
+        stripped = set()
+        for form in cell.forms:
+            head, _, rest = form.partition(" ")
+            stripped.add(rest if head in clitics and rest else form)
+        if stripped != set(plain[key].forms):
+            fused.add(key)
+    assert fused == {("gerundio", INVARIABLE_PERSON)} | {
+        ("imperativo", p) for p in catalogue.IMPERATIVE_PERSONS
+    }
+    assert len(reflexive) - len(fused) == 79
 
 
 # ---- alternatives --------------------------------------------------------

@@ -95,13 +95,21 @@
     inventory differs), so the edition cookie cannot deliver it.  and it is
     more than a person swap -- voce displacing tu with 3rd-person agreement,
     voces for vos, no falamos accent, different clitic placement.
-  - reflexives and stem-changers classify as "irregular".  levantarse does not
-    end in -ar/-er/-ir so no pattern applies, and its answers carry a clitic
-    the ending table cannot predict; pensar->pienso is not recoverable from
-    the infinitive.  both understate regularity rather than overstate it, but
-    between them they cover a lot of ordinary spanish 1 vocabulary.  stripping
-    the -se and the clitic would fix the first; the second needs the three
-    stem-change classes as extra patterns.
+  - DONE (2026-09-09): reflexives now substitute.  typing levantarse adds
+    levantar, via LanguageAdapter.substitute; the confirmation says why.  the
+    clitic is fixed per person and adds no conjugation -- of levantarse's 85
+    cells, 78 are the plain form with a pronoun in front and 1 is identical.
+    the reflexive SENSE still reaches the learner through the example
+    sentences, which guidance.json now tells the model to mix with the plain
+    sense.
+  - italian has the same clitic question (lavarsi) and substitute() returns
+    None there.  it/reverso drops particletxt entirely, so an italian
+    reflexive would store bare forms today -- latent, since none is drilled.
+  - stem-changers still classify as "irregular".  pensar->pienso is not
+    recoverable from the infinitive (pensar changes, pasar does not).  it
+    understates regularity rather than overstating it, but covers a lot of
+    ordinary spanish 1 vocabulary.  needs the three stem-change classes as
+    extra patterns.
   - no hand-checked es seed, so no equivalent of tools/voc_check.py.  same
     debt italian already owes.  tools/spanish_endings.py --check is the only
     canary for reverso changing shape under us.

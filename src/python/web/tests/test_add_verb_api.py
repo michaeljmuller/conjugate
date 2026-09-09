@@ -460,6 +460,81 @@ def _italian_paradigm(infinitive="parlare"):
     )
 
 
+def test_a_spanish_reflexive_adds_the_plain_verb_instead(env, monkeypatch):
+    """Typing "levantarse" adds "levantar". The reflexive pronoun is fixed per
+    person and is not part of the conjugation, so drilling it would ask for the
+    same six-item list on every row — see SpanishAdapter.substitute."""
+    client, TS = env
+    real = get_adapter("es")
+    asked_for = []
+
+    class _Adapter:
+        def __getattr__(self, name):
+            return getattr(real, name)
+
+        async def paradigm(self, infinitive):
+            asked_for.append(infinitive)
+            return Paradigm(
+                infinitive=infinitive,
+                cells={
+                    ("presente", "yo"): Cell(("levanto",)),
+                    ("presente", "vos"): Cell(("levantáis",)),
+                    ("participio", "inv"): Cell(("levantado",)),
+                },
+            )
+
+    monkeypatch.setattr(jobs, "get_adapter", lambda *a, **k: _Adapter())
+    client.put("/api/settings", json={"language": "es"})
+
+    # Unforced: the confirmation says what is being swapped and why.
+    started = client.post("/api/verbs", json={"infinitive": "levantarse"})
+    assert started.status_code == 202
+    job = _await_job(client, started.json()["job_id"])
+    assert job["status"] == "needs_confirmation"
+    assert "levantarse" in job["question"] and "reflexive" in job["question"]
+    # The preface, then the ordinary confirmation about the plain verb. (The
+    # stub paradigm is three cells, so the verdict on it is "irregular"; what
+    # matters here is that it is levantar being asked about.)
+    assert job["question"].startswith('"levantarse" is reflexive')
+    assert job["question"].endswith("levantar is an irregular verb. Add it?")
+
+    # The lookup never went near the reflexive spelling.
+    assert asked_for == ["levantar"]
+
+    # Saying yes re-sends what the user typed, so the swap must survive it.
+    job = _await_job(client, _confirmed(client, "levantarse").json()["job_id"])
+    assert job["status"] == "done", job
+    with TS() as db:
+        assert db.scalar(select(Verb).where(Verb.infinitive == "levantarse")) is None
+        verb = db.scalar(select(Verb).where(Verb.infinitive == "levantar"))
+        assert verb is not None and verb.language == "es"
+
+
+def test_a_reflexive_collides_with_the_plain_verb_already_added(env, monkeypatch):
+    """The swap happens before the duplicate check, so levantarse cannot sneak
+    in a second copy of levantar."""
+    client, TS = env
+    real = get_adapter("es")
+
+    class _Adapter:
+        def __getattr__(self, name):
+            return getattr(real, name)
+
+        async def paradigm(self, infinitive):
+            return Paradigm(
+                infinitive=infinitive,
+                cells={("presente", "yo"): Cell(("levanto",))},
+            )
+
+    monkeypatch.setattr(jobs, "get_adapter", lambda *a, **k: _Adapter())
+    client.put("/api/settings", json={"language": "es"})
+    assert _await_job(client, _confirmed(client, "levantar").json()["job_id"])["status"] == "done"
+
+    clash = client.post("/api/verbs", json={"infinitive": "levantarse"})
+    assert clash.status_code == 409
+    assert "levantar" in clash.json()["detail"]
+
+
 def test_adding_an_italian_verb_uses_the_italian_adapter_throughout(env, monkeypatch):
     """jobs.py, seed.py and the forms endpoint were never told there is more
     than one language; this is what that buys."""

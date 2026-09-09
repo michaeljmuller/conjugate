@@ -8,7 +8,8 @@
         "The 'vosotros' row is the informal plural used in Spain. Write it as Spain would ('¿Habláis español?'). Never rewrite it with 'ustedes' — that is a different row, and it is the one the 'ellos/ellas/Uds.' forms already cover.",
         "Subject pronouns are usually dropped in Spanish ('Hablo español', not 'Yo hablo español'). Include one only for contrast or emphasis, or where the sentence would be ambiguous — which is common in the imperfect, the conditional and both subjunctives, where the 'yo' and 'él/ella' forms are identical.",
         "Ser and estar are not interchangeable. Ser for identity, origin, profession and inherent qualities; estar for location, condition, and the result of a change.",
-        "Use the personal 'a' before a human direct object: 'Veo a mi hermana', not 'Veo mi hermana'."
+        "Use the personal 'a' before a human direct object: 'Veo a mi hermana', not 'Veo mi hermana'.",
+        "Many verbs have a reflexive sense alongside a plain one — levantar is 'to lift something', levantarse is 'to get up'; dormir is 'to sleep', dormirse is 'to fall asleep'. Only the plain verb is drilled, but BOTH senses are fair game in the sentences, and mixing them across the slots is better than not. Put the reflexive pronoun in front of the form when you use that sense ('Me levanto temprano'); the given form itself is unchanged and must still appear exactly."
       ],
       "vocabulary": "Everyday concrete nouns. Prefer words a learner will meet early: casa, trabajo, tren, amigo, cena, periódico, coche, ciudad, escuela."
     },
@@ -63,6 +64,24 @@
         "example_native": "¿Habláis español en casa?"
       },
       {
+        "verb": "levantar",
+        "tense": "presente",
+        "person": "yo",
+        "form": "levanto",
+        "example_en": "I get up early in the morning.",
+        "example_native": "Me levanto temprano por la mañana.",
+        "note": "The reflexive sense. The given form 'levanto' is present and unchanged; 'me' is a separate word."
+      },
+      {
+        "verb": "levantar",
+        "tense": "presente",
+        "person": "tu",
+        "form": "levantas",
+        "example_en": "You lift the heavy weights every day.",
+        "example_native": "Levantas las pesas pesadas todos los días.",
+        "note": "The plain sense, for the very next slot of the same verb. Mixing the two is deliberate."
+      },
+      {
         "verb": "hablar",
         "tense": "preterito",
         "person": "el",
@@ -94,6 +113,11 @@
         "example_en": "I had already spoken with her when you arrived.",
         "example_native": "Ya había hablado con ella cuando llegaste."
       }
-    ]
+    ],
+    "reflexive_senses": {
+      "why": "The reflexive pronoun (me/te/se/nos/os/se) is a separate word, not part of the conjugation, so it never appears in the form you are given. That does not make the reflexive sense off-limits — it is often the more natural everyday sentence, and a learner meeting only 'lift the box' would never meet 'get up'.",
+      "how": "Use whichever sense makes the better sentence for that person and tense, and vary it across the slots. The pronoun must match the person: yo->me, tú->te, él/ella/Ud.->se, nosotros->nos, vosotros->os, ellos/ellas/Uds.->se.",
+      "caution": "Do not use a reflexive sense for a verb that has none. If the plain verb is not used reflexively, just write the plain sense."
+    }
   }
 }

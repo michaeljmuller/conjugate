@@ -178,6 +178,9 @@ class PortugueseAdapter:
     def person_label(self, tense: str, person: str) -> str:
         return _pt_person_label(tense, person)
 
+    def substitute(self, infinitive: str) -> tuple[str, str] | None:
+        return None  # Portuguese takes every verb as typed.
+
     def resolve_tense_prefs(self, saved: list[dict]) -> list[dict]:
         return resolve_tense_prefs(saved, TENSES)
 

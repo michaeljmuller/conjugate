@@ -60,12 +60,15 @@ def test_irregular_verbs_are_reported_as_such(verb):
     assert classify(paradigm(verb)).describe() == "is an irregular verb."
 
 
-def test_a_reflexive_reads_as_irregular():
-    """The other documented gap. levantarse is a textbook-regular -ar verb, but
-    it does not end in -ar, and its answers carry a clitic no ending table
-    predicts — so the check has nothing to match it against."""
+def test_a_reflexive_paradigm_still_reads_as_irregular():
+    """Why SpanishAdapter.substitute exists. levantarse is a textbook-regular
+    -ar verb, but it does not end in -ar and its answers carry a clitic the
+    ending table cannot predict, so the check has nothing to match against.
+    Adding one now classifies levantar instead, so this verdict is unreachable
+    from the UI — but it is still the right answer for these forms."""
     assert patterns_for("levantarse") == []
     assert classify(paradigm("levantarse")).kind == IRREGULAR
+    assert classify(paradigm("levantar")).kind == REGULAR
 
 
 def test_a_stem_change_reads_as_irregular():

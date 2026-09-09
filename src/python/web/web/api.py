@@ -235,6 +235,15 @@ async def add_verb(
     infinitive = jobs.normalize_infinitive(payload.infinitive)
     if not _INFINITIVE_RE.match(infinitive):
         raise HTTPException(status_code=400, detail="enter a single verb, letters only")
+    # Some words are really a spelling of a verb the drill would rather hold in
+    # another form — a Spanish reflexive is levantar with a pronoun on it. Swap
+    # before the lookup, and before the duplicate check, so "levantarse" collides
+    # with an existing "levantar" rather than adding it twice. Re-applied when
+    # the user confirms, which is why it has to be idempotent.
+    preface = ""
+    swap = adapter.substitute(infinitive)
+    if swap:
+        infinitive, preface = swap
     if jobs.verb_exists(db, infinitive, adapter.code):
         raise HTTPException(status_code=409, detail=f'"{infinitive}" is already in the list')
     if not llm.is_configured():
@@ -245,7 +254,9 @@ async def add_verb(
             status_code=503,
             detail="Adding a verb needs ANTHROPIC_API_KEY, which is not set on the server.",
         )
-    return jobs.start(infinitive, user.id, adapter.code, force=payload.force).as_dict()
+    return jobs.start(
+        infinitive, user.id, adapter.code, force=payload.force, preface=preface
+    ).as_dict()
 
 
 @router.get("/verbs/jobs/{job_id}")

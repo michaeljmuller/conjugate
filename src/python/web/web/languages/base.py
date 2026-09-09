@@ -219,6 +219,23 @@ class LanguageAdapter(Protocol):
     def present_participle_tense(self) -> str | None:
         """Tense key of the gerund/present participle, or ``None``."""
 
+    def substitute(self, infinitive: str) -> tuple[str, str] | None:
+        """``(verb to add instead, why)``, or ``None`` to take the word as typed.
+
+        For a word that is really a spelling of a verb the drill would rather
+        hold in another form. Spanish's reflexives are the case today:
+        ``levantarse`` adds ``levantar``, because the reflexive pronoun is not
+        part of the conjugation.
+
+        Applied before the lookup, so it costs nothing, and again when the user
+        confirms — it must therefore be idempotent, and the substituted verb
+        must not itself substitute. The reason is shown as a preface to the
+        confirmation, so the user sees what they are getting before saying yes.
+
+        This is not for a word the source has never heard of — that is
+        ``UnknownWord``, and only the source can say it.
+        """
+
     def person_label(self, tense: str, person: str) -> str:
         """Row label for a cell, e.g. ``que eu``, ``não tu``, ``ter / haver``."""
 

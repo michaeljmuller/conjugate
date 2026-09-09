@@ -100,6 +100,21 @@ BLOCK_TENSES: dict[str, str] = {
 # Blocks whose single row has no person at all.
 _PERSONLESS_TENSES = frozenset({GERUND_TENSE, PAST_PARTICIPLE_TENSE})
 
+# A Spanish infinitive ends in -ar, -er or -ir, so one ending in -se can only be
+# an infinitive with the reflexive clitic stuck on it. "ír" covers reírse and
+# sonreírse.
+_INFINITIVE_ENDINGS = ("ar", "er", "ir", "ír")
+
+
+def plain_infinitive(infinitive: str) -> str | None:
+    """``levantarse`` -> ``levantar``; ``None`` if it isn't a reflexive infinitive."""
+    if not infinitive.endswith("se"):
+        return None
+    stem = infinitive[:-2]
+    # ``ir`` is the shortest real Spanish infinitive, so two letters is the
+    # floor rather than something to guard against: ``irse`` is a real verb.
+    return stem if len(stem) >= 2 and stem.endswith(_INFINITIVE_ENDINGS) else None
+
 
 def to_paradigm(raw: reverso.RawParadigm) -> Paradigm:
     """Keep the drilled blocks, key them by tense, drop the rest.
@@ -179,6 +194,43 @@ class SpanishAdapter:
 
     def person_label(self, tense: str, person: str) -> str:
         return _es_person_label(tense, person)
+
+    def substitute(self, infinitive: str) -> tuple[str, str] | None:
+        """Add the plain verb when a reflexive infinitive is typed.
+
+        A reflexive adds no conjugation. Measured against ``levantar``, the 85
+        cells of ``levantarse`` are one identical (the participle takes no
+        clitic), 78 that are the same conjugated form with a fixed pronoun in
+        front, and 6 where the pronoun fuses onto the end. Even those six leave
+        the conjugation alone — ``levanta``, ``levantemos``, ``levantad`` — and
+        differ only in how the fused word is spelled. So drilling one asks for
+        the same six-item pronoun list eighty times and teaches nothing a
+        conjugation drill exists to teach.
+
+        The pronoun is a separate axis, not part of the verb: ``te levanto``
+        ("I get you up") is equally good Spanish. Drilling the reflexive would
+        cover only the slice of that axis where the object is the subject.
+
+        Nothing is lost by substituting. The reflexive *sense* still reaches the
+        learner through the example sentences, which are told to mix it with the
+        plain one — see ``guidance.json``.
+
+        Idempotent, because ``plain_infinitive`` returns ``None`` for a verb
+        that does not end in a clitic, and the value it returns never does.
+
+        For a reflexive-only verb such as ``quejarse`` the named plain verb is
+        not current Spanish on its own, but this claims only that it conjugates
+        identically, which is true — and Reverso publishes it.
+        """
+        plain = plain_infinitive(infinitive)
+        if plain is None:
+            return None
+        return plain, (
+            f'"{infinitive}" is reflexive, and the pronoun (me/te/se/nos/os) is '
+            f"the same for every verb rather than part of the conjugation — so "
+            f'"{plain}" is what gets drilled, and its example sentences use both '
+            f"senses."
+        )
 
     def resolve_tense_prefs(self, saved: list[dict]) -> list[dict]:
         return resolve_tense_prefs(saved, TENSES)

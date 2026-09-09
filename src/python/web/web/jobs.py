@@ -198,21 +198,31 @@ def _evict() -> None:
 
 
 def start(
-    infinitive: str, user_id: int | None, language: str, force: bool = False
+    infinitive: str,
+    user_id: int | None,
+    language: str,
+    force: bool = False,
+    preface: str = "",
 ) -> Job:
     """Register a job and kick it off in the background.
 
     Every add stops after the lookup to confirm; ``force`` skips that, and is
     how the client answers yes.
+
+    ``preface`` opens the confirmation when the caller swapped the typed word
+    for another verb — the user asked for ``levantarse`` and needs to see that
+    ``levantar`` is what will be added before agreeing to it.
     """
     job = create(normalize_infinitive(infinitive))
-    task = asyncio.create_task(_run(job, user_id, language, force))
+    task = asyncio.create_task(_run(job, user_id, language, force, preface))
     # Hold a reference so the task isn't garbage-collected mid-flight.
     job._task = task  # type: ignore[attr-defined]
     return job
 
 
-async def _run(job: Job, user_id: int | None, language: str, force: bool) -> None:
+async def _run(
+    job: Job, user_id: int | None, language: str, force: bool, preface: str = ""
+) -> None:
     adapter = get_adapter(language)
     try:
         paradigm = await _look_up(job, adapter)
@@ -222,7 +232,8 @@ async def _run(job: Job, user_id: int | None, language: str, force: bool) -> Non
         # to undo.
         if not force:
             found = adapter.describe(paradigm)
-            job.ask(f"{job.infinitive} {found} Add it?" if found else f"Add {job.infinitive}?")
+            asked = f"{job.infinitive} {found} Add it?" if found else f"Add {job.infinitive}?"
+            job.ask(f"{preface} {asked}".strip() if preface else asked)
             return
         slots = await _write_examples(job, paradigm, adapter)
         job.finish(_save(job, paradigm, slots, user_id, adapter))
