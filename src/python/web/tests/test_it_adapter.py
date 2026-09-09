@@ -15,8 +15,9 @@ import pytest
 
 from web.languages import get_adapter
 from web.languages.base import INVARIABLE_PERSON, UnknownWord
-from web.languages.it import catalogue, reverso
-from web.languages.it.adapter import BLOCK_TENSES, to_paradigm
+from web.languages import reverso
+from web.languages.it import catalogue
+from web.languages.it.adapter import BLOCK_TENSES, SITE, to_paradigm
 
 FIXTURES = Path(__file__).parent / "fixtures" / "reverso"
 
@@ -26,7 +27,7 @@ def page(name: str) -> str:
 
 
 def raw(verb: str) -> reverso.RawParadigm:
-    return reverso.parse_paradigm(page(f"verb-{verb}.html"), verb, catalogue.person_key)
+    return reverso.parse_paradigm(page(f"verb-{verb}.html"), verb, catalogue.person_key, SITE)
 
 
 def paradigm(verb: str):
@@ -155,7 +156,7 @@ def test_split_forms(text, expected):
 
 def test_a_page_with_no_paradigm_is_not_found():
     with pytest.raises(reverso.WordNotFound):
-        reverso.parse_paradigm(page("notfound-tavolo.html"), "tavolo", catalogue.person_key)
+        reverso.parse_paradigm(page("notfound-tavolo.html"), "tavolo", catalogue.person_key, SITE)
 
 
 def test_a_noun_is_only_ever_unknown_never_not_a_verb():
@@ -174,7 +175,7 @@ def test_a_noun_is_only_ever_unknown_never_not_a_verb():
     adapter = get_adapter("it")
     import web.languages.it.adapter as mod
 
-    original, mod.reverso.ReversoClient = mod.reverso.ReversoClient, lambda: _Client()
+    original, mod.reverso.ReversoClient = mod.reverso.ReversoClient, lambda _site: _Client()
     try:
         with pytest.raises(UnknownWord):
             asyncio.run(adapter.paradigm("tavolo"))

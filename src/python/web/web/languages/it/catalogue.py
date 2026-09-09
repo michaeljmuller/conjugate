@@ -101,6 +101,20 @@ _PERSON_BY_DISPLAY: dict[str, str] = {
 }
 
 
+# The imperative prints no pronouns at all, so its rows are positional. Italian
+# has no 1st-person-singular imperative, so the five rows are these:
+IMPERATIVE_PERSONS: list[str] = ["tu", "lui", "noi", "voi", "loro"]
+
+
+def positional_persons(title: str, rows: int) -> list[str]:
+    """Persons for a block whose rows print no pronoun.
+
+    The imperative is the only one in Italian, so the title and row count are
+    not consulted. Spanish needs both — see ``languages/reverso.py``.
+    """
+    return IMPERATIVE_PERSONS
+
+
 def person_key(display: str) -> str | None:
     """Ascii person key for a pronoun as printed (``lei/lui`` -> ``lui``).
 

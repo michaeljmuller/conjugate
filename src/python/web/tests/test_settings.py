@@ -283,6 +283,30 @@ def test_each_language_keeps_its_own_tense_order(tmp_path):
         app.dependency_overrides.clear()
 
 
+def test_spanish_is_a_third_catalogue_of_its_own(tmp_path):
+    """The registry is what makes a language exist, so a third one has to need
+    nothing more than the second did."""
+    client, _ = _make_client(tmp_path)
+    try:
+        got = client.put("/api/settings", json={"language": "es"}).json()
+        assert got["language"] == "es"
+        assert got["language_name"] == "Spanish"
+        assert [lang["code"] for lang in got["languages"]] == ["es", "it", "pt-PT"]
+
+        keys = [t["key"] for t in got["tenses"]]
+        assert keys[0] == "presente"
+        assert "preterite" not in keys        # Portuguese's key
+        assert "passato_remoto" not in keys   # Italian's
+        # Spanish drills its compound tenses; Italian drills none.
+        assert "pluscuamperfecto" in keys
+        # ...and its own accent bar: ñ is Spanish's alone, ç Portuguese's.
+        assert "ñ" in got["accents"] and "ç" not in got["accents"]
+
+        assert client.get("/api/verbs").json() == []
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_a_tense_from_the_other_language_is_rejected(tmp_path):
     client, _ = _make_client(tmp_path)
     try:

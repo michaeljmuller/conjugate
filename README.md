@@ -1,18 +1,23 @@
 # Conjugation Practice
 
-A web to aid in learning verb conjugation, in **European Portuguese** and
-**Italian**. Pick a language and a verb, type each conjugation, and get
-immediate feedback.
+A web to aid in learning verb conjugation, in **European Portuguese**,
+**Italian** and **Spanish**. Pick a language and a verb, type each conjugation,
+and get immediate feedback.
 
 - **Drilled — pt-PT:** 12 tenses × 5 persons (`eu, tu, ele, nós, eles`) plus the
   two participles. `vós` is stored but skipped, matching the original sheet.
 - **Drilled — Italian:** 10 tenses × 6 persons (`io, tu, lui/lei, noi, voi,
   loro`) plus the gerund and past participle. `voi` *is* drilled, unlike `vós`.
   Only simple tenses; see [Why no compound tenses](#why-no-compound-tenses).
+- **Drilled — Spanish:** 14 tenses × 6 persons (`yo, tú, él/ella/Ud., nosotros,
+  vosotros, ellos/ellas/Uds.`) plus the gerund and past participle. `vosotros`
+  *is* drilled — see [Spanish and vosotros](#spanish-and-vosotros) — and so are
+  the six compound tenses, which Spanish can hold and Italian cannot.
 - Which tenses appear, and in what order, is a per-user setting **per language**.
 - **Grading:** exact match, accents included — a missing diacritic is wrong. An
   accent bar inserts the letters that language needs (`á â ã à é ê í ó ô õ ú ç`
-  for Portuguese, `à è é ì ò ó ù` for Italian). A wrong first attempt can be
+  for Portuguese, `à è é ì ò ó ù` for Italian, `á é í ó ú ü ñ` for Spanish). A
+  wrong first attempt can be
   reclassified as "just a typo" so it doesn't count against the score.
 - **Auth:** Google OAuth (multi-user); progress is per account. Setup:
   [`docs/oauth-setup.md`](../../../docs/oauth-setup.md).
@@ -45,10 +50,16 @@ web/
     it/            #   Italian — same shape, nothing shared but the abstraction
       adapter.py   #     block-title -> tense; the imperative and che handling
       catalogue.py #     10 simple tenses, 6 drilled persons, row labels
-      reverso.py   #     reads paradigms from conjugator.reverso.net
       regular.py   #     the four regular patterns (-are/-ere/-ire/-isc-)
       prompts.py   #     what Claude is told about Italian
       guidance.json#     the Italian style guide
+    es/            #   Spanish — same shape again
+      adapter.py   #     block-title -> tense; -ra/-se merging, reflexive clitics
+      catalogue.py #     16 tenses (6 compound), 6 drilled persons, row labels
+      regular.py   #     three patterns, and spelling changes in both directions
+      prompts.py   #     what Claude is told about Spanish
+      guidance.json#     the Spanish style guide
+    reverso.py     #   reads paradigms from conjugator.reverso.net (it + es)
   llm.py           # Claude: write + refine the example sentences (language-neutral)
   jobs.py          # background add-a-verb jobs, with progress for the UI
   data/verbs_seed.json   # the 10 bootstrap pt verbs, 6 persons × 12 tenses (+ participles)
@@ -58,6 +69,7 @@ tools/pull_seed.sh        # refresh the seed files from the deployment's databas
 tools/voc_check.py        # the pt regression gate: seed vs cplp.org
 tools/regular_endings.py  # regenerates the pt ending table from cplp.org
 tools/italian_endings.py  # regenerates the it ending table from Reverso
+tools/spanish_endings.py  # regenerates the es ending table from Reverso
 ```
 
 Adding a language is a new adapter plus a source for it — `jobs.py`, `api.py`,
@@ -68,14 +80,14 @@ name, the regularity check, and the prompt material.
 
 ## Languages
 
-| | European Portuguese | Italian |
-|---|---|---|
-| Code | `pt-PT` | `it` |
-| Source | [cplp.org](https://voc.cplp.org) | [Reverso](https://conjugator.reverso.net) |
-| Normative? | yes — the vocabulary AO90 mandates | no — a commercial aggregator |
-| Tenses drilled | 14 | 10 |
-| Persons drilled | 5 (+2 participle rows) | 6 (+1 personless) |
-| Regular patterns | 3 (`-ar/-er/-ir`) | 4 (`-are/-ere/-ire/-ire`-isc) |
+| | European Portuguese | Italian | Spanish |
+|---|---|---|---|
+| Code | `pt-PT` | `it` | `es` |
+| Source | [cplp.org](https://voc.cplp.org) | [Reverso](https://conjugator.reverso.net) | [Reverso](https://conjugator.reverso.net) |
+| Normative? | yes — the vocabulary AO90 mandates | no — a commercial aggregator | no — the RAE is Cloudflare-gated |
+| Tenses drilled | 14 | 10 | 16 (6 of them compound) |
+| Persons drilled | 5 (+2 participle rows) | 6 (+1 personless) | 6 (+1 personless) |
+| Regular patterns | 3 (`-ar/-er/-ir`) | 4 (`-are/-ere/-ire/-ire`-isc) | 3 (`-ar/-er/-ir`) |
 
 The asymmetry in *normative?* is the one that matters. cplp.org publishes what
 the Acordo Ortográfico obliges the signatory states to produce, and it agreed
@@ -83,7 +95,33 @@ with this project's hand-curated seed on all 700 cells — which is why nothing
 second-guesses it and `llm.py` does not check the conjugation. Reverso has no
 such standing. Its tables are good and widely used, but "unverified" is the
 honest description, so an Italian equivalent of `tools/voc_check.py` against a
-hand-checked seed is still owed.
+hand-checked seed is still owed. Spanish inherits that gap. The RAE would be its
+cplp.org — the same kind of normative authority — but `dle.rae.es` sits behind a
+Cloudflare browser challenge and answers 403 to any server-side fetch, so
+Reverso is what there is. `en.wiktionary.org` (or kaikki.org's extracted JSON)
+is the openly-licensed fallback if Reverso ever changes shape.
+
+### Spanish and vosotros
+
+`vosotros` is drilled, which is the opposite of the `vós` call in Portuguese.
+`vós` is archaic in every variety, so drilling it would teach a form nobody
+uses. `vosotros` is ordinary everyday speech in Spain, and US textbooks —
+Realidades/Auténtico, Descubre/Vistas, Avancemos — print the six-person chart
+with it in, with the AP exam expecting recognition. It costs one row, and
+nothing is missing for a learner who will never say it: Latin American `ustedes`
+takes the same forms as `ellos`, which is already a drilled row.
+
+An option to hide the row (and a `pt-BR` variety, which would need a different
+source — cplp.org's tables are identical under both editions) is wanted but not
+built.
+
+Spanish **does** drill its compound tenses, unlike Italian. The reason Italian
+excludes them does not apply: after *haber* the participle never agrees, so
+every Spanish compound tense is exactly six rows. Reverso publishes three tenses
+that are not drilled because they are dead rather than out of scope — the
+`pretérito anterior` (*hube hablado*) and both future subjunctives (*hablare*,
+*hubiere hablado*). Portuguese drills its future subjunctive because the tense
+is alive there; Spanish is where it died.
 
 ### Why no compound tenses
 

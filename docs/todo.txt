@@ -83,3 +83,25 @@
 
   - run tools/voc_check.py now and then -- it expects 700/700 and is the canary
     for cplp.org changing shape under us
+
+- spanish follow-ups (added 2026-09-09, with the es release):
+  - an option to hide the vosotros row.  drilled by default because US
+    textbooks print the row and AP expects recognition, but a learner aimed
+    only at latin america has no use for it.  latin american "ustedes" reuses
+    the ellos row, so hiding vosotros leaves no gap -- it is a display rule
+    like contrastive_rows, not a data one.
+  - pt-BR.  the same shape of question, but a different source: cplp.org's
+    paradigm tables are IDENTICAL under both editions (only the lemma
+    inventory differs), so the edition cookie cannot deliver it.  and it is
+    more than a person swap -- voce displacing tu with 3rd-person agreement,
+    voces for vos, no falamos accent, different clitic placement.
+  - reflexives and stem-changers classify as "irregular".  levantarse does not
+    end in -ar/-er/-ir so no pattern applies, and its answers carry a clitic
+    the ending table cannot predict; pensar->pienso is not recoverable from
+    the infinitive.  both understate regularity rather than overstate it, but
+    between them they cover a lot of ordinary spanish 1 vocabulary.  stripping
+    the -se and the clitic would fix the first; the second needs the three
+    stem-change classes as extra patterns.
+  - no hand-checked es seed, so no equivalent of tools/voc_check.py.  same
+    debt italian already owes.  tools/spanish_endings.py --check is the only
+    canary for reverso changing shape under us.

@@ -32,3 +32,4 @@ web = ["data/*.json", "static/*"]
 # Each language ships its own prompt material next to its adapter.
 "web.languages.pt" = ["*.json"]
 "web.languages.it" = ["*.json"]
+"web.languages.es" = ["*.json"]

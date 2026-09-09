@@ -26,8 +26,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from web.languages.it import catalogue, reverso  # noqa: E402
-from web.languages.it.adapter import BLOCK_TENSES  # noqa: E402
+from web.languages import reverso  # noqa: E402
+from web.languages.it import catalogue  # noqa: E402
+from web.languages.it.adapter import BLOCK_TENSES, SITE  # noqa: E402
 from web.languages.it.regular import ENDINGS, PATTERNS  # noqa: E402
 
 FIXTURES = Path(__file__).resolve().parent.parent / "tests" / "fixtures" / "reverso"
@@ -41,8 +42,8 @@ PAUSE = 1.5
 async def _raw(verb: str, offline: bool) -> reverso.RawParadigm:
     if offline:
         page = (FIXTURES / f"verb-{verb}.html").read_text(encoding="utf-8")
-        return reverso.parse_paradigm(page, verb, catalogue.person_key)
-    async with reverso.ReversoClient() as client:
+        return reverso.parse_paradigm(page, verb, catalogue.person_key, SITE)
+    async with reverso.ReversoClient(SITE) as client:
         return await client.paradigm(verb, catalogue.person_key)
 
 

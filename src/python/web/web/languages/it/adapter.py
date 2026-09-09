@@ -21,6 +21,7 @@ stripped on the way in and re-added as a row label on the way out.
 
 from __future__ import annotations
 
+from .. import reverso
 from ..base import (
     INVARIABLE_PERSON,
     Cell,
@@ -31,7 +32,7 @@ from ..base import (
     UnknownWord,
     resolve_tense_prefs,
 )
-from . import prompts, reverso
+from . import prompts
 from .catalogue import (
     ACCENTS,
     DRILL_PERSONS,
@@ -43,11 +44,22 @@ from .catalogue import (
     TENSE_KEYS,
     TENSES,
     person_key,
+    positional_persons,
 )
 from .catalogue import person_label as _it_person_label
 from .regular import classify
 
 CODE = "it"
+
+# What Reverso's Italian edition looks like. ``particletxt`` holds the
+# subjunctive's ``che``, which the drill shows as a row label rather than
+# storing, so it stays out of the form.
+SITE = reverso.Site(
+    language="italian",
+    personless_titles=("Gerundio", "Participio", "Infinito"),
+    positional_persons=positional_persons,
+    particle_in_form=False,
+)
 
 # Reverso's ``mobile-title`` -> this project's tense key. The ten drilled
 # tenses, all simple. Everything else Reverso publishes — the eight compound
@@ -150,7 +162,7 @@ class ItalianAdapter:
         if not verb:
             raise UnknownWord(infinitive)
         try:
-            async with reverso.ReversoClient() as client:
+            async with reverso.ReversoClient(SITE) as client:
                 raw = await client.paradigm(verb, person_key)
         except reverso.WordNotFound as exc:
             # Reverso cannot tell a noun from a typo, so this is the only

@@ -8,8 +8,9 @@ from pathlib import Path
 
 import pytest
 
-from web.languages.it import catalogue, reverso
-from web.languages.it.adapter import to_paradigm
+from web.languages import reverso
+from web.languages.it import catalogue
+from web.languages.it.adapter import SITE, to_paradigm
 from web.languages.it.regular import (
     ENDINGS,
     PATTERNS,
@@ -28,7 +29,7 @@ FIXTURES = Path(__file__).parent / "fixtures" / "reverso"
 
 def paradigm(verb: str):
     page = (FIXTURES / f"verb-{verb}.html").read_text(encoding="utf-8")
-    return to_paradigm(reverso.parse_paradigm(page, verb, catalogue.person_key))
+    return to_paradigm(reverso.parse_paradigm(page, verb, catalogue.person_key, SITE))
 
 
 # ---- the four regular patterns -------------------------------------------

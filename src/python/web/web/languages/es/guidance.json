@@ -1,0 +1,99 @@
+{
+  "_instructions": "For every slot you are given, write TWO things: \"example_en\", ONE natural everyday English sentence that illustrates that specific verb form — it MUST reflect the SUBJECT (person) and the TENSE/ASPECT — and \"example_native\", a faithful Spanish translation of that same sentence which MUST naturally contain the exact given form. Keep both short and concrete. Echo each slot's tense and person unchanged.",
+  "_guidance": {
+    "register": {
+      "required": "Standard modern Spanish. Neutral register: everyday, not literary and not slang. Vocabulary should be pan-Hispanic — a reader in Mexico and a reader in Madrid should both find it ordinary — but the vosotros rows are the informal plural of Spain and must be written as such.",
+      "grammar": [
+        "Address one person informally as 'tú' with real 2nd-person endings ('tú hablas', 'tú vas'). Do not switch to the polite 'usted' except in the imperative rows, where the 3rd-person form IS the polite one.",
+        "The 'vosotros' row is the informal plural used in Spain. Write it as Spain would ('¿Habláis español?'). Never rewrite it with 'ustedes' — that is a different row, and it is the one the 'ellos/ellas/Uds.' forms already cover.",
+        "Subject pronouns are usually dropped in Spanish ('Hablo español', not 'Yo hablo español'). Include one only for contrast or emphasis, or where the sentence would be ambiguous — which is common in the imperfect, the conditional and both subjunctives, where the 'yo' and 'él/ella' forms are identical.",
+        "Ser and estar are not interchangeable. Ser for identity, origin, profession and inherent qualities; estar for location, condition, and the result of a change.",
+        "Use the personal 'a' before a human direct object: 'Veo a mi hermana', not 'Veo mi hermana'."
+      ],
+      "vocabulary": "Everyday concrete nouns. Prefer words a learner will meet early: casa, trabajo, tren, amigo, cena, periódico, coche, ciudad, escuela."
+    },
+    "persons": {
+      "yo": "I",
+      "tu": "you (one person, informal)",
+      "el": "he / she / you (one person, formal — usted)",
+      "nos": "we",
+      "vos": "you (more than one, informal — vosotros, as used in Spain)",
+      "ellos": "they / you (more than one — ustedes)",
+      "inv": "(no subject — gerund / participle)"
+    },
+    "subjunctive_prefixes": {
+      "subjuntivo_presente": "que (that ...) — show the trigger that licenses it",
+      "subjuntivo_imperfecto": "que (that ...) — after a past-tense or conditional main clause, or after 'si'",
+      "subjuntivo_perfecto": "que (that ...) — a completed action inside a subjunctive clause whose main verb is present",
+      "subjuntivo_pluscuamperfecto": "que (that ...) — a counterfactual about the past, usually after 'si' or in a main clause with 'habría'"
+    },
+    "tense_usage": {
+      "presente": "Habitual action, general truth, or something happening now. Spanish uses the simple present where English often uses the continuous: 'Hablo con él ahora' = 'I am talking to him now'.",
+      "imperfecto": "Ongoing, repeated, or background past action: 'was ...-ing' or 'used to ...'. Also for description and for age, weather and telling the time in the past.",
+      "preterito": "A single completed action in the past, viewed as finished: 'Ayer hablé con el médico'. Contrast it with the imperfect — if the sentence would really be said with 'used to' or 'was ...-ing', it belongs in the imperfect, not here.",
+      "futuro": "Simple future ('will ...'). Also common for present probability: 'Serán las tres' = 'It must be three o'clock'.",
+      "condicional": "The 'would' form — the result of a hypothetical, or a polite request ('Querría un café').",
+      "subjuntivo_presente": "Subjunctive after wish, doubt, emotion, opinion, necessity, or a future-referring time clause — usually a 'que ...' clause. ALWAYS show the main clause that triggers it ('Espero que ...', 'Quiero que ...', 'Es necesario que ...', 'Cuando ...').",
+      "subjuntivo_imperfecto": "Hypothetical or counterfactual, usually after 'si' ('Si hablara ...'), or in a 'que' clause whose main verb is past or conditional. Show the trigger. Both the -ra and -se forms are correct; the -ra form is the usual one.",
+      "imperativo": "A command. The tú, nosotros and vosotros rows are the familiar imperative ('¡Habla!', '¡Hablemos!', '¡Hablad!'); the Ud. and Uds. rows are the POLITE imperative, addressing someone formally — write those sentences as polite requests to a stranger, a customer, an official.",
+      "perfecto": "Present perfect — a past action with a bearing on now, or one inside a period that has not closed: 'Hoy he hablado con ella', 'Nunca he estado en Perú'. In Spain it also covers what Latin America would put in the preterite; keep the sentence one where both would use it.",
+      "pluscuamperfecto": "Pluperfect — a past action completed before another past action: 'Ya había hablado con ella cuando llegaste'. Show the later past event, so the ordering is visible.",
+      "futuro_perfecto": "Future perfect — an action that will be finished by some future point: 'Para el viernes habré hablado con todos'. Also used for past probability: 'Habrá salido ya'.",
+      "condicional_perfecto": "Conditional perfect — what would have happened: 'Habría hablado con él, pero no contestó'. Usually paired with a counterfactual condition.",
+      "subjuntivo_perfecto": "Present perfect subjunctive — a completed action inside a subjunctive clause with a present-tense main verb: 'Me alegro de que hayas hablado con ella'. Show the trigger.",
+      "subjuntivo_pluscuamperfecto": "Pluperfect subjunctive — a counterfactual about the past: 'Si hubiera hablado antes, todo sería distinto'. Show the 'si' clause or the main clause that licenses it. Both the -ra and -se forms are correct.",
+      "gerundio": "The gerund, most often with 'estar' for an action in progress ('Estoy hablando') or on its own meaning 'by/while ...-ing' ('Hablando con ella, lo entendí').",
+      "participio": "The past participle. Use it in a compound tense with haber ('He hablado'), where it never changes, or adjectivally with ser or estar, where it agrees ('una carta escrita a mano', 'La puerta está cerrada')."
+    },
+    "style_examples": [
+      {
+        "verb": "hablar",
+        "tense": "presente",
+        "person": "yo",
+        "form": "hablo",
+        "example_en": "I speak Spanish with my grandmother.",
+        "example_native": "Hablo español con mi abuela."
+      },
+      {
+        "verb": "hablar",
+        "tense": "presente",
+        "person": "vos",
+        "form": "habláis",
+        "example_en": "Do you all speak Spanish at home?",
+        "example_native": "¿Habláis español en casa?"
+      },
+      {
+        "verb": "hablar",
+        "tense": "preterito",
+        "person": "el",
+        "form": "habló",
+        "example_en": "The manager spoke to us for an hour yesterday.",
+        "example_native": "El director habló con nosotros durante una hora ayer."
+      },
+      {
+        "verb": "hablar",
+        "tense": "subjuntivo_presente",
+        "person": "tu",
+        "form": "hables",
+        "example_en": "I hope you speak with the manager tomorrow.",
+        "example_native": "Espero que hables con el director mañana."
+      },
+      {
+        "verb": "hablar",
+        "tense": "imperativo",
+        "person": "el",
+        "form": "hable",
+        "example_en": "Please speak more slowly, sir.",
+        "example_native": "Por favor, hable más despacio, señor."
+      },
+      {
+        "verb": "hablar",
+        "tense": "pluscuamperfecto",
+        "person": "yo",
+        "form": "había hablado",
+        "example_en": "I had already spoken with her when you arrived.",
+        "example_native": "Ya había hablado con ella cuando llegaste."
+      }
+    ]
+  }
+}
