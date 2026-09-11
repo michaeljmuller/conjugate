@@ -1218,6 +1218,9 @@ function updateVerbIndicator(verbId) {
   const label = verb ? verb.infinitive : "";
   el("verb-indicator").querySelector(".vi-verb").textContent = label;
   el("verb-indicator").classList.toggle("hidden", !label);
+  // The banner is most of the pinned header's height, and it is hidden when the
+  // page loads; measured then, a tense scrolled to the top lands behind it.
+  updateStickyHeight();
 }
 
 // ---- Model construction -------------------------------------------------
