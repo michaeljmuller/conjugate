@@ -1184,15 +1184,13 @@ function setCheck(item, on) {
 // Keep drill sections from scrolling under the two pinned headers — the page's
 // and the drill's banner below it: expose their live height as a CSS var that
 // .tense-block uses for scroll-margin-top. The page header's own height is what
-// everything else that sticks stops below. Also where the columns start on the
-// page, which the verb column's height is cut to, so its footer is on screen.
+// everything else that sticks stops below.
 function updateStickyHeight() {
   const top = document.querySelector(".topbar").offsetHeight;
   const h = el("sticky-header").offsetHeight;
   const root = document.documentElement.style;
   root.setProperty("--topbar-h", `${top}px`);
   root.setProperty("--sticky-h", `${top + h + 8}px`);
-  root.setProperty("--col-top", `${el("app").offsetTop}px`);
 }
 
 async function loadVerb(verbId) {

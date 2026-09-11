@@ -127,14 +127,17 @@ body {
 
 .signed-out { max-width: 30rem; margin: 4rem auto; text-align: center; }
 
-/* Two columns: the verb list, and the drill at the width it has always had. */
+/* Two columns: the verb list, and the drill at the width it has always had.
+   --page-gap is the space between the page header and the columns, and what
+   they keep below it once pinned, so neither moves when the page scrolls. */
+:root { --page-gap: 1.5rem; }
 .app {
   display: grid;
   grid-template-columns: 12rem minmax(0, 46rem);
   gap: 1.5rem;
   align-items: start;
   max-width: 62rem;
-  margin: 1.5rem auto 0;
+  margin: var(--page-gap) auto 0;
   padding: 0 1rem;
 }
 /* The room at the foot of the page belongs to the drill, not the page. A sticky
@@ -144,13 +147,12 @@ body {
 .drill-col { padding-bottom: 5.5rem; }
 
 /* The verb column stays in view while the drill scrolls, and scrolls by itself
-   once the list outgrows it. Its height is cut to what is left of the window
-   below the header, so the footer is on screen whether or not the page has
-   scrolled. --col-top is set from app.js. */
+   once the list outgrows it. Pinned where it starts, and cut to what is left
+   of the window below that, so the footer is always on screen. */
 .verb-col {
   position: sticky;
-  top: calc(var(--topbar-h, 3.3rem) + 1rem);
-  max-height: calc(100vh - var(--col-top, 5rem) - 1rem);
+  top: calc(var(--topbar-h, 3.3rem) + var(--page-gap));
+  max-height: calc(100vh - var(--topbar-h, 3.3rem) - var(--page-gap) - 1rem);
   overflow-y: auto;
   background: var(--panel);
   border: 1px solid var(--line);
@@ -251,13 +253,16 @@ body {
 .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); text-decoration: none; display: inline-block; }
 .btn.ghost { color: var(--muted); }
 
-/* Verb banner + accent bar ride together, pinned under the page header while
-   scrolling. */
+/* Verb banner + accent bar ride together, pinned where they start while
+   scrolling. The box reaches up through the page gap to the page header, so
+   the drill scrolls out of sight there rather than showing above the banner. */
 .sticky-header {
   position: sticky;
   top: var(--topbar-h, 3.3rem);
   z-index: 10;
   background: var(--bg);
+  margin-top: calc(-1 * var(--page-gap));
+  padding-top: var(--page-gap);
   padding-bottom: 0.75rem;
 }
 
