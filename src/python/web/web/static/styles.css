@@ -141,11 +141,14 @@ body {
   top: 1rem;
   max-height: calc(100vh - var(--col-top, 5rem) - 1rem);
   overflow-y: auto;
-  padding: 0.4rem;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 12px;
 }
+/* The padding lives on the list, not the column: a sticky footer stops at the
+   inner edge of its scroller's padding, and the rows would show through the
+   strip left below it. */
+.verb-list { padding: 0.4rem 0.4rem 0; }
 /* The focus is really in the invisible filter box, so the column shows it. */
 .verb-col:focus-within { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 
@@ -154,7 +157,7 @@ body {
 .verb-col-foot {
   position: sticky;
   bottom: 0;
-  margin: 0.4rem -0.4rem -0.4rem; /* flush with the column's edges, through its padding */
+  margin-top: 0.4rem;
   padding: 0.4rem;
   background: var(--panel);
   border-top: 1px solid var(--line);
