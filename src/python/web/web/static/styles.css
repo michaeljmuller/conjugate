@@ -121,51 +121,88 @@ body {
 
 .signed-out { max-width: 30rem; margin: 4rem auto; text-align: center; }
 
-.app { max-width: 46rem; margin: 1.5rem auto; padding: 0 1rem 4rem; }
+/* Two columns: the verb list, and the drill at the width it has always had. */
+.app {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 46rem);
+  gap: 1.5rem;
+  align-items: start;
+  max-width: 62rem;
+  margin: 1.5rem auto;
+  padding: 0 1rem 4rem;
+}
 
-.controls {
+/* The verb column stays in view while the drill scrolls, and scrolls by itself
+   once the list outgrows it. Its height is cut to what is left of the window
+   below the header, so the footer is on screen from the start; scrolled, that
+   leaves a little air under it. --col-top is set from app.js. */
+.verb-col {
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - var(--col-top, 5rem) - 1rem);
+  overflow-y: auto;
+  padding: 0.4rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+/* The focus is really in the invisible filter box, so the column shows it. */
+.verb-col:focus-within { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+
+/* Under the last verb when the list is short; pinned to the bottom of the
+   column, with the verbs scrolling behind it, when it is long. */
+.verb-col-foot {
+  position: sticky;
+  bottom: 0;
+  margin: 0.4rem -0.4rem -0.4rem; /* flush with the column's edges, through its padding */
+  padding: 0.4rem;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
   display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 0.75rem;
+  flex-direction: column;
+  gap: 0.4rem;
 }
-/* Wide enough for the longer of the two labels, so the box beside it does not
-   shift when "Conjugate verb" becomes "Next verb" at the end of a drill. */
-.controls label {
-  font-weight: 600;
-  min-width: 7.2rem;
-}
-/* The verb picker. Sized to the longest infinitive rather than the box's default
-   width. Its text is a real value, not a placeholder — the verb being
-   conjugated, or the one offered next — so it gets no muted treatment. */
-#verb-pick {
-  padding: 0.4rem 0.5rem;
+.verb-col-foot .btn { width: 100%; }
+
+/* The filter: a real input so accents compose, but out of sight until
+   something is typed into it. Clipped rather than display:none, which could
+   not hold the focus. */
+.verb-filter {
+  width: 100%;
+  padding: 0.3rem 0.5rem;
   border: 1px solid var(--line);
   border-radius: 6px;
-  font-size: 1rem;
-  background: var(--panel);
+  font-size: 0.95rem;
+  background: var(--bg);
   color: var(--ink);
-  width: 11rem;
 }
-#verb-pick:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-#verb-pick:disabled { opacity: 0.45; }
-/* The box and its list. Relative so the panel hangs off the box rather than the
-   page, and inline-block so the row lays out as if the panel were not there. */
-.picker { position: relative; display: inline-block; }
-/* The header menus hang from the right edge; this one from the left, under the
-   box it belongs to, and it scrolls once the catalogue outgrows the screen. */
-.picker-menu {
-  left: 0;
-  right: auto;
-  min-width: 100%;
-  max-height: 60vh;
-  overflow-y: auto;
+.verb-filter:focus { outline: none; }
+.verb-filter:not(.has-text) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
 }
-.picker-item { border-radius: 8px; }
-/* Highlighted by the arrow keys. Same treatment as a hover, because it is the
-   keyboard's version of the same thing. */
-.picker-item.active { background: var(--bg); }
+
+/* The bottom margin keeps a row walked to by the arrow keys clear of the
+   pinned footer, which would otherwise cover it. */
+.picker-item { border-radius: 8px; scroll-margin-bottom: 5.5rem; }
+/* The verb on screen, marked whether or not the list has the focus. */
+.picker-item.current { font-weight: 700; color: var(--accent); }
+/* Highlighted by the arrow keys, and only while they are driving the list:
+   with the focus in the drill there is nothing for a highlight to mean. */
+.verb-col:focus-within .picker-item.active { background: var(--accent); color: #fff; }
+
+/* Part way through a drill, the list steps back, except for the verb on screen.
+   Pointing at it or giving it the focus brings it back. */
+.picker-item { transition: opacity 0.15s ease; }
+.app.drilling .verb-col:not(:hover):not(:focus-within) .picker-item:not(.current) {
+  color: var(--muted);
+  opacity: 0.5;
+}
 /* Regular / Irregular, the grouping the list inherits from the verb order. Ink
    rather than muted, over a hairline: it has to read as the label for what is
    under it, which a grey line of small caps among black verbs does not. */
@@ -186,13 +223,6 @@ body {
   padding: 0.55rem 0.7rem;
   color: var(--muted);
   font-size: 0.95rem;
-}
-
-/* Why a keystroke did nothing: no such verb, or a prefix several verbs share. */
-.verb-pick-error {
-  flex-basis: 100%;
-  font-size: 0.85rem;
-  color: var(--red);
 }
 
 .btn {
@@ -242,6 +272,19 @@ body {
 }
 .verb-indicator .vi-label { font-size: 0.8rem; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.03em; }
 .verb-indicator .vi-verb { font-size: 1.1rem; font-weight: 700; }
+/* The pencil that edits this verb's example sentences. */
+.vi-edit {
+  align-self: center;
+  display: flex;
+  padding: 0.25rem;
+  border: none;
+  border-radius: 5px;
+  background: none;
+  color: #fff;
+  opacity: 0.8;
+  cursor: pointer;
+}
+.vi-edit:hover { opacity: 1; background: rgba(255, 255, 255, 0.18); }
 .verb-indicator .vi-progress {
   margin-left: auto;
   font-size: 0.9rem;
@@ -671,12 +714,30 @@ body {
   opacity: 0.8;
 }
 
-/* The verb row's two actions sit to the right of the picker. Disabled means
-   there is no verb on screen to edit. */
-.controls .btn:disabled {
-  opacity: 0.45;
-  cursor: default;
-  border-color: var(--line);
+/* Asked before leaving a drill part way through. */
+.switch-dialog {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+.switch-dialog::backdrop { background: rgba(0, 0, 0, 0.35); }
+.switch-text { margin: 0; font-size: 1.05rem; font-weight: 600; }
+.switch-dialog .settings-actions { margin-top: 1rem; }
+.btn kbd {
+  margin-left: 0.35rem;
+  font-family: inherit;
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
+/* Narrow screens: the list above the drill instead of beside it, short and
+   scrolling by itself. Nothing else changes. */
+@media (max-width: 40rem) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .verb-col { position: static; max-height: 12rem; }
 }
 
 /* Phone width: the header carries a title, a language and an avatar, which is

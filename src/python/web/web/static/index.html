@@ -25,50 +25,66 @@
 
   <!-- Signed-in view -->
   <main id="app" class="app hidden">
-    <!-- The verb picker: a box you type into over a list you can read. The list
-         is the catalogue, grouped the way the old <select> grouped it; typing
-         filters it. Nothing starts until you commit, with Return or a click —
-         a <datalist> could do neither, which is why the list is ours.
-
-         The label names which of the box's two states it is in: the verb being
-         conjugated while a drill is on screen, the one Return would start next
-         once that drill is done. -->
-    <div class="controls">
-      <label for="verb-pick" id="verb-pick-label">Conjugate verb</label>
-      <div class="picker">
-        <input id="verb-pick" type="text" role="combobox" aria-expanded="false"
-               aria-controls="verb-list" aria-autocomplete="list"
+    <!-- The verb list: the language's whole catalogue, always in view, dimmed
+         while a drill is running. It is driven from the keyboard through the
+         box in its footer, which holds the focus and moves a highlight through
+         the rows; the box itself shows only once something has been typed into
+         it, as a filter. A real input rather than keys caught on the list, so
+         dead-key accents compose. -->
+    <aside class="verb-col">
+      <div id="verb-list" class="verb-list" role="listbox" aria-label="Verbs"></div>
+      <!-- Pinned to the bottom of the column, so a long list scrolls behind it
+           and a short one leaves it right under the last verb. -->
+      <div class="verb-col-foot">
+        <input id="verb-pick" class="verb-filter" type="text" role="combobox"
+               aria-expanded="true" aria-controls="verb-list" aria-autocomplete="list"
+               aria-label="Filter verbs"
                autocomplete="off" autocapitalize="off" spellcheck="false" />
-        <div id="verb-list" class="menu-panel picker-menu hidden" role="listbox"
-             aria-label="Verbs"></div>
+        <button id="verb-add" class="btn" type="button">+ Add a verb</button>
       </div>
-      <!-- Both act on this row: one adds a verb to the list, the other edits
-           the example sentences of the verb on screen. -->
-      <button id="verb-add" class="btn" type="button">+ Add a verb</button>
-      <button id="verb-edit" class="btn" type="button">Edit sentences</button>
-      <span id="verb-pick-error" class="verb-pick-error hidden"></span>
-    </div>
+    </aside>
 
-    <!-- Verb banner + accent bar stay pinned to the top together while scrolling. -->
-    <div id="sticky-header" class="sticky-header">
-      <div id="verb-indicator" class="verb-indicator hidden">
-        <span class="vi-label">Conjugating</span>
-        <span class="vi-verb"></span>
-        <span class="vi-progress"></span>
+    <section class="drill-col">
+      <!-- Verb banner + accent bar stay pinned to the top together while scrolling. -->
+      <div id="sticky-header" class="sticky-header">
+        <div id="verb-indicator" class="verb-indicator hidden">
+          <span class="vi-label">Conjugating</span>
+          <span class="vi-verb"></span>
+          <!-- Edits the example sentences of the verb on screen, the one this
+               banner names. -->
+          <button id="verb-edit" class="vi-edit" type="button"
+                  title="Edit sentences" aria-label="Edit sentences">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M11.5 1.5l3 3L5 14H2v-3z" fill="none" stroke="currentColor"
+                    stroke-width="1.5" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <span class="vi-progress"></span>
+        </div>
+        <div class="accent-bar hidden" id="accent-bar" aria-label="Insert accented character"></div>
       </div>
-      <div class="accent-bar hidden" id="accent-bar" aria-label="Insert accented character"></div>
-    </div>
 
-    <!-- Revealed once every field is answered, which is also when the page jumps
-         back to the top: the score, the misses and the verb picker are then all
-         in view together. Above the drill for that reason, not below it. -->
-    <div id="results" class="results hidden">
-      <span id="results-summary" class="results-summary"></span>
-      <ul id="results-mistakes" class="results-mistakes"></ul>
-    </div>
+      <!-- Revealed once every field is answered, which is also when the page jumps
+           back to the top: the score and the misses are then in view, with the
+           focus back in the verb list. Above the drill for that reason. -->
+      <div id="results" class="results hidden">
+        <span id="results-summary" class="results-summary"></span>
+        <ul id="results-mistakes" class="results-mistakes"></ul>
+      </div>
 
-    <div id="drill" class="drill"></div>
+      <div id="drill" class="drill"></div>
+    </section>
   </main>
+
+  <!-- Leaving a drill part way through, from a click or Return in the verb
+       list. Return switches, Escape stays. -->
+  <dialog id="switch-dialog" class="switch-dialog" aria-label="Switch verb">
+    <p id="switch-text" class="switch-text"></p>
+    <div class="settings-actions">
+      <button id="switch-go" class="btn primary" type="button">Switch <kbd>Return</kbd></button>
+      <button id="switch-stay" class="btn ghost" type="button">Keep conjugating <kbd>Esc</kbd></button>
+    </div>
+  </dialog>
 
   <!-- Settings modal. Choose which tenses to drill and in what order. -->
   <div id="settings-panel" class="settings-panel hidden" role="dialog" aria-modal="true" aria-label="Settings">

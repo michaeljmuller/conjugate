@@ -3,26 +3,27 @@
 const el = (id) => document.getElementById(id);
 const normalize = (s) => s.trim().toLowerCase().split(/\s+/).join(" ");
 
-// Accents folded away, for matching what was TYPED INTO THE VERB PICKER: "por"
+// Accents folded away, for matching what was TYPED INTO THE VERB FILTER: "por"
 // should find "pôr". Deliberately separate from normalize() above, which grading
 // uses and which must stay accent-sensitive — a missing diacritic is wrong.
 const fold = (s) => s.trim().toLowerCase().normalize("NFD").replace(/\p{Mn}/gu, "");
 
 // A stray Enter right after the last answer would otherwise start the next verb
-// before the results had been read; see focusPicker().
+// before the results had been read; see finishDrill(). The switch dialog uses the
+// same guard against the Return that opened it.
 const ENTER_GUARD_MS = 400;
 
-let lastFocused = null; // input to receive accent-bar insertions
+let lastFocused = null; // drill input to receive accent-bar insertions, and to
+                        // go back to when the verb list is left mid-drill
 let currentVerbId = null;
-let verbOrder = [];     // the drilled language's verbs, in picker order (regular
+let verbOrder = [];     // the drilled language's verbs, in list order (regular
                         // first). The source for "the next verb" and for turning
                         // an id into an infinitive — never the DOM.
-let pickerFocusedAt = 0; // when the picker last took focus without being asked
-let pickerOpen = false;  // is the verb list showing
-let pickerActive = -1;   // highlighted row, as an index into pickerHits; -1 = none
+let pickerFocusedAt = 0; // when the list last took focus without being asked
 let pickerHits = [];     // the verbs the list is currently showing, in row order
-let drillFinished = false; // has this drill's finish (top of page, cursor in the
-                           // picker) already run — it happens once per drill
+let highlightId = null;  // the highlighted verb, by id so it survives filtering
+let drillFinished = false; // has this drill's finish (top of page, focus in the
+                           // list) already run — it happens once per drill
 let rows = [];          // MODEL: one entry per form, the single source of truth.
                         // The DOM is a projection of this — never read back for state.
 let ui = { labels: "en", show_accents: false }; // interface prefs, loaded at init
@@ -80,8 +81,8 @@ async function init() {
   window.addEventListener("resize", updateStickyHeight);
 }
 
-// (Re)fill the verb picker from the server. Called at startup and again
-// whenever a verb is added, so the new one appears without a reload.
+// (Re)fill the verb list from the server. Called at startup and again whenever
+// a verb is added, so the new one appears without a reload.
 //
 // Regular verbs lead. They are the models the irregular ones are departures
 // from, so they are what you reach for first — and the split is the same one the
@@ -93,14 +94,18 @@ async function loadVerbs() {
     ...verbs.filter((v) => v.pattern),
     ...verbs.filter((v) => !v.pattern),
   ];
-  // What the box holds is a matter of which verb is on screen, not of the list
-  // having been refetched; the callers below settle that. Only the list itself
-  // is redrawn here, and only if it is showing.
-  if (pickerOpen) renderPickerList();
+  el("verb-pick").disabled = !verbOrder.length;
+  renderPickerList();
   return verbOrder;
 }
 
-// ---- The verb picker ----------------------------------------------------
+// ---- The verb list ------------------------------------------------------
+//
+// Always on screen. The focus, when the list has it, is really in the filter
+// box in its footer, which stays invisible until something is typed into it:
+// the arrow keys move a highlight through the rows, Return starts the
+// highlighted verb, and typing narrows the list. Nothing starts until Return
+// or a click.
 
 // The verb after the one on screen, wrapping at the end. With one verb in the
 // language it is that verb, so Return runs it again.
@@ -108,34 +113,6 @@ function nextVerb() {
   if (!verbOrder.length || currentVerbId === null) return null;
   const i = verbOrder.findIndex((v) => v.id == currentVerbId);
   return verbOrder[(i + 1) % verbOrder.length];
-}
-
-// The picker has two states, and the label says which one it is in.
-//
-// While a verb is on screen the box holds THAT verb — the one the banner names.
-// What you typed stays put for as long as you are conjugating it: a box that
-// changed to the next verb the moment you committed would answer a question you
-// had not asked yet, and would disagree with the banner while doing it.
-//
-// The next verb arrives only at the end, when the page comes back to the top and
-// the box becomes the proposal for what to do now.
-function setPickerVerb() {
-  showInPicker(verbOrder.find((v) => v.id == currentVerbId), "Conjugate verb");
-}
-
-function setPickerNext() {
-  showInPicker(nextVerb(), "Next verb");
-}
-
-function showInPicker(verb, label) {
-  const inp = el("verb-pick");
-  inp.value = verb ? verb.infinitive : "";
-  // Empty is not the same as unusable: before the first verb is chosen the box
-  // is empty and is the only thing to do. It is the bare language — nothing to
-  // choose at all — that disables it.
-  inp.disabled = !verbOrder.length;
-  el("verb-pick-label").textContent = label;
-  clearPickError();
 }
 
 // What the list shows for what has been typed: everything when the box is empty,
@@ -147,78 +124,107 @@ function filterVerbs(text) {
   return verbOrder.filter((v) => fold(v.infinitive).startsWith(t));
 }
 
-// Which verbs the typed text could mean on Return: the one it names exactly, or
-// else whatever the list is showing. Same test either way, so what you can see
-// and what Return will take can never disagree.
-function matchVerbs(text) {
+// Where the highlight lands once the list has been redrawn: on the verb the
+// text names exactly (so "ser" means ser, not servir), else where it already
+// was if that verb is still showing, else on the first row.
+function highlightFor(text) {
   const t = fold(text);
-  if (!t) return [];
-  const exact = verbOrder.find((v) => fold(v.infinitive) === t);
-  return exact ? [exact] : filterVerbs(text);
+  const exact = t && pickerHits.find((v) => fold(v.infinitive) === t);
+  const kept = pickerHits.find((v) => v.id == highlightId);
+  return (exact || kept || pickerHits[0])?.id ?? null;
 }
 
-// Return in the picker: the commit. Nothing has happened until this point —
-// typing and browsing the suggestions change no state, which is the whole reason
-// this is an input and not the <select> it replaced.
-function pickVerb() {
-  const text = el("verb-pick").value;
-  const hits = matchVerbs(text);
-  // Say which of the two ways it was unclear: nothing to start either way, but
-  // one is answered by typing something else and the other by typing more.
-  if (hits.length !== 1) {
-    showPickError(
-      !text.trim() ? "Type a verb"
-      : hits.length ? `${hits.length} verbs start with that`
-      : "No such verb"
-    );
-    return;
-  }
-  startPicked(hits[0]);
-}
-
-// The one way a verb starts from the picker, whether it was typed or clicked.
-function startPicked(verb) {
-  clearPickError();
-  closePicker();
-  startVerb(verb.id);
-}
-
-function showPickError(msg) {
-  const err = el("verb-pick-error");
-  err.textContent = msg;
-  err.classList.remove("hidden");
-}
-
-const clearPickError = () => el("verb-pick-error").classList.add("hidden");
-
-// Put the cursor in the picker with its prefill selected, so Return moves on and
-// typing replaces it. The timestamp is the guard: the Enter that answered the
-// last field is consumed by the row it was typed in (see makeRow), but a
-// habitual second Enter would land here and skip past the results unread, so the
-// picker ignores one for a moment after a focus it did not ask for.
-function focusPicker() {
+// Give the list the focus with `id` highlighted and nothing typed. No scroll
+// from the focus itself: the box is in the column's footer, and the page may be
+// on its way back to the top.
+function focusList(id) {
   const inp = el("verb-pick");
   if (inp.disabled) return;
-  pickerFocusedAt = Date.now();
-  inp.focus();
-  inp.select();
+  setFilter("");
+  inp.focus({ preventScroll: true });
+  highlightVerb(id);
 }
 
-// ---- The verb picker's list ---------------------------------------------
+function setFilter(text) {
+  el("verb-pick").value = text;
+  renderPickerList();
+}
+
+// A drill on screen with fields still to answer.
+const drillUnfinished = () => rows.length > 0 && !rows.every((r) => r.graded);
+
+// The one way a verb starts from the list, whether by Return or a click. Part
+// way through a drill it asks first, since a stray click on an always-visible
+// list is easy; with nothing answered yet, or the drill done, there is nothing
+// to ask about.
+function chooseVerb(verb) {
+  if (drillUnfinished() && rows.some((r) => r.graded)) openSwitch(verb);
+  else startVerb(verb.id);
+}
+
+// ---- The switch dialog --------------------------------------------------
+
+let switchTo = null;   // the verb the open dialog would start
+let switchOpenedAt = 0;
+
+function openSwitch(verb) {
+  const dlg = el("switch-dialog");
+  switchTo = verb;
+  el("switch-text").textContent =
+    verb.id == currentVerbId ? `Start ${verb.infinitive} over?` : `Switch to ${verb.infinitive}?`;
+  switchOpenedAt = Date.now();
+  dlg.showModal();
+  el("switch-go").focus();
+}
+
+// Staying goes back to the field you left, even when the dialog was opened from
+// the keyboard with the focus in the list. Done here rather than in a "close"
+// listener: Chrome holds that event until the next paint, which a background
+// tab never gets, and this runs after close() has put the focus back where the
+// dialog found it, so the field wins.
+function closeSwitch(go) {
+  el("switch-dialog").close();
+  if (go) startVerb(switchTo.id);
+  else lastFocused?.focus();
+}
+
+// Return presses the focused button, which starts on Switch; Escape is Keep
+// conjugating. Only a fresh Return counts: not a held one, and not one straight
+// after the Return that opened the dialog.
+function wireSwitch() {
+  el("switch-go").addEventListener("click", () => closeSwitch(true));
+  el("switch-stay").addEventListener("click", () => closeSwitch(false));
+  el("switch-dialog").addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      e.preventDefault(); // ours, not the dialog's own cancel
+      closeSwitch(false);
+    } else if (e.key === "Enter" && (e.repeat || Date.now() - switchOpenedAt < ENTER_GUARD_MS)) {
+      e.preventDefault();
+    }
+  });
+}
+
+// ---- Drawing the verb list ----------------------------------------------
 
 // Draw the list for whatever is typed. The Regular/Irregular headings are the
 // split verbOrder already carries, and appear only when both kinds are showing:
 // a heading over every row divides nothing. Row order follows pickerHits, which
 // is what the arrow keys walk.
 function renderPickerList() {
+  const inp = el("verb-pick");
   const panel = el("verb-list");
-  pickerHits = filterVerbs(el("verb-pick").value);
+  inp.classList.toggle("has-text", !!inp.value);
+  pickerHits = filterVerbs(inp.value);
   panel.innerHTML = "";
   if (!pickerHits.length) {
-    const none = document.createElement("div");
-    none.className = "picker-none";
-    none.textContent = "No such verb";
-    panel.appendChild(none);
+    // Only a filter can empty the list; a language with no verbs says so in
+    // the drill column instead.
+    if (inp.value) {
+      const none = document.createElement("div");
+      none.className = "picker-none";
+      none.textContent = "No such verb";
+      panel.appendChild(none);
+    }
   } else {
     const regular = pickerHits.filter((v) => v.pattern);
     const irregular = pickerHits.filter((v) => !v.pattern);
@@ -231,7 +237,7 @@ function renderPickerList() {
       for (const v of verbs) panel.appendChild(pickerRow(v));
     }
   }
-  setPickerActive(-1);
+  highlightVerb(highlightFor(inp.value));
 }
 
 function pickerHeading(text) {
@@ -242,11 +248,13 @@ function pickerHeading(text) {
 }
 
 // A row is a <div>, not a <button>: the box keeps the focus and the arrow keys
-// move a highlight, so rows have no business in the tab order. textContent —
+// move a highlight, so rows have no business in the tab order. `current` marks
+// the verb on screen, which the dimming leaves alone. textContent —
 // infinitives are model-generated.
 function pickerRow(verb) {
   const row = document.createElement("div");
   row.className = "um-item picker-item";
+  row.classList.toggle("current", verb.id == currentVerbId);
   row.id = `verb-row-${verb.id}`;
   row.setAttribute("role", "option");
   row.setAttribute("aria-selected", "false");
@@ -255,85 +263,69 @@ function pickerRow(verb) {
   return row;
 }
 
-// Move the highlight, clamped, with -1 meaning "none — Return takes what I
-// typed". Screen readers follow it through aria-activedescendant, since the
-// focus itself never leaves the box.
-function setPickerActive(i) {
-  const rows = [...el("verb-list").querySelectorAll(".picker-item")];
-  pickerActive = rows.length ? Math.max(-1, Math.min(i, rows.length - 1)) : -1;
-  rows.forEach((row, n) => {
-    const on = n === pickerActive;
+// Move the highlight onto a verb. Screen readers follow it through
+// aria-activedescendant, since the focus itself never leaves the box. It shows
+// only while the list has the focus (see styles.css), and scrolls into view
+// only then: with the focus in the drill, a redraw has no business moving the
+// page.
+function highlightVerb(id) {
+  const inp = el("verb-pick");
+  highlightId = id;
+  let active = null;
+  for (const row of el("verb-list").querySelectorAll(".picker-item")) {
+    const on = row.dataset.id == id;
     row.classList.toggle("active", on);
     row.setAttribute("aria-selected", String(on));
-  });
-  const active = rows[pickerActive];
-  if (active) {
-    // The box shows what Return would take, so walking the list writes into it.
-    // Nothing re-filters: setting the value fires no input event, so the rows
-    // stay where they are while you walk them.
-    el("verb-pick").value = pickerHits[pickerActive].infinitive;
-    el("verb-pick").setAttribute("aria-activedescendant", active.id);
-    active.scrollIntoView({ block: "nearest" });
-  } else {
-    el("verb-pick").removeAttribute("aria-activedescendant");
+    if (on) active = row;
   }
+  if (!active) return void inp.removeAttribute("aria-activedescendant");
+  inp.setAttribute("aria-activedescendant", active.id);
+  if (document.activeElement === inp) active.scrollIntoView({ block: "nearest" });
 }
 
-// Move the box one verb along the list without opening it — the same "previous
-// or next verb" the arrows mean inside the list, for when the list is closed.
-// This is the way back to the verb just finished: the box offers the one after
-// it, so Up returns to it and Return runs it again.
-function stepPicker(delta) {
-  if (!verbOrder.length) return;
-  const inp = el("verb-pick");
-  const named = verbOrder.findIndex((v) => fold(v.infinitive) === fold(inp.value));
-  // Whatever the box names, or failing that the verb on screen: a half-typed
-  // filter is not a position in the list.
-  const from = named === -1 ? verbOrder.findIndex((v) => v.id == currentVerbId) : named;
-  const to = Math.min(Math.max(from + delta, 0), verbOrder.length - 1);
-  inp.value = verbOrder[to].infinitive;
-  inp.select();
-  clearPickError();
+// One row up or down, clamped at the ends. The Regular/Irregular headings are
+// not rows, so the walk steps over them.
+function moveHighlight(delta) {
+  if (!pickerHits.length) return;
+  const i = pickerHits.findIndex((v) => v.id == highlightId);
+  const to = i === -1 ? 0 : Math.min(Math.max(i + delta, 0), pickerHits.length - 1);
+  highlightVerb(pickerHits[to].id);
 }
 
-function openPicker() {
-  if (el("verb-pick").disabled) return;
-  renderPickerList();
-  el("verb-list").classList.remove("hidden");
-  el("verb-pick").setAttribute("aria-expanded", "true");
-  pickerOpen = true;
-}
-
-function closePicker() {
-  el("verb-list").classList.add("hidden");
-  el("verb-pick").setAttribute("aria-expanded", "false");
-  el("verb-pick").removeAttribute("aria-activedescendant");
-  pickerOpen = false;
-  pickerActive = -1;
-}
-
-// The picker's keys. Return commits — the highlighted row if there is one, else
-// whatever was typed. Nothing else here starts a drill.
+// The list's keys. Return starts the highlighted verb; nothing else here starts
+// a drill. Escape drops the filter and, part way through a drill, goes back to
+// the field you left.
 function pickerKey(e) {
   if (e.key === "ArrowDown" || e.key === "ArrowUp") {
     e.preventDefault();
-    const delta = e.key === "ArrowDown" ? 1 : -1;
-    if (pickerOpen) setPickerActive(pickerActive + delta);
-    else stepPicker(delta);
+    moveHighlight(e.key === "ArrowDown" ? 1 : -1);
     return;
   }
   if (e.key === "Escape") {
-    closePicker();
+    // Some browsers clear an input on Escape themselves; the key is ours here.
+    e.preventDefault();
+    setFilter("");
+    if (drillUnfinished() && lastFocused?.isConnected) lastFocused.focus();
     return;
   }
   if (e.key !== "Enter") return;
   e.preventDefault();
   // The Enter that answered the last field is consumed by the row it was typed
-  // in, but a habitual second one lands here; see focusPicker().
+  // in, but a habitual second one lands here; see finishDrill().
   if (Date.now() - pickerFocusedAt < ENTER_GUARD_MS) return;
-  const active = pickerHits[pickerActive];
-  if (active) startPicked(active);
-  else pickVerb();
+  const verb = pickerHits.find((v) => v.id == highlightId);
+  if (verb) chooseVerb(verb);
+}
+
+// Cmd+K (Ctrl+K off the Mac), from anywhere: the list, with the highlight on
+// the verb on screen, so Up and Down reach its neighbours and typing filters.
+// Not over a dialog, which owns the keyboard while it is open.
+function listShortcut(e) {
+  if (!(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey) return;
+  if (e.key.toLowerCase() !== "k") return;
+  if (el("switch-dialog").open || document.querySelector(".settings-panel:not(.hidden)")) return;
+  e.preventDefault();
+  focusList(currentVerbId ?? verbOrder[0]?.id);
 }
 
 // The bar's buttons, rebuilt whenever the drilled language changes. Only the
@@ -364,29 +356,22 @@ function wireControls() {
   el("verb-add").addEventListener("click", openAddVerb);
   const pick = el("verb-pick");
   pick.addEventListener("keydown", pickerKey);
-  pick.addEventListener("click", openPicker);
-  // An empty box is a question waiting to be answered, so the list opens with
-  // it. A full one is the next verb, already an answer — and at the end of a
-  // drill it is the results block that has just appeared underneath.
-  pick.addEventListener("focus", () => {
-    if (!pick.value) openPicker();
+  pick.addEventListener("input", renderPickerList);
+  // A filter is for the moment you are in the list; leaving it (Tab, a click
+  // elsewhere, a verb started) puts every verb back.
+  pick.addEventListener("blur", () => {
+    if (pick.value) setFilter("");
   });
-  // Typing filters the list, and moves on from any error about what it said a
-  // moment ago.
-  pick.addEventListener("input", () => {
-    clearPickError();
-    openPicker();
-  });
-  // The box owns the focus, so losing it is the honest signal that the list is
-  // done — an outside click, or Tab. Rows keep it by refusing the mousedown,
-  // which is what lets a click on one be a click rather than a blur.
-  pick.addEventListener("blur", closePicker);
+  document.addEventListener("keydown", listShortcut);
+  // Rows refuse the mousedown, so a click on one leaves the focus where it was:
+  // in the drill, which is where the switch dialog's Escape goes back to.
   el("verb-list").addEventListener("mousedown", (e) => e.preventDefault());
   el("verb-list").addEventListener("click", (e) => {
     const row = e.target.closest(".picker-item");
     const verb = row && verbOrder.find((v) => v.id == row.dataset.id);
-    if (verb) startPicked(verb);
+    if (verb) chooseVerb(verb);
   });
+  wireSwitch();
   // Acts on the verb on screen — there is no other verb it could mean.
   el("verb-edit").addEventListener("click", () => openReview(currentVerbId));
   el("settings-save").addEventListener("click", saveSettings);
@@ -698,31 +683,28 @@ async function switchLanguage(code) {
 }
 
 // Where the page opens, and where a language switch returns it: no verb chosen,
-// an empty form, and the cursor in the picker with its list showing. Choosing
-// the verb is the first move, so the page starts where that is made.
+// an empty form, and the focus in the list on its first verb. Choosing the verb
+// is the first move, so Return alone makes it.
 function showStart(verbs) {
   showNoDrill(
     verbs.length
       ? "Pick a verb to start."
-      : `No ${lang.name} verbs yet — use "Add a verb" above.`
+      : `No ${lang.name} verbs yet — use "Add a verb".`
   );
-  focusPicker();
-  // Say it rather than leave it to the focus handler: the list showing is the
-  // point of this state, not a side effect of where the cursor landed.
-  if (verbs.length) openPicker();
+  focusList(verbs[0]?.id);
 }
 
 // Nothing to drill: either no verb has been chosen yet, or the language has none
 // to choose. The clearing is the same apart from the note, so it is one
-// function — the drill, the banner that names a verb, and the button that edits
-// one all have nothing to work with.
+// function — the drill, the banner that names a verb (and carries the pencil
+// that edits one), and the results of whatever was drilled before all go.
 function showNoDrill(note) {
   rows = [];
   currentVerbId = null;
   el("drill").innerHTML = "";
   el("verb-indicator").classList.add("hidden");
-  setEditEnabled();
-  setPickerVerb(); // no verb on screen, so the box goes empty
+  renderProgress(); // no rows: no results block, and the list undimmed
+  renderPickerList(); // no verb on screen to mark
   // textContent, not innerHTML: lang.name is server data, never markup.
   const p = document.createElement("p");
   p.className = "drill-note";
@@ -1198,28 +1180,26 @@ function setCheck(item, on) {
 }
 
 // Keep drill sections from scrolling under the sticky header: expose its live
-// height as a CSS var that .tense-block uses for scroll-margin-top.
+// height as a CSS var that .tense-block uses for scroll-margin-top. Also where
+// the columns start on the page, which the verb column's height is cut to, so
+// its footer is on screen before the page has scrolled.
 function updateStickyHeight() {
   const h = el("sticky-header").offsetHeight;
   document.documentElement.style.setProperty("--sticky-h", `${h + 8}px`);
+  document.documentElement.style.setProperty("--col-top", `${el("app").offsetTop}px`);
 }
-
-// "Edit sentences" acts on the verb on screen; with no verb there is nothing
-// for it to open.
-const setEditEnabled = () => (el("verb-edit").disabled = !currentVerbId);
 
 async function loadVerb(verbId) {
   currentVerbId = verbId;
-  setEditEnabled();
   const data = await api(`/api/verbs/${verbId}/forms`);
   renderDrill(data);
-  setPickerVerb(); // the box names the verb being conjugated, as the banner does
+  renderPickerList(); // the list marks the verb being conjugated, as the banner names it
   updateVerbIndicator(verbId);
 }
 
 // Start (or restart) a verb fresh: reload it, jump to the top, and focus the
-// first field. The picker is the only way in — including back to the verb just
-// finished, which is one Up away in the box.
+// first field. The list is the only way in — including back to the verb just
+// finished, which is one Up away once the drill is done.
 async function startVerb(verbId) {
   await loadVerb(verbId);
   rows[0]?.input.focus({ preventScroll: true });
@@ -1307,8 +1287,12 @@ function makeRow(data, tenseLabel) { // tenseLabel: the heading text, mood inclu
     lastFocused = input;
     div.classList.add("focused");
   });
-  input.addEventListener("blur", () => {
+  input.addEventListener("blur", (e) => {
     div.classList.remove("focused");
+    // Stepping over to the verb list (Cmd+K, or the switch dialog a click on it
+    // opens) is not answering: the field keeps what is in it, ungraded, for
+    // when you come back.
+    if (e.relatedTarget?.closest(".verb-col, #switch-dialog")) return;
     gradeRow(row);
   });
   input.addEventListener("keydown", (e) => {
@@ -1559,6 +1543,9 @@ function renderProgress() {
   header.textContent = text;
   header.classList.toggle("perfect", perfect);
 
+  // The verb list steps back while there are fields to answer.
+  el("app").classList.toggle("drilling", drillUnfinished());
+
   // The results block appears only once every field is answered.
   const results = el("results");
   results.classList.toggle("hidden", !complete);
@@ -1575,8 +1562,8 @@ function renderProgress() {
   else if (!drillFinished) finishDrill();
 }
 
-// Done: back to the top, where the results block and the verb picker both are,
-// with the picker ready for the next verb. Deferred to the next turn of the
+// Done: back to the top, where the results block is, with the focus in the verb
+// list on the next verb. Deferred to the next turn of the
 // event loop because renderProgress runs inside the last field's own blur or
 // keydown handler, and taking focus out from under one is fragile. A timeout
 // rather than requestAnimationFrame: rAF never fires in a tab that isn't being
@@ -1590,8 +1577,12 @@ function finishDrill() {
     if (wrongRowFocused()) return;
     drillFinished = true;
     window.scrollTo({ top: 0, behavior: "smooth" });
-    setPickerNext(); // done with this verb: the box now offers the next one
-    focusPicker();
+    // The guard: the Enter that answered the last field is consumed by the row
+    // it was typed in (see makeRow), but a habitual second Enter would land in
+    // the list and skip past the results unread, so the list ignores one for a
+    // moment after a focus it did not ask for.
+    pickerFocusedAt = Date.now();
+    focusList(nextVerb()?.id);
   }, 0);
 }
 
@@ -1656,7 +1647,7 @@ function showToast(msg, detail) {
 
 // Leave a finished row: the next person, or the next tense block's first field
 // when this was the section's last. No-op once every field is answered — the
-// finish takes focus to the verb picker at the top, and moving it into another
+// finish takes focus to the verb list, and moving it into another
 // field here would fight that.
 function advanceFrom(row) {
   if (rows.every((r) => r.graded)) return;
