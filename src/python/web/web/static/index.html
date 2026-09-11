@@ -25,13 +25,28 @@
 
   <!-- Signed-in view -->
   <main id="app" class="app hidden">
+    <!-- The verb picker: a box you type into over a list you can read. The list
+         is the catalogue, grouped the way the old <select> grouped it; typing
+         filters it. Nothing starts until you commit, with Return or a click —
+         a <datalist> could do neither, which is why the list is ours.
+
+         The label names which of the box's two states it is in: the verb being
+         conjugated while a drill is on screen, the one Return would start next
+         once that drill is done. -->
     <div class="controls">
-      <label for="verb-select">Verb</label>
-      <select id="verb-select"></select>
+      <label for="verb-pick" id="verb-pick-label">Conjugate verb</label>
+      <div class="picker">
+        <input id="verb-pick" type="text" role="combobox" aria-expanded="false"
+               aria-controls="verb-list" aria-autocomplete="list"
+               autocomplete="off" autocapitalize="off" spellcheck="false" />
+        <div id="verb-list" class="menu-panel picker-menu hidden" role="listbox"
+             aria-label="Verbs"></div>
+      </div>
       <!-- Both act on this row: one adds a verb to the list, the other edits
-           the example sentences of whichever verb is selected. -->
+           the example sentences of the verb on screen. -->
       <button id="verb-add" class="btn" type="button">+ Add a verb</button>
       <button id="verb-edit" class="btn" type="button">Edit sentences</button>
+      <span id="verb-pick-error" class="verb-pick-error hidden"></span>
     </div>
 
     <!-- Verb banner + accent bar stay pinned to the top together while scrolling. -->
@@ -44,18 +59,15 @@
       <div class="accent-bar hidden" id="accent-bar" aria-label="Insert accented character"></div>
     </div>
 
-    <div id="drill" class="drill"></div>
-
-    <!-- Revealed once every field is answered, echoing the header summary. -->
-    <div id="footer-controls" class="footer-controls hidden">
-      <span id="footer-summary" class="footer-summary"></span>
-      <ul id="footer-mistakes" class="footer-mistakes"></ul>
-      <button id="again" class="btn" type="button">Conjugate this verb again</button>
-      <div class="next-verb">
-        <label for="verb-select-bottom">now conjugate:</label>
-        <select id="verb-select-bottom"></select>
-      </div>
+    <!-- Revealed once every field is answered, which is also when the page jumps
+         back to the top: the score, the misses and the verb picker are then all
+         in view together. Above the drill for that reason, not below it. -->
+    <div id="results" class="results hidden">
+      <span id="results-summary" class="results-summary"></span>
+      <ul id="results-mistakes" class="results-mistakes"></ul>
     </div>
+
+    <div id="drill" class="drill"></div>
   </main>
 
   <!-- Settings modal. Choose which tenses to drill and in what order. -->

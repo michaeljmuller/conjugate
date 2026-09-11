@@ -3,8 +3,26 @@
 const el = (id) => document.getElementById(id);
 const normalize = (s) => s.trim().toLowerCase().split(/\s+/).join(" ");
 
+// Accents folded away, for matching what was TYPED INTO THE VERB PICKER: "por"
+// should find "pôr". Deliberately separate from normalize() above, which grading
+// uses and which must stay accent-sensitive — a missing diacritic is wrong.
+const fold = (s) => s.trim().toLowerCase().normalize("NFD").replace(/\p{Mn}/gu, "");
+
+// A stray Enter right after the last answer would otherwise start the next verb
+// before the results had been read; see focusPicker().
+const ENTER_GUARD_MS = 400;
+
 let lastFocused = null; // input to receive accent-bar insertions
 let currentVerbId = null;
+let verbOrder = [];     // the drilled language's verbs, in picker order (regular
+                        // first). The source for "the next verb" and for turning
+                        // an id into an infinitive — never the DOM.
+let pickerFocusedAt = 0; // when the picker last took focus without being asked
+let pickerOpen = false;  // is the verb list showing
+let pickerActive = -1;   // highlighted row, as an index into pickerHits; -1 = none
+let pickerHits = [];     // the verbs the list is currently showing, in row order
+let drillFinished = false; // has this drill's finish (top of page, cursor in the
+                           // picker) already run — it happens once per drill
 let rows = [];          // MODEL: one entry per form, the single source of truth.
                         // The DOM is a projection of this — never read back for state.
 let ui = { labels: "en", show_accents: false }; // interface prefs, loaded at init
@@ -57,59 +75,265 @@ async function init() {
   buildAccentBar();
   applyInterface();
 
-  const selTop = el("verb-select");
-  const selBottom = el("verb-select-bottom");
-  selTop.addEventListener("change", () => startVerb(selTop.value));
-  selBottom.addEventListener("change", () => startVerb(selBottom.value));
-
-  const verbs = await loadVerbs();
-  if (verbs.length) await loadVerb(verbs[0].id);
-  else showEmptyLanguage();
+  showStart(await loadVerbs());
   updateStickyHeight();
   window.addEventListener("resize", updateStickyHeight);
 }
 
-// (Re)fill both verb pickers from the server. Called at startup and again
+// (Re)fill the verb picker from the server. Called at startup and again
 // whenever a verb is added, so the new one appears without a reload.
 //
-// Regular verbs lead, under their own heading. They are the models the
-// irregular ones are departures from, so they are what you reach for first —
-// and the split is the same one the add-a-verb confirmation reports, from the
-// same `pattern` the server sends here.
+// Regular verbs lead. They are the models the irregular ones are departures
+// from, so they are what you reach for first — and the split is the same one the
+// add-a-verb confirmation reports, from the same `pattern` the server sends
+// here. That order is also the order "the next verb" walks.
 async function loadVerbs() {
   const verbs = await api("/api/verbs");
-  const regular = verbs.filter((v) => v.pattern);
-  const irregular = verbs.filter((v) => !v.pattern);
-  for (const id of ["verb-select", "verb-select-bottom"]) {
-    const sel = el(id);
-    const keep = sel.value;
-    sel.innerHTML = "";
-    // Group only when both kinds are present: a heading over every verb in the
-    // list divides nothing.
-    if (regular.length && irregular.length) {
-      sel.appendChild(verbGroup("Regular", regular));
-      sel.appendChild(verbGroup("Irregular", irregular));
-    } else {
-      for (const v of verbs) sel.appendChild(verbOption(v));
-    }
-    if (keep) sel.value = keep;
+  verbOrder = [
+    ...verbs.filter((v) => v.pattern),
+    ...verbs.filter((v) => !v.pattern),
+  ];
+  // What the box holds is a matter of which verb is on screen, not of the list
+  // having been refetched; the callers below settle that. Only the list itself
+  // is redrawn here, and only if it is showing.
+  if (pickerOpen) renderPickerList();
+  return verbOrder;
+}
+
+// ---- The verb picker ----------------------------------------------------
+
+// The verb after the one on screen, wrapping at the end. With one verb in the
+// language it is that verb, so Return runs it again.
+function nextVerb() {
+  if (!verbOrder.length || currentVerbId === null) return null;
+  const i = verbOrder.findIndex((v) => v.id == currentVerbId);
+  return verbOrder[(i + 1) % verbOrder.length];
+}
+
+// The picker has two states, and the label says which one it is in.
+//
+// While a verb is on screen the box holds THAT verb — the one the banner names.
+// What you typed stays put for as long as you are conjugating it: a box that
+// changed to the next verb the moment you committed would answer a question you
+// had not asked yet, and would disagree with the banner while doing it.
+//
+// The next verb arrives only at the end, when the page comes back to the top and
+// the box becomes the proposal for what to do now.
+function setPickerVerb() {
+  showInPicker(verbOrder.find((v) => v.id == currentVerbId), "Conjugate verb");
+}
+
+function setPickerNext() {
+  showInPicker(nextVerb(), "Next verb");
+}
+
+function showInPicker(verb, label) {
+  const inp = el("verb-pick");
+  inp.value = verb ? verb.infinitive : "";
+  // Empty is not the same as unusable: before the first verb is chosen the box
+  // is empty and is the only thing to do. It is the bare language — nothing to
+  // choose at all — that disables it.
+  inp.disabled = !verbOrder.length;
+  el("verb-pick-label").textContent = label;
+  clearPickError();
+}
+
+// What the list shows for what has been typed: everything when the box is empty,
+// otherwise every verb the text is a prefix of. Folded, so accents are a
+// convenience rather than a requirement — "por" finds "pôr".
+function filterVerbs(text) {
+  const t = fold(text);
+  if (!t) return verbOrder;
+  return verbOrder.filter((v) => fold(v.infinitive).startsWith(t));
+}
+
+// Which verbs the typed text could mean on Return: the one it names exactly, or
+// else whatever the list is showing. Same test either way, so what you can see
+// and what Return will take can never disagree.
+function matchVerbs(text) {
+  const t = fold(text);
+  if (!t) return [];
+  const exact = verbOrder.find((v) => fold(v.infinitive) === t);
+  return exact ? [exact] : filterVerbs(text);
+}
+
+// Return in the picker: the commit. Nothing has happened until this point —
+// typing and browsing the suggestions change no state, which is the whole reason
+// this is an input and not the <select> it replaced.
+function pickVerb() {
+  const text = el("verb-pick").value;
+  const hits = matchVerbs(text);
+  // Say which of the two ways it was unclear: nothing to start either way, but
+  // one is answered by typing something else and the other by typing more.
+  if (hits.length !== 1) {
+    showPickError(
+      !text.trim() ? "Type a verb"
+      : hits.length ? `${hits.length} verbs start with that`
+      : "No such verb"
+    );
+    return;
   }
-  return verbs;
+  startPicked(hits[0]);
 }
 
-// textContent, not innerHTML: infinitives are model-generated.
-function verbOption(verb) {
-  const opt = document.createElement("option");
-  opt.value = verb.id;
-  opt.textContent = verb.infinitive;
-  return opt;
+// The one way a verb starts from the picker, whether it was typed or clicked.
+function startPicked(verb) {
+  clearPickError();
+  closePicker();
+  startVerb(verb.id);
 }
 
-function verbGroup(label, verbs) {
-  const group = document.createElement("optgroup");
-  group.label = label;
-  for (const v of verbs) group.appendChild(verbOption(v));
-  return group;
+function showPickError(msg) {
+  const err = el("verb-pick-error");
+  err.textContent = msg;
+  err.classList.remove("hidden");
+}
+
+const clearPickError = () => el("verb-pick-error").classList.add("hidden");
+
+// Put the cursor in the picker with its prefill selected, so Return moves on and
+// typing replaces it. The timestamp is the guard: the Enter that answered the
+// last field is consumed by the row it was typed in (see makeRow), but a
+// habitual second Enter would land here and skip past the results unread, so the
+// picker ignores one for a moment after a focus it did not ask for.
+function focusPicker() {
+  const inp = el("verb-pick");
+  if (inp.disabled) return;
+  pickerFocusedAt = Date.now();
+  inp.focus();
+  inp.select();
+}
+
+// ---- The verb picker's list ---------------------------------------------
+
+// Draw the list for whatever is typed. The Regular/Irregular headings are the
+// split verbOrder already carries, and appear only when both kinds are showing:
+// a heading over every row divides nothing. Row order follows pickerHits, which
+// is what the arrow keys walk.
+function renderPickerList() {
+  const panel = el("verb-list");
+  pickerHits = filterVerbs(el("verb-pick").value);
+  panel.innerHTML = "";
+  if (!pickerHits.length) {
+    const none = document.createElement("div");
+    none.className = "picker-none";
+    none.textContent = "No such verb";
+    panel.appendChild(none);
+  } else {
+    const regular = pickerHits.filter((v) => v.pattern);
+    const irregular = pickerHits.filter((v) => !v.pattern);
+    const groups =
+      regular.length && irregular.length
+        ? [["Regular", regular], ["Irregular", irregular]]
+        : [["", pickerHits]];
+    for (const [label, verbs] of groups) {
+      if (label) panel.appendChild(pickerHeading(label));
+      for (const v of verbs) panel.appendChild(pickerRow(v));
+    }
+  }
+  setPickerActive(-1);
+}
+
+function pickerHeading(text) {
+  const head = document.createElement("div");
+  head.className = "picker-group";
+  head.textContent = text;
+  return head;
+}
+
+// A row is a <div>, not a <button>: the box keeps the focus and the arrow keys
+// move a highlight, so rows have no business in the tab order. textContent —
+// infinitives are model-generated.
+function pickerRow(verb) {
+  const row = document.createElement("div");
+  row.className = "um-item picker-item";
+  row.id = `verb-row-${verb.id}`;
+  row.setAttribute("role", "option");
+  row.setAttribute("aria-selected", "false");
+  row.dataset.id = verb.id;
+  row.textContent = verb.infinitive;
+  return row;
+}
+
+// Move the highlight, clamped, with -1 meaning "none — Return takes what I
+// typed". Screen readers follow it through aria-activedescendant, since the
+// focus itself never leaves the box.
+function setPickerActive(i) {
+  const rows = [...el("verb-list").querySelectorAll(".picker-item")];
+  pickerActive = rows.length ? Math.max(-1, Math.min(i, rows.length - 1)) : -1;
+  rows.forEach((row, n) => {
+    const on = n === pickerActive;
+    row.classList.toggle("active", on);
+    row.setAttribute("aria-selected", String(on));
+  });
+  const active = rows[pickerActive];
+  if (active) {
+    // The box shows what Return would take, so walking the list writes into it.
+    // Nothing re-filters: setting the value fires no input event, so the rows
+    // stay where they are while you walk them.
+    el("verb-pick").value = pickerHits[pickerActive].infinitive;
+    el("verb-pick").setAttribute("aria-activedescendant", active.id);
+    active.scrollIntoView({ block: "nearest" });
+  } else {
+    el("verb-pick").removeAttribute("aria-activedescendant");
+  }
+}
+
+// Move the box one verb along the list without opening it — the same "previous
+// or next verb" the arrows mean inside the list, for when the list is closed.
+// This is the way back to the verb just finished: the box offers the one after
+// it, so Up returns to it and Return runs it again.
+function stepPicker(delta) {
+  if (!verbOrder.length) return;
+  const inp = el("verb-pick");
+  const named = verbOrder.findIndex((v) => fold(v.infinitive) === fold(inp.value));
+  // Whatever the box names, or failing that the verb on screen: a half-typed
+  // filter is not a position in the list.
+  const from = named === -1 ? verbOrder.findIndex((v) => v.id == currentVerbId) : named;
+  const to = Math.min(Math.max(from + delta, 0), verbOrder.length - 1);
+  inp.value = verbOrder[to].infinitive;
+  inp.select();
+  clearPickError();
+}
+
+function openPicker() {
+  if (el("verb-pick").disabled) return;
+  renderPickerList();
+  el("verb-list").classList.remove("hidden");
+  el("verb-pick").setAttribute("aria-expanded", "true");
+  pickerOpen = true;
+}
+
+function closePicker() {
+  el("verb-list").classList.add("hidden");
+  el("verb-pick").setAttribute("aria-expanded", "false");
+  el("verb-pick").removeAttribute("aria-activedescendant");
+  pickerOpen = false;
+  pickerActive = -1;
+}
+
+// The picker's keys. Return commits — the highlighted row if there is one, else
+// whatever was typed. Nothing else here starts a drill.
+function pickerKey(e) {
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    const delta = e.key === "ArrowDown" ? 1 : -1;
+    if (pickerOpen) setPickerActive(pickerActive + delta);
+    else stepPicker(delta);
+    return;
+  }
+  if (e.key === "Escape") {
+    closePicker();
+    return;
+  }
+  if (e.key !== "Enter") return;
+  e.preventDefault();
+  // The Enter that answered the last field is consumed by the row it was typed
+  // in, but a habitual second one lands here; see focusPicker().
+  if (Date.now() - pickerFocusedAt < ENTER_GUARD_MS) return;
+  const active = pickerHits[pickerActive];
+  if (active) startPicked(active);
+  else pickVerb();
 }
 
 // The bar's buttons, rebuilt whenever the drilled language changes. Only the
@@ -134,11 +358,35 @@ function insertAccent(ch) {
 }
 
 function wireControls() {
-  el("again").addEventListener("click", () => startVerb(currentVerbId));
   el("accent-bar").addEventListener("click", (e) =>
     insertAccent(e.target.getAttribute("data-ch"))
   );
   el("verb-add").addEventListener("click", openAddVerb);
+  const pick = el("verb-pick");
+  pick.addEventListener("keydown", pickerKey);
+  pick.addEventListener("click", openPicker);
+  // An empty box is a question waiting to be answered, so the list opens with
+  // it. A full one is the next verb, already an answer — and at the end of a
+  // drill it is the results block that has just appeared underneath.
+  pick.addEventListener("focus", () => {
+    if (!pick.value) openPicker();
+  });
+  // Typing filters the list, and moves on from any error about what it said a
+  // moment ago.
+  pick.addEventListener("input", () => {
+    clearPickError();
+    openPicker();
+  });
+  // The box owns the focus, so losing it is the honest signal that the list is
+  // done — an outside click, or Tab. Rows keep it by refusing the mousedown,
+  // which is what lets a click on one be a click rather than a blur.
+  pick.addEventListener("blur", closePicker);
+  el("verb-list").addEventListener("mousedown", (e) => e.preventDefault());
+  el("verb-list").addEventListener("click", (e) => {
+    const row = e.target.closest(".picker-item");
+    const verb = row && verbOrder.find((v) => v.id == row.dataset.id);
+    if (verb) startPicked(verb);
+  });
   // Acts on the verb on screen — there is no other verb it could mean.
   el("verb-edit").addEventListener("click", () => openReview(currentVerbId));
   el("settings-save").addEventListener("click", saveSettings);
@@ -443,27 +691,43 @@ async function switchLanguage(code) {
   renderLanguageMenu();
   buildAccentBar();
   applyInterface();
-  // The verb list is per language, so the old selection is gone.
+  // The verb list is per language, so the old choice is gone — and a new
+  // language is a new choice, not a different verb chosen for you.
   currentVerbId = null;
-  const verbs = await loadVerbs();
-  if (verbs.length) await loadVerb(verbs[0].id);
-  else showEmptyLanguage();
+  showStart(await loadVerbs());
 }
 
-// A language with no verbs yet: clear the drill rather than leave the previous
-// language's rows on screen.
-function showEmptyLanguage() {
+// Where the page opens, and where a language switch returns it: no verb chosen,
+// an empty form, and the cursor in the picker with its list showing. Choosing
+// the verb is the first move, so the page starts where that is made.
+function showStart(verbs) {
+  showNoDrill(
+    verbs.length
+      ? "Pick a verb to start."
+      : `No ${lang.name} verbs yet — use "Add a verb" above.`
+  );
+  focusPicker();
+  // Say it rather than leave it to the focus handler: the list showing is the
+  // point of this state, not a side effect of where the cursor landed.
+  if (verbs.length) openPicker();
+}
+
+// Nothing to drill: either no verb has been chosen yet, or the language has none
+// to choose. The clearing is the same apart from the note, so it is one
+// function — the drill, the banner that names a verb, and the button that edits
+// one all have nothing to work with.
+function showNoDrill(note) {
   rows = [];
+  currentVerbId = null;
   el("drill").innerHTML = "";
-  // The banner names the verb being drilled, and there is no longer one.
   el("verb-indicator").classList.add("hidden");
   setEditEnabled();
+  setPickerVerb(); // no verb on screen, so the box goes empty
   // textContent, not innerHTML: lang.name is server data, never markup.
-  const note = document.createElement("p");
-  note.className = "empty-language";
-  note.textContent = `No ${lang.name} verbs yet — use "Add a verb" above.`;
-  el("drill").appendChild(note);
-  for (const id of ["verb-select", "verb-select-bottom"]) el(id).innerHTML = "";
+  const p = document.createElement("p");
+  p.className = "drill-note";
+  p.textContent = note;
+  el("drill").appendChild(p);
 }
 
 // ---- Adding a verb ------------------------------------------------------
@@ -949,13 +1213,13 @@ async function loadVerb(verbId) {
   setEditEnabled();
   const data = await api(`/api/verbs/${verbId}/forms`);
   renderDrill(data);
-  el("verb-select").value = verbId;
-  el("verb-select-bottom").value = verbId;
+  setPickerVerb(); // the box names the verb being conjugated, as the banner does
   updateVerbIndicator(verbId);
 }
 
 // Start (or restart) a verb fresh: reload it, jump to the top, and focus the
-// first field. Used by "conjugate again" and both verb pickers.
+// first field. The picker is the only way in — including back to the verb just
+// finished, which is one Up away in the box.
 async function startVerb(verbId) {
   await loadVerb(verbId);
   rows[0]?.input.focus({ preventScroll: true });
@@ -964,9 +1228,8 @@ async function startVerb(verbId) {
 
 // Sticky banner naming the verb being drilled, so it stays visible on scroll.
 function updateVerbIndicator(verbId) {
-  const sel = el("verb-select");
-  const opt = [...sel.options].find((o) => o.value == verbId);
-  const label = opt ? opt.text : "";
+  const verb = verbOrder.find((v) => v.id == verbId);
+  const label = verb ? verb.infinitive : "";
   el("verb-indicator").querySelector(".vi-verb").textContent = label;
   el("verb-indicator").classList.toggle("hidden", !label);
 }
@@ -1176,7 +1439,7 @@ async function clearError(row) {
   row.dismissedTypo = false;
   row.recorded = false; // the next answer is the one that counts
   renderRow(row);
-  renderProgress(); // one fewer answered, and the footer hides again
+  renderProgress(); // one fewer answered, and the results block hides again
   if (attemptId) await forgiveAttempt(attemptId);
 }
 
@@ -1277,7 +1540,7 @@ function renderNote(row) {
 }
 
 // The progress summary, derived purely from row state. Drives the sticky
-// header readout always, and the footer summary once the drill is complete.
+// header readout always, and the results block once the drill is complete.
 function renderProgress() {
   const total = rows.length;
   const filled = rows.filter((r) => r.graded).length;
@@ -1296,19 +1559,45 @@ function renderProgress() {
   header.textContent = text;
   header.classList.toggle("perfect", perfect);
 
-  // Footer (summary + next-verb controls) appears only once all fields are answered.
-  const footer = el("footer-controls");
-  const justRevealed = complete && footer.classList.contains("hidden");
-  footer.classList.toggle("hidden", !complete);
-  const summary = el("footer-summary");
+  // The results block appears only once every field is answered.
+  const results = el("results");
+  results.classList.toggle("hidden", !complete);
+  const summary = el("results-summary");
   summary.textContent = complete ? text : "";
   summary.classList.toggle("perfect", perfect);
 
   renderMistakes(complete);
 
-  // Bring the freshly revealed controls into view (they're below the fold).
-  if (justRevealed) footer.scrollIntoView({ behavior: "smooth", block: "end" });
+  // The finish runs once per drill, the first time every field is answered.
+  // Un-answering one (esc to retry) arms it again, so fixing a late mistake
+  // still ends with the same jump to the top.
+  if (!complete) drillFinished = false;
+  else if (!drillFinished) finishDrill();
 }
+
+// Done: back to the top, where the results block and the verb picker both are,
+// with the picker ready for the next verb. Deferred to the next turn of the
+// event loop because renderProgress runs inside the last field's own blur or
+// keydown handler, and taking focus out from under one is fragile. A timeout
+// rather than requestAnimationFrame: rAF never fires in a tab that isn't being
+// painted, and this has to happen whether or not the page is on screen.
+function finishDrill() {
+  setTimeout(() => {
+    // Not while a wrong answer still holds the field. The row's rule is that you
+    // stay put until it is fixed, and the rest of the drill being answered does
+    // not overrule it — otherwise the last field is the one field you can leave
+    // wrong. Grading it again brings the finish back round.
+    if (wrongRowFocused()) return;
+    drillFinished = true;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setPickerNext(); // done with this verb: the box now offers the next one
+    focusPicker();
+  }, 0);
+}
+
+// Is the cursor in a field that is currently answered wrong?
+const wrongRowFocused = () =>
+  rows.some((r) => r.input === document.activeElement && r.graded && !r.correct);
 
 // The end-of-drill review: every form that was missed first time, with the
 // answer alongside what was actually typed. Same set the score counts, so a
@@ -1317,7 +1606,7 @@ function renderProgress() {
 // Only rendered once the drill is complete — mid-drill it would be a running
 // tally of failures next to the fields still being worked on.
 function renderMistakes(complete) {
-  const list = el("footer-mistakes");
+  const list = el("results-mistakes");
   list.innerHTML = "";
   if (!complete) return;
 
@@ -1367,8 +1656,8 @@ function showToast(msg, detail) {
 
 // Leave a finished row: the next person, or the next tense block's first field
 // when this was the section's last. No-op once every field is answered — the
-// footer reveal wins there, and moving focus would scroll the field back into
-// view over it.
+// finish takes focus to the verb picker at the top, and moving it into another
+// field here would fight that.
 function advanceFrom(row) {
   if (rows.every((r) => r.graded)) return;
   if (isLastInSection(row.input)) scrollToNextSection(row.el); // next tense to top
