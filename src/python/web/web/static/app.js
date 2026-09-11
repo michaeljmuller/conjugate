@@ -1181,14 +1181,18 @@ function setCheck(item, on) {
   item.setAttribute("aria-checked", String(on));
 }
 
-// Keep drill sections from scrolling under the sticky header: expose its live
-// height as a CSS var that .tense-block uses for scroll-margin-top. Also where
-// the columns start on the page, which the verb column's height is cut to, so
-// its footer is on screen before the page has scrolled.
+// Keep drill sections from scrolling under the two pinned headers — the page's
+// and the drill's banner below it: expose their live height as a CSS var that
+// .tense-block uses for scroll-margin-top. The page header's own height is what
+// everything else that sticks stops below. Also where the columns start on the
+// page, which the verb column's height is cut to, so its footer is on screen.
 function updateStickyHeight() {
+  const top = document.querySelector(".topbar").offsetHeight;
   const h = el("sticky-header").offsetHeight;
-  document.documentElement.style.setProperty("--sticky-h", `${h + 8}px`);
-  document.documentElement.style.setProperty("--col-top", `${el("app").offsetTop}px`);
+  const root = document.documentElement.style;
+  root.setProperty("--topbar-h", `${top}px`);
+  root.setProperty("--sticky-h", `${top + h + 8}px`);
+  root.setProperty("--col-top", `${el("app").offsetTop}px`);
 }
 
 async function loadVerb(verbId) {

@@ -24,7 +24,13 @@ body {
 
 .hidden { display: none !important; }
 
+/* Stays at the top of the window. Everything else that sticks — the verb
+   column, the drill's banner — stops below it, by --topbar-h (set from app.js).
+   Above them, so its dropdowns open over the drill. */
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -128,17 +134,22 @@ body {
   gap: 1.5rem;
   align-items: start;
   max-width: 62rem;
-  margin: 1.5rem auto;
-  padding: 0 1rem 4rem;
+  margin: 1.5rem auto 0;
+  padding: 0 1rem;
 }
+/* The room at the foot of the page belongs to the drill, not the page. A sticky
+   verb column cannot stick past the end of the grid; with the room on the page,
+   a drill shorter than the list left the column the tallest thing there, and
+   scrolling through that room carried it up under the header. */
+.drill-col { padding-bottom: 5.5rem; }
 
 /* The verb column stays in view while the drill scrolls, and scrolls by itself
    once the list outgrows it. Its height is cut to what is left of the window
-   below the header, so the footer is on screen from the start; scrolled, that
-   leaves a little air under it. --col-top is set from app.js. */
+   below the header, so the footer is on screen whether or not the page has
+   scrolled. --col-top is set from app.js. */
 .verb-col {
   position: sticky;
-  top: 1rem;
+  top: calc(var(--topbar-h, 3.3rem) + 1rem);
   max-height: calc(100vh - var(--col-top, 5rem) - 1rem);
   overflow-y: auto;
   background: var(--panel);
@@ -240,10 +251,11 @@ body {
 .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); text-decoration: none; display: inline-block; }
 .btn.ghost { color: var(--muted); }
 
-/* Verb banner + accent bar ride together as one pinned header while scrolling. */
+/* Verb banner + accent bar ride together, pinned under the page header while
+   scrolling. */
 .sticky-header {
   position: sticky;
-  top: 0;
+  top: var(--topbar-h, 3.3rem);
   z-index: 10;
   background: var(--bg);
   padding-bottom: 0.75rem;
