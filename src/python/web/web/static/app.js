@@ -22,8 +22,8 @@ let verbOrder = [];     // the drilled language's verbs, in list order (regular
 let pickerFocusedAt = 0; // when the list last took focus without being asked
 let pickerHits = [];     // the verbs the list is currently showing, in row order
 let highlightId = null;  // the highlighted verb, by id so it survives filtering
-let drillFinished = false; // has this drill's finish (top of page, focus in the
-                           // list) already run — it happens once per drill
+let drillFinished = false; // has this drill reached complete (and its finish —
+                           // top of page, focus in the list — been set off)
 let rows = [];          // MODEL: one entry per form, the single source of truth.
                         // The DOM is a projection of this — never read back for state.
 let ui = { labels: "en", show_accents: false }; // interface prefs, loaded at init
@@ -150,8 +150,10 @@ function setFilter(text) {
   renderPickerList();
 }
 
-// A drill on screen with fields still to answer.
-const drillUnfinished = () => rows.length > 0 && !rows.every((r) => r.graded);
+// A drill on screen that has not reached complete (see renderProgress). Read
+// from the flag rather than worked out afresh, because completion depends on
+// where the cursor was — and by the time this is asked it is in the list.
+const drillUnfinished = () => rows.length > 0 && !drillFinished;
 
 // The one way a verb starts from the list, whether by Return or a click. Part
 // way through a drill it asks first, since a stray click on an always-visible
@@ -1529,7 +1531,12 @@ function renderProgress() {
   const total = rows.length;
   const filled = rows.filter((r) => r.graded).length;
   const mistakes = rows.filter((r) => r.firstWrong && !r.dismissedTypo).length;
-  const complete = total > 0 && filled === total;
+  // Every field answered, and the cursor not in one still showing a wrong
+  // answer. The row's rule is that you stay put until it is fixed, and the rest
+  // of the drill being answered does not overrule it — otherwise the last field
+  // is the one field you can leave wrong. Fixing it, or clicking away from it,
+  // grades it again and brings completion back round.
+  const complete = total > 0 && filled === total && !wrongRowFocused();
   const perfect = complete && mistakes === 0;
 
   let text = "";
@@ -1543,8 +1550,8 @@ function renderProgress() {
   header.textContent = text;
   header.classList.toggle("perfect", perfect);
 
-  // The verb list steps back while there are fields to answer.
-  el("app").classList.toggle("drilling", drillUnfinished());
+  // The verb list steps back until the drill is complete.
+  el("app").classList.toggle("drilling", total > 0 && !complete);
 
   // The results block appears only once every field is answered.
   const results = el("results");
@@ -1555,11 +1562,14 @@ function renderProgress() {
 
   renderMistakes(complete);
 
-  // The finish runs once per drill, the first time every field is answered.
-  // Un-answering one (esc to retry) arms it again, so fixing a late mistake
+  // The finish runs once per drill, the first time it is complete.
+  // Un-answering a field (esc to retry) arms it again, so fixing a late mistake
   // still ends with the same jump to the top.
   if (!complete) drillFinished = false;
-  else if (!drillFinished) finishDrill();
+  else if (!drillFinished) {
+    drillFinished = true;
+    finishDrill();
+  }
 }
 
 // Done: back to the top, where the results block is, with the focus in the verb
@@ -1570,12 +1580,6 @@ function renderProgress() {
 // painted, and this has to happen whether or not the page is on screen.
 function finishDrill() {
   setTimeout(() => {
-    // Not while a wrong answer still holds the field. The row's rule is that you
-    // stay put until it is fixed, and the rest of the drill being answered does
-    // not overrule it — otherwise the last field is the one field you can leave
-    // wrong. Grading it again brings the finish back round.
-    if (wrongRowFocused()) return;
-    drillFinished = true;
     window.scrollTo({ top: 0, behavior: "smooth" });
     // The guard: the Enter that answered the last field is consumed by the row
     // it was typed in (see makeRow), but a habitual second Enter would land in
